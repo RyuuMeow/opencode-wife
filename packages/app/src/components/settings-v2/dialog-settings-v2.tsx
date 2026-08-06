@@ -8,6 +8,8 @@ import { SettingsGeneralV2 } from "./general"
 import { SettingsKeybinds } from "../settings-keybinds"
 import { SettingsProvidersV2 } from "./providers"
 import { SettingsModelsV2 } from "./models"
+import { SettingsWifeV2 } from "./wife"
+import { SettingsCharactersV2 } from "./characters"
 import "./settings-v2.css"
 import { SettingsServersV2 } from "./servers"
 import { useDialog } from "@opencode-ai/ui/context/dialog"
@@ -69,6 +71,20 @@ export const DialogSettings: Component<{
                 </div>
 
                 <div class="flex flex-col gap-1.5">
+                  <TabsV2.SectionTitle>{language.t("settings.section.wife")}</TabsV2.SectionTitle>
+                  <div class="flex flex-col gap-1.5 w-full">
+                    <TabsV2.Trigger value="wife">
+                      <Icon name="wife-sparks" />
+                      {language.t("settings.tab.wife")}
+                    </TabsV2.Trigger>
+                    <TabsV2.Trigger value="wife-characters">
+                      <Icon name="user-circle" />
+                      {language.t("wife.characters.title")}
+                    </TabsV2.Trigger>
+                  </div>
+                </div>
+
+                <div class="flex flex-col gap-1.5">
                   <TabsV2.SectionTitle>{language.t("settings.section.server")}</TabsV2.SectionTitle>
                   <div class="flex flex-col gap-1.5 w-full">
                     <TabsV2.Trigger value="servers">
@@ -98,6 +114,12 @@ export const DialogSettings: Component<{
         </TabsV2.Content>
         <TabsV2.Content value="shortcuts" class="settings-v2-panel">
           <SettingsKeybinds v2 />
+        </TabsV2.Content>
+        <TabsV2.Content value="wife" class="settings-v2-panel">
+          <SettingsWifeV2 />
+        </TabsV2.Content>
+        <TabsV2.Content value="wife-characters" class="settings-v2-panel">
+          <SettingsCharactersV2 />
         </TabsV2.Content>
         <TabsV2.Content value="servers" class="settings-v2-panel">
           <SettingsServersV2 />

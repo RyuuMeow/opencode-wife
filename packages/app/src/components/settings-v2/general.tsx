@@ -9,7 +9,6 @@ import { useLanguage } from "@/context/language"
 import { usePlatform } from "@/context/platform"
 import { useUpdaterAction } from "../updater-action"
 import { useSettings } from "@/context/settings"
-import { DialogWife } from "../dialog-wife"
 import { ExternalLink } from "../external-link"
 import { SettingsListV2 } from "./parts/list"
 import { SettingsRowV2 } from "./parts/row"
@@ -443,35 +442,6 @@ export const SettingsGeneralV2: Component<{
     </div>
   )
 
-  const WifeSection = () => (
-    <div class="settings-v2-section">
-      <h3 class="settings-v2-section-title">{language.t("settings.general.section.wife")}</h3>
-
-      <SettingsListV2>
-        <SettingsRowV2
-          title={language.t("settings.general.row.wifeMode.title")}
-          description={language.t("settings.general.row.wifeMode.description")}
-        >
-          <div data-action="settings-wife-mode">
-            <Switch
-              checked={settings.general.wifeMode()}
-              onChange={(checked) => settings.general.setWifeMode(checked)}
-            />
-          </div>
-        </SettingsRowV2>
-
-        <SettingsRowV2
-          title={language.t("wife.characters.title")}
-          description={language.t("settings.general.row.wifeCharacters.description")}
-        >
-          <ButtonV2 size="small" variant="neutral" onClick={() => void dialog.show(() => <DialogWife />)}>
-            {language.t("wife.characters.manage")}
-          </ButtonV2>
-        </SettingsRowV2>
-      </SettingsListV2>
-    </div>
-  )
-
   const NotificationsSection = () => (
     <div class="settings-v2-section">
       <h3 class="settings-v2-section-title">{language.t("settings.general.section.notifications")}</h3>
@@ -581,8 +551,6 @@ export const SettingsGeneralV2: Component<{
         </Show>
 
         <GeneralSection />
-
-        <WifeSection />
 
         <AppearanceSection controller={appearance} />
 
