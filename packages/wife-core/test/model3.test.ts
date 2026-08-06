@@ -6,6 +6,7 @@ import {
   isPathSafe,
   normalizeModelPath,
   parseModel3,
+  resolveModelPath,
   scanHasErrors,
   scanLive2dModel,
 } from "../src/index"
@@ -18,12 +19,18 @@ describe("path normalization", () => {
     expect(normalizeModelPath("/absolute/file")).toBe("absolute/file")
   })
 
-  test("rejects traversal, absolute and URL paths", () => {
+  test("rejects absolute and URL paths but allows parent segments", () => {
     expect(isPathSafe("motions/idle.motion3.json")).toBe(true)
-    expect(isPathSafe("../outside.moc3")).toBe(false)
-    expect(isPathSafe("a/../../b.moc3")).toBe(false)
+    expect(isPathSafe("../outside.moc3")).toBe(true)
     expect(isPathSafe("C:/Windows/system32")).toBe(false)
     expect(isPathSafe("https://example.com/model.moc3")).toBe(false)
+  })
+
+  test("collapses parent segments when resolving", () => {
+    expect(resolveModelPath("model", "../textures/a.png")).toBe("textures/a.png")
+    expect(resolveModelPath("a/b", "../../c.moc3")).toBe("c.moc3")
+    expect(resolveModelPath("", "motions/idle.motion3.json")).toBe("motions/idle.motion3.json")
+    expect(resolveModelPath("model", "./moc/小熊.moc3")).toBe("model/moc/小熊.moc3")
   })
 })
 
@@ -81,6 +88,66 @@ describe("scanLive2dModel", () => {
     expect(result.capabilities.motionGroups.Idle).toHaveLength(2)
   })
 
+  test("resolves references relative to the model directory", async () => {
+    const nested = {
+      "model/小熊.model3.json": JSON.stringify({
+        Version: 3,
+        FileReferences: {
+          Moc: "小熊.moc3",
+          Textures: ["小熊.4096/texture_00.png", "../40a8d217.png"],
+          Physics: "小熊.physics3.json",
+          DisplayInfo: "小熊.cdi3.json",
+        },
+        Groups: [{ Target: "Parameter", Name: "LipSync", Ids: ["ParamMouthOpenY"] }],
+      }),
+      "model/小熊.moc3": "\u0000moc",
+      "model/小熊.physics3.json": JSON.stringify({ Version: 3 }),
+      "model/小熊.cdi3.json": JSON.stringify({ Version: 3 }),
+      "model/小熊.4096/texture_00.png": "\u0000png",
+      "40a8d217.png": "\u0000png",
+    }
+    const result = await scanLive2dModel("model/小熊.model3.json", fileSet(nested))
+    expect(result.issues).toEqual([])
+    expect(result.capabilities.lipSyncParameterIds).toEqual(["ParamMouthOpenY"])
+  })
+
+  test("reports missing assets with resolved paths", async () => {
+    const files = {
+      "model/小熊.model3.json": JSON.stringify({
+        Version: 3,
+        FileReferences: { Moc: "小熊.moc3", Textures: ["小熊.4096/texture_00.png"] },
+      }),
+      "model/小熊.4096/texture_00.png": "\u0000png",
+    }
+    const result = await scanLive2dModel("model/小熊.model3.json", fileSet(files))
+    const missing = result.issues.filter((issue) => issue.code === "missing-asset")
+    expect(missing.map((issue) => issue.path)).toEqual(["model/小熊.moc3"])
+    expect(scanHasErrors(result.issues)).toBe(true)
+  })
+
+  test("warns instead of blocking on optional assets", async () => {
+    const files = {
+      "model/小熊.model3.json": JSON.stringify({
+        Version: 3,
+        FileReferences: {
+          Moc: "小熊.moc3",
+          Textures: ["小熊.4096/texture_00.png"],
+          Physics: "小熊.physics3.json",
+          DisplayInfo: "小熊.cdi3.json",
+        },
+      }),
+      "model/小熊.moc3": "\u0000moc",
+      "model/小熊.4096/texture_00.png": "\u0000png",
+    }
+    const result = await scanLive2dModel("model/小熊.model3.json", fileSet(files))
+    const missing = result.issues.filter((issue) => issue.code === "missing-asset")
+    expect(missing.map((issue) => [issue.path, issue.severity]).sort()).toEqual([
+      ["model/小熊.cdi3.json", "warning"],
+      ["model/小熊.physics3.json", "warning"],
+    ])
+    expect(scanHasErrors(result.issues)).toBe(false)
+  })
+
   test("reports every missing referenced asset", async () => {
     const files = { ...lunaFiles }
     delete files["luna.moc3"]
@@ -95,12 +162,25 @@ describe("scanLive2dModel", () => {
     ])
   })
 
-  test("rejects traversal references", async () => {
+  test("resolves parent references within the picked file set", async () => {
     const files = {
       ...lunaFiles,
       "luna.model3.json": JSON.stringify({
         ...lunaModel3,
         FileReferences: { ...lunaModel3.FileReferences, Moc: "../../outside.moc3" },
+      }),
+    }
+    const result = await scanLive2dModel("luna.model3.json", fileSet(files))
+    expect(result.issues.some((issue) => issue.code === "missing-asset" && issue.path === "outside.moc3")).toBe(true)
+    expect(result.issues.some((issue) => issue.code === "unsafe-path")).toBe(false)
+  })
+
+  test("rejects absolute reference paths", async () => {
+    const files = {
+      ...lunaFiles,
+      "luna.model3.json": JSON.stringify({
+        ...lunaModel3,
+        FileReferences: { ...lunaModel3.FileReferences, Moc: "C:/Windows/outside.moc3" },
       }),
     }
     const result = await scanLive2dModel("luna.model3.json", fileSet(files))
@@ -122,7 +202,7 @@ describe("scanLive2dModel", () => {
 describe("findModel3Files", () => {
   test("finds model3 manifests in a file list", () => {
     expect(
-      findModel3Files(["textures/luna.png", "luna.model3.json", "motions/a.motion3.json", "other/luna.model3.json"]),
-    ).toEqual(["luna.model3.json", "other/luna.model3.json"])
+      findModel3Files(["textures/luna.png", "luna.model3.json", "motions/a.motion3.json", "other/luna.model3"]),
+    ).toEqual(["luna.model3.json", "other/luna.model3"])
   })
 })

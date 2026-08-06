@@ -11,6 +11,7 @@ import {
   scanHasErrors,
   scanLive2dModel,
   suggestMappings,
+  type ScanIssue,
   type SuggestedMappings,
 } from "@opencode-ai/wife-core"
 import { SettingsListV2 } from "@/components/settings-v2/parts/list"
@@ -67,6 +68,7 @@ export const CharacterSettings: Component<{
   const [modelPath, setModelPath] = createSignal<string>()
   const [scanning, setScanning] = createSignal(false)
   const [notice, setNotice] = createSignal<string>()
+  const [issues, setIssues] = createSignal<ScanIssue[]>([])
   const [oversizedFiles, setOversizedFiles] = createSignal(0)
 
   const setName = (value: string) => {
@@ -101,6 +103,7 @@ export const CharacterSettings: Component<{
     const picked = Array.from(list)
     setFiles(picked)
     setNotice(undefined)
+    setIssues([])
     const model3Files = findModel3Files(picked.map((file) => file.webkitRelativePath || file.name))
     if (model3Files.length === 0) {
       setNotice(language.t("wife.import.noModelFound"))
@@ -118,7 +121,7 @@ export const CharacterSettings: Component<{
     try {
       const scan = await scanLive2dModel(path, fileSetFromFiles(picked))
       if (scanHasErrors(scan.issues)) {
-        setNotice(scan.issues.map((issue) => `[${issue.code}] ${issue.message}`).join("; "))
+        setIssues(scan.issues)
         return
       }
       const suggested = suggestMappings(scan.capabilities)
@@ -133,6 +136,7 @@ export const CharacterSettings: Component<{
       registry.setCapabilities(props.id, scan.capabilities)
       setChangingModel(false)
       setNotice(undefined)
+      setIssues([])
       setOversizedFiles(picked.filter((file) => file.size > MAX_ASSET_BYTES).length)
     } catch (error) {
       setNotice(error instanceof Error ? error.message : String(error))
@@ -264,6 +268,22 @@ export const CharacterSettings: Component<{
             </Show>
           </SettingsRowV2>
         </SettingsListV2>
+
+        <Show when={issues().length > 0}>
+          <div class="flex flex-col gap-1 max-h-40 overflow-auto">
+            {issues().map((issue) => (
+              <span
+                class="text-11-regular break-words"
+                style={{
+                  color: issue.severity === "error" ? "var(--v2-state-fg-danger)" : "var(--v2-state-fg-warning)",
+                }}
+              >
+                [{issue.code}] {issue.path ? `${issue.path}: ` : ""}
+                {issue.message}
+              </span>
+            ))}
+          </div>
+        </Show>
       </div>
 
       <Show when={capabilities()}>

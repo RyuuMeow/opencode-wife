@@ -9,6 +9,7 @@ export {
   isPathSafe,
   normalizeModelPath,
   parseModel3,
+  resolveModelPath,
   scanHasErrors,
   scanLive2dModel,
 } from "./live2d/model3"

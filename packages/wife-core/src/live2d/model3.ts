@@ -71,14 +71,35 @@ export function normalizeModelPath(path: string) {
 export function isPathSafe(path: string) {
   const normalized = normalizeModelPath(path)
   if (/^[a-zA-Z]:\//.test(normalized) || normalized.includes("://")) return false
-  if (normalized.split("/").some((segment) => segment === ".." || segment === ".")) return false
   return true
+}
+
+export function resolveModelPath(modelDir: string, reference: string) {
+  const segments = [
+    ...normalizeModelPath(modelDir).split("/").filter(Boolean),
+    ...normalizeModelPath(reference).split("/").filter(Boolean),
+  ]
+  const resolved: string[] = []
+  for (const segment of segments) {
+    if (segment === ".") continue
+    if (segment === "..") {
+      resolved.pop()
+      continue
+    }
+    resolved.push(segment)
+  }
+  return resolved.join("/")
 }
 
 export function parseModel3(raw: unknown, model3Path: string): { model: Model3Json; issues: ScanIssue[] } {
   const issues: ScanIssue[] = []
   if (typeof raw !== "object" || raw === null || Array.isArray(raw)) {
-    return { model: {}, issues: [{ severity: "error", code: "invalid-model3", path: model3Path, message: "Invalid .model3.json content" }] }
+    return {
+      model: {},
+      issues: [
+        { severity: "error", code: "invalid-model3", path: model3Path, message: "Invalid .model3.json content" },
+      ],
+    }
   }
   const model = raw as Model3Json
   if (model.Version !== 3) {
@@ -120,7 +141,9 @@ export function extractCapabilities(model: Model3Json): CharacterCapabilities {
   })
 
   const groupIds = (name: string) =>
-    (model.Groups ?? []).filter((group) => group.Target === "Parameter" && group.Name === name).flatMap((group) => group.Ids ?? [])
+    (model.Groups ?? [])
+      .filter((group) => group.Target === "Parameter" && group.Name === name)
+      .flatMap((group) => group.Ids ?? [])
 
   const parameterIds = new Set(parameters.map((parameter) => parameter.id))
   const supportsGaze = [...parameterIds].some((id) => id.includes("EyeBall"))
@@ -148,7 +171,15 @@ export async function scanLive2dModel(model3Path: string, files: Live2dFileSet):
   if (content === undefined) {
     return {
       capabilities: emptyCapabilities(),
-      issues: [...issues, { severity: "error", code: "missing-model3", path: model3Path, message: "Selected .model3.json file could not be read" }],
+      issues: [
+        ...issues,
+        {
+          severity: "error",
+          code: "missing-model3",
+          path: model3Path,
+          message: "Selected .model3.json file could not be read",
+        },
+      ],
     }
   }
 
@@ -158,7 +189,10 @@ export async function scanLive2dModel(model3Path: string, files: Live2dFileSet):
   } catch {
     return {
       capabilities: emptyCapabilities(),
-      issues: [...issues, { severity: "error", code: "malformed-json", path: model3Path, message: "Malformed .model3.json" }],
+      issues: [
+        ...issues,
+        { severity: "error", code: "malformed-json", path: model3Path, message: "Malformed .model3.json" },
+      ],
     }
   }
 
@@ -166,24 +200,36 @@ export async function scanLive2dModel(model3Path: string, files: Live2dFileSet):
   issues.push(...parseIssues)
 
   const references = model.FileReferences ?? {}
+  const modelDir = model3Path.includes("/") ? model3Path.slice(0, model3Path.lastIndexOf("/")) : ""
+  const optionalReferences = [references.Physics, references.Pose, references.DisplayInfo, references.UserData]
   const referenced = [
-    references.Moc,
-    ...(references.Textures ?? []),
-    references.Physics,
-    references.Pose,
-    references.DisplayInfo,
-    references.UserData,
-    ...(references.Expressions ?? []).flatMap((entry) => (entry.File ? [entry.File] : [])),
-    ...Object.values(references.Motions ?? {}).flatMap((entries) => entries.flatMap((entry) => (entry.File ? [entry.File] : []))),
-  ].filter((path): path is string => typeof path === "string" && path.length > 0)
+    ...([references.Moc] as const).map((path) => ({ path, severity: "error" as const })),
+    ...(references.Textures ?? []).map((path) => ({ path, severity: "error" as const })),
+    ...(references.Expressions ?? []).flatMap((entry) =>
+      entry.File ? [{ path: entry.File, severity: "error" as const }] : [],
+    ),
+    ...Object.values(references.Motions ?? {}).flatMap((entries) =>
+      entries.flatMap((entry) => (entry.File ? [{ path: entry.File, severity: "error" as const }] : [])),
+    ),
+    ...optionalReferences.map((path) => ({ path, severity: "warning" as const })),
+  ].filter(
+    (entry): entry is { path: string; severity: "error" | "warning" } =>
+      typeof entry.path === "string" && entry.path.length > 0,
+  )
 
-  for (const path of referenced) {
-    if (!isPathSafe(path)) {
-      issues.push({ severity: "error", code: "unsafe-path", path, message: "Referenced path escapes the model folder" })
+  for (const entry of referenced) {
+    if (!isPathSafe(entry.path)) {
+      issues.push({ severity: "error", code: "unsafe-path", path: entry.path, message: "Referenced path is invalid" })
       continue
     }
-    if (!(await files.has(path))) {
-      issues.push({ severity: "error", code: "missing-asset", path, message: "Referenced file is missing" })
+    const resolved = resolveModelPath(modelDir, entry.path)
+    if (!(await files.has(resolved))) {
+      issues.push({
+        severity: entry.severity,
+        code: "missing-asset",
+        path: resolved,
+        message: "Referenced file is missing",
+      })
     }
   }
 
@@ -191,7 +237,7 @@ export async function scanLive2dModel(model3Path: string, files: Live2dFileSet):
 }
 
 export function findModel3Files(paths: string[]) {
-  return paths.filter((path) => path.endsWith(".model3.json")).sort()
+  return paths.filter((path) => path.endsWith(".model3.json") || path.endsWith(".model3")).sort()
 }
 
 export function emptyCapabilities(): CharacterCapabilities {
