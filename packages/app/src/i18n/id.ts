@@ -146,6 +146,10 @@ export const dict = {
   "command.language.cycle": "Ganti bahasa",
   "command.language.set": "Gunakan bahasa: {{language}}",
 
+  "command.session.export": "Ekspor sesi",
+  "command.session.export.description": "Ekspor seluruh transkrip sesi sebagai JSON",
+  "context.export.session": "Ekspor sesi",
+  "common.export": "Ekspor",
   "command.session.new": "Sesi baru",
   "command.file.open": "Buka berkas",
   "command.tab.close": "Tutup tab",
@@ -662,6 +666,10 @@ export const dict = {
   "toast.session.unshare.success.title": "Berbagi sesi dihentikan",
   "toast.session.unshare.success.description": "Berbagi sesi berhasil dihentikan!",
   "toast.session.unshare.failed.title": "Gagal menghentikan berbagi sesi",
+  "toast.session.export.success.title": "Sesi diekspor",
+  "toast.session.export.success.description": "Sesi disimpan ke {{filename}}",
+  "toast.session.export.failed.title": "Gagal mengekspor sesi",
+  "toast.session.export.failed.description": "Terjadi kesalahan saat mengekspor sesi",
   "toast.session.unshare.failed.description": "Terjadi kesalahan saat menghentikan berbagi sesi",
 
   "toast.session.listFailed.title": "Gagal memuat sesi untuk {{project}}",
@@ -989,6 +997,10 @@ export const dict = {
   "settings.general.section.sounds": "Efek suara",
   "settings.general.section.feed": "Umpan",
   "settings.general.section.display": "Tampilan",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Mode Wife",
+  "settings.general.row.wifeMode.description":
+    "Tampilkan pendamping karakter yang merespons sesi pengodean Anda. Nonaktifkan untuk menggunakan Mode Klasik tanpa lapisan Wife.",
 
   "settings.general.row.language.title": "Bahasa",
   "settings.general.row.language.description": "Ubah bahasa tampilan untuk OpenCode",

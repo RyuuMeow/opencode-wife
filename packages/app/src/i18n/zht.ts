@@ -148,6 +148,10 @@ export const dict = {
   "command.language.cycle": "依序切換語言",
   "command.language.set": "使用語言: {{language}}",
 
+  "command.session.export": "匯出作業階段",
+  "command.session.export.description": "將作業階段完整記錄匯出為 JSON",
+  "context.export.session": "匯出作業階段",
+  "common.export": "匯出",
   "command.session.new": "新增工作階段",
   "command.file.open": "開啟檔案",
   "command.tab.close": "關閉分頁",
@@ -644,6 +648,10 @@ export const dict = {
   "toast.session.unshare.success.title": "已取消分享工作階段",
   "toast.session.unshare.success.description": "工作階段已成功取消分享",
   "toast.session.unshare.failed.title": "取消分享失敗",
+  "toast.session.export.success.title": "作業階段已匯出",
+  "toast.session.export.success.description": "作業階段已儲存到 {{filename}}",
+  "toast.session.export.failed.title": "匯出作業階段失敗",
+  "toast.session.export.failed.description": "匯出作業階段時發生錯誤",
   "toast.session.unshare.failed.description": "取消分享工作階段時發生錯誤",
 
   "toast.session.listFailed.title": "無法載入 {{project}} 的工作階段",
@@ -875,6 +883,10 @@ export const dict = {
   "settings.general.section.sounds": "音效",
   "settings.general.section.feed": "資訊流",
   "settings.general.section.display": "顯示",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Wife 模式",
+  "settings.general.row.wifeMode.description":
+    "顯示一個能對你的程式作業階段作出反應的角色夥伴。關閉後使用不含 Wife 層的經典模式。",
 
   "settings.general.row.language.title": "語言",
   "settings.general.row.language.description": "變更 OpenCode 的顯示語言",

@@ -150,6 +150,10 @@ export const dict = {
   "command.language.cycle": "Dil değiştir",
   "command.language.set": "Dil kullan: {{language}}",
 
+  "command.session.export": "Oturumu dışa aktar",
+  "command.session.export.description": "Oturum kaydının tamamını JSON olarak dışa aktar",
+  "context.export.session": "Oturumu dışa aktar",
+  "common.export": "Dışa aktar",
   "command.session.new": "Yeni oturum",
   "command.file.open": "Dosya aç",
   "command.tab.close": "Sekmeyi kapat",
@@ -656,6 +660,10 @@ export const dict = {
   "toast.session.unshare.success.title": "Oturum paylaşımı kaldırıldı",
   "toast.session.unshare.success.description": "Oturum paylaşımı başarıyla kaldırıldı!",
   "toast.session.unshare.failed.title": "Oturum paylaşımı kaldırılamadı",
+  "toast.session.export.success.title": "Oturum dışa aktarıldı",
+  "toast.session.export.success.description": "Oturum {{filename}} konumuna kaydedildi",
+  "toast.session.export.failed.title": "Oturum dışa aktarılamadı",
+  "toast.session.export.failed.description": "Oturum dışa aktarılırken bir hata oluştu",
   "toast.session.unshare.failed.description": "Oturum paylaşımı kaldırılırken bir hata oluştu",
 
   "toast.session.listFailed.title": "{{project}} için oturumlar yüklenemedi",
@@ -901,6 +909,10 @@ export const dict = {
   "settings.general.section.sounds": "Ses efektleri",
   "settings.general.section.feed": "Akış",
   "settings.general.section.display": "Ekran",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Wife Modu",
+  "settings.general.row.wifeMode.description":
+    "Kodlama oturumunuza tepki veren bir karakter arkadaşı gösterir. Wife katmanı olmadan Klasik Modu kullanmak için kapatın.",
 
   "settings.general.row.language.title": "Dil",
   "settings.general.row.language.description": "OpenCode'un görünüm dilini değiştirin",

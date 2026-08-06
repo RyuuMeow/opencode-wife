@@ -146,6 +146,10 @@ export const dict = {
   "command.language.cycle": "Cambiar idioma",
   "command.language.set": "Usar idioma: {{language}}",
 
+  "command.session.export": "Exportar sesión",
+  "command.session.export.description": "Exportar la transcripción completa de la sesión como JSON",
+  "context.export.session": "Exportar sesión",
+  "common.export": "Exportar",
   "command.session.new": "Nueva sesión",
   "command.file.open": "Abrir archivo",
   "command.tab.close": "Cerrar pestaña",
@@ -655,6 +659,10 @@ export const dict = {
   "toast.session.unshare.success.title": "La sesión dejó de compartirse",
   "toast.session.unshare.success.description": "La sesión dejó de compartirse correctamente.",
   "toast.session.unshare.failed.title": "Fallo al dejar de compartir sesión",
+  "toast.session.export.success.title": "Sesión exportada",
+  "toast.session.export.success.description": "Sesión guardada en {{filename}}",
+  "toast.session.export.failed.title": "No se pudo exportar la sesión",
+  "toast.session.export.failed.description": "Se produjo un error al exportar la sesión",
   "toast.session.unshare.failed.description": "Ocurrió un error al dejar de compartir la sesión",
 
   "toast.session.listFailed.title": "Fallo al cargar sesiones para {{project}}",
@@ -901,6 +909,10 @@ export const dict = {
   "settings.general.section.sounds": "Efectos de sonido",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Pantalla",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Modo Wife",
+  "settings.general.row.wifeMode.description":
+    "Muestra un compañero que reacciona a tu sesión de codificación. Desactívalo para usar el modo clásico sin la capa Wife.",
 
   "settings.general.row.language.title": "Idioma",
   "settings.general.row.language.description": "Cambiar el idioma de visualización para OpenCode",

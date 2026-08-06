@@ -146,6 +146,10 @@ export const dict = {
   "command.language.cycle": "Перемкнути мову",
   "command.language.set": "Використати мову: {{language}}",
 
+  "command.session.export": "Експортувати сесію",
+  "command.session.export.description": "Експортувати повний журнал сесії у форматі JSON",
+  "context.export.session": "Експортувати сесію",
+  "common.export": "Експорт",
   "command.session.new": "Нова сесія",
   "command.file.open": "Відкрити файл",
   "command.tab.close": "Закрити вкладку",
@@ -666,6 +670,10 @@ export const dict = {
   "toast.session.unshare.success.title": "Поширення сесії припинено",
   "toast.session.unshare.success.description": "Поширення сесії успішно припинено!",
   "toast.session.unshare.failed.title": "Не вдалося припинити поширення сесії",
+  "toast.session.export.success.title": "Сесію експортовано",
+  "toast.session.export.success.description": "Сесію збережено в {{filename}}",
+  "toast.session.export.failed.title": "Не вдалося експортувати сесію",
+  "toast.session.export.failed.description": "Під час експорту сесії сталася помилка",
   "toast.session.unshare.failed.description": "Під час припинення поширення сесії сталася помилка",
 
   "toast.session.listFailed.title": "Не вдалося завантажити сесії для {{project}}",
@@ -1003,6 +1011,10 @@ export const dict = {
   "settings.general.section.sounds": "Звукові ефекти",
   "settings.general.section.feed": "Стрічка",
   "settings.general.section.display": "Дисплей",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Режим Wife",
+  "settings.general.row.wifeMode.description":
+    "Показуйте персонажа-компаньйона, який реагує на вашу сесію кодування. Вимкніть, щоб використовувати класичний режим без шару Wife.",
 
   "settings.general.row.language.title": "Мова",
   "settings.general.row.language.description": "Змінити мову інтерфейсу OpenCode",

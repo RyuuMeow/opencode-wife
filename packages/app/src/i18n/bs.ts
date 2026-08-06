@@ -146,6 +146,10 @@ export const dict = {
   "command.language.cycle": "Promijeni jezik",
   "command.language.set": "Koristi jezik: {{language}}",
 
+  "command.session.export": "Izvezi sesiju",
+  "command.session.export.description": "Izvezi cijeli transkript sesije kao JSON",
+  "context.export.session": "Izvezi sesiju",
+  "common.export": "Izvoz",
   "command.session.new": "Nova sesija",
   "command.file.open": "Otvori datoteku",
   "command.tab.close": "Zatvori karticu",
@@ -653,6 +657,10 @@ export const dict = {
   "toast.session.unshare.success.title": "Dijeljenje sesije ukinuto",
   "toast.session.unshare.success.description": "Dijeljenje sesije je uspješno ukinuto!",
   "toast.session.unshare.failed.title": "Neuspjelo ukidanje dijeljenja",
+  "toast.session.export.success.title": "Sesija izvezena",
+  "toast.session.export.success.description": "Sesija spremljena u {{filename}}",
+  "toast.session.export.failed.title": "Izvoz sesije nije uspio",
+  "toast.session.export.failed.description": "Došlo je do greške pri izvozu sesije",
   "toast.session.unshare.failed.description": "Došlo je do greške prilikom ukidanja dijeljenja",
 
   "toast.session.listFailed.title": "Neuspjelo učitavanje sesija za {{project}}",
@@ -896,6 +904,10 @@ export const dict = {
   "settings.general.section.sounds": "Zvučni efekti",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Prikaz",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Wife režim",
+  "settings.general.row.wifeMode.description":
+    "Prikažite lika pratioca koji reaguje na vašu sesiju kodiranja. Isključite da koristite klasični režim bez Wife sloja.",
 
   "settings.general.row.language.title": "Jezik",
   "settings.general.row.language.description": "Promijeni jezik prikaza u OpenCode-u",

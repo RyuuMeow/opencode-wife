@@ -153,6 +153,10 @@ export const dict = {
   "command.language.cycle": "切换语言",
   "command.language.set": "使用语言：{{language}}",
 
+  "command.session.export": "导出会话",
+  "command.session.export.description": "将会话完整记录导出为 JSON",
+  "context.export.session": "导出会话",
+  "common.export": "导出",
   "command.session.new": "新建会话",
 
   "command.file.open": "打开文件",
@@ -653,6 +657,10 @@ export const dict = {
   "toast.session.unshare.success.title": "已取消分享会话",
   "toast.session.unshare.success.description": "会话已成功取消分享",
   "toast.session.unshare.failed.title": "取消分享失败",
+  "toast.session.export.success.title": "会话已导出",
+  "toast.session.export.success.description": "会话已保存到 {{filename}}",
+  "toast.session.export.failed.title": "导出会话失败",
+  "toast.session.export.failed.description": "导出会话时发生错误",
   "toast.session.unshare.failed.description": "取消分享会话时发生错误",
   "toast.session.listFailed.title": "无法加载 {{project}} 的会话",
   "toast.update.title": "有可用更新",
@@ -881,6 +889,10 @@ export const dict = {
   "settings.general.section.sounds": "音效",
   "settings.general.section.feed": "动态",
   "settings.general.section.display": "显示",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Wife 模式",
+  "settings.general.row.wifeMode.description":
+    "显示一个能对你的编程会话作出反应的角色伴侣。关闭后使用不含 Wife 层的经典模式。",
   "settings.general.row.language.title": "语言",
   "settings.general.row.language.description": "更改 OpenCode 的显示语言",
   "settings.general.row.shell.title": "终端 Shell",

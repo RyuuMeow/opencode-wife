@@ -145,6 +145,10 @@ export const dict = {
   "command.language.cycle": "Bytt språk",
   "command.language.set": "Bruk språk: {{language}}",
 
+  "command.session.export": "Eksporter økt",
+  "command.session.export.description": "Eksporter hele økttranskripsjonen som JSON",
+  "context.export.session": "Eksporter økt",
+  "common.export": "Eksporter",
   "command.session.new": "Ny sesjon",
   "command.file.open": "Åpne fil",
   "command.tab.close": "Lukk fane",
@@ -557,6 +561,10 @@ export const dict = {
   "toast.session.unshare.success.title": "Deling av sesjon stoppet",
   "toast.session.unshare.success.description": "Sesjonen deles ikke lenger!",
   "toast.session.unshare.failed.title": "Kunne ikke stoppe deling av sesjon",
+  "toast.session.export.success.title": "Økten eksportert",
+  "toast.session.export.success.description": "Økten lagret i {{filename}}",
+  "toast.session.export.failed.title": "Kunne ikke eksportere økten",
+  "toast.session.export.failed.description": "Det oppstod en feil under eksport av økten",
   "toast.session.unshare.failed.description": "Det oppstod en feil da delingen av sesjonen skulle stoppes",
 
   "toast.session.listFailed.title": "Kunne ikke laste sesjoner for {{project}}",
@@ -758,6 +766,10 @@ export const dict = {
   "settings.general.section.sounds": "Lydeffekter",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Skjerm",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "Wife-modus",
+  "settings.general.row.wifeMode.description":
+    "Vis en karakterfølgesvenn som reagerer på kodesesjonen din. Slå av for å bruke klassisk modus uten Wife-laget.",
 
   "settings.general.row.language.title": "Språk",
   "settings.general.row.language.description": "Endre visningsspråket for OpenCode",

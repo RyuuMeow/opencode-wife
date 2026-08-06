@@ -144,6 +144,10 @@ export const dict = {
   "command.language.cycle": "เปลี่ยนภาษา",
   "command.language.set": "ใช้ภาษา: {{language}}",
 
+  "command.session.export": "ส่งออกเซสชัน",
+  "command.session.export.description": "ส่งออกบันทึกเซสชันทั้งหมดเป็น JSON",
+  "context.export.session": "ส่งออกเซสชัน",
+  "common.export": "ส่งออก",
   "command.session.new": "เซสชันใหม่",
   "command.file.open": "เปิดไฟล์",
   "command.tab.close": "ปิดแท็บ",
@@ -648,6 +652,10 @@ export const dict = {
   "toast.session.unshare.success.title": "ยกเลิกการแชร์เซสชันแล้ว",
   "toast.session.unshare.success.description": "ยกเลิกการแชร์เซสชันสำเร็จ!",
   "toast.session.unshare.failed.title": "ไม่สามารถยกเลิกการแชร์เซสชัน",
+  "toast.session.export.success.title": "ส่งออกเซสชันแล้ว",
+  "toast.session.export.success.description": "บันทึกเซสชันไว้ที่ {{filename}}",
+  "toast.session.export.failed.title": "ไม่สามารถส่งออกเซสชันได้",
+  "toast.session.export.failed.description": "เกิดข้อผิดพลาดขณะส่งออกเซสชัน",
   "toast.session.unshare.failed.description": "เกิดข้อผิดพลาดระหว่างการยกเลิกการแชร์เซสชัน",
 
   "toast.session.listFailed.title": "ไม่สามารถโหลดเซสชันสำหรับ {{project}}",
@@ -883,6 +891,10 @@ export const dict = {
   "settings.general.section.sounds": "เสียงเอฟเฟกต์",
   "settings.general.section.feed": "ฟีด",
   "settings.general.section.display": "การแสดงผล",
+  "settings.general.section.wife": "Wife",
+  "settings.general.row.wifeMode.title": "โหมด Wife",
+  "settings.general.row.wifeMode.description":
+    "แสดงเพื่อนร่วมทางที่ตอบสนองต่อเซสชันการเขียนโค้ดของคุณ ปิดเพื่อใช้โหมดคลาสสิกโดยไม่มีเลเยอร์ Wife",
 
   "settings.general.row.language.title": "ภาษา",
   "settings.general.row.language.description": "เปลี่ยนภาษาที่แสดงสำหรับ OpenCode",
