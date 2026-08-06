@@ -9,6 +9,7 @@ import { useLanguage } from "@/context/language"
 import { usePlatform } from "@/context/platform"
 import { useUpdaterAction } from "../updater-action"
 import { useSettings } from "@/context/settings"
+import { DialogWife } from "../dialog-wife"
 import { ExternalLink } from "../external-link"
 import { SettingsListV2 } from "./parts/list"
 import { SettingsRowV2 } from "./parts/row"
@@ -543,12 +544,24 @@ export const SettingsGeneralV2: Component<{
 
         <SettingsListV2>
           <SettingsRowV2
-            title={language.t("settings.general.row.pinchZoom.title")}
-            description={language.t("settings.general.row.pinchZoom.description")}
+            title={language.t("settings.general.row.wifeMode.title")}
+            description={language.t("settings.general.row.wifeMode.description")}
           >
-            <div data-action="settings-pinch-zoom">
-              <Switch checked={pinchZoom.latest} onChange={onPinchZoomChange} />
+            <div data-action="settings-wife-mode">
+              <Switch
+                checked={settings.general.wifeMode()}
+                onChange={(checked) => settings.general.setWifeMode(checked)}
+              />
             </div>
+          </SettingsRowV2>
+
+          <SettingsRowV2
+            title={language.t("wife.characters.title")}
+            description={language.t("settings.general.row.wifeCharacters.description")}
+          >
+            <ButtonV2 size="small" variant="neutral" onClick={() => void dialog.show(() => <DialogWife />)}>
+              {language.t("wife.characters.manage")}
+            </ButtonV2>
           </SettingsRowV2>
         </SettingsListV2>
       </div>
