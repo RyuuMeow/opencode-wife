@@ -47,7 +47,7 @@ const CapabilityTag: Component<{ id: string }> = (props) => {
 
   const summary = createMemo(() => {
     const caps = capabilities()
-    if (!caps) return ""
+    if (!caps) return language.t("wife.characters.unconfigured")
     const motions = Object.values(caps.motionGroups).reduce((total, motions) => total + motions.length, 0)
     return `${motions} ${language.t("wife.scan.motions")} · ${caps.expressions.length} ${language.t(
       "wife.scan.expressions",

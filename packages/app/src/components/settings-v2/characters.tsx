@@ -2,25 +2,28 @@ import { Component, Match, Show, Switch, createMemo, createSignal } from "solid-
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { CharacterList } from "@/features/wife/character/character-list"
 import { CharacterSettings } from "@/features/wife/character/character-settings"
-import { ImportWizard } from "@/features/wife/character/import-wizard"
 import { useLanguage } from "@/context/language"
+import { useWifeRegistry } from "@/features/wife/registry/wife-registry"
 
 export const SettingsCharactersV2: Component = () => {
   const language = useLanguage()
-  const [view, setView] = createSignal<{ type: "list" } | { type: "import" } | { type: "edit"; id: string }>({
-    type: "list",
-  })
+  const registry = useWifeRegistry()
+  const [view, setView] = createSignal<{ type: "list" } | { type: "edit"; id: string }>({ type: "list" })
   const editingId = createMemo(() => {
     const current = view()
     return current.type === "edit" ? current.id : undefined
   })
+
+  const add = () => {
+    registry.register(language.t("wife.characters.newDefault"))
+  }
 
   return (
     <>
       <div class="settings-v2-tab-header flex items-center justify-between">
         <h2 class="settings-v2-tab-title">{language.t("wife.characters.title")}</h2>
         <Show when={view().type === "list"}>
-          <ButtonV2 size="normal" variant="neutral" icon="plus" onClick={() => setView({ type: "import" })}>
+          <ButtonV2 size="normal" variant="neutral" icon="plus" onClick={add}>
             {language.t("wife.import.title")}
           </ButtonV2>
         </Show>
@@ -30,9 +33,6 @@ export const SettingsCharactersV2: Component = () => {
         <Switch>
           <Match when={view().type === "list"}>
             <CharacterList onEdit={(id) => setView({ type: "edit", id })} />
-          </Match>
-          <Match when={view().type === "import"}>
-            <ImportWizard onDone={() => setView({ type: "list" })} onCancel={() => setView({ type: "list" })} />
           </Match>
           <Match when={editingId()}>
             {(id) => <CharacterSettings id={id()} onBack={() => setView({ type: "list" })} />}

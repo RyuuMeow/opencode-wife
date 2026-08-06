@@ -153,7 +153,7 @@ export type CharacterDefinition = {
   id: string
   name: string
   version: string
-  avatar: AvatarProfile
+  avatar?: AvatarProfile
   voicePresetId?: string
   personaPresetId?: string
   behavior?: CharacterBehaviorDefaults
