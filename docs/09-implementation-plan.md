@@ -58,6 +58,8 @@ Acceptance:
 
 ## Milestone 1 — Character registry
 
+> Status: delivered on `character-registry`. Preview player is a static avatar/capability summary; WebGL Live2D preview is deferred to the Live2D runtime milestone (Cubism SDK core cannot be committed to the repo).
+
 Deliverables:
 
 - import character package or Live2D model

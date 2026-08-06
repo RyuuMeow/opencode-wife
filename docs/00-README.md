@@ -1,6 +1,6 @@
 # OpenCode Desktop Wife — Documentation Index
 
-> Status: architecture proposal / pre-implementation design (Milestone 0 delivered on `wife-baseline`)
+> Status: Milestone 0 delivered on `wife-baseline`; Milestone 1 (character registry) delivered on `character-registry`.
 > Basis: the design discussion around extending `anomalyco/opencode` with a low-impact presentation layer.
 
 ## Project position
