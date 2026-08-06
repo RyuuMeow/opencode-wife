@@ -1,4 +1,4 @@
-import { Component, JSX, Show, createMemo } from "solid-js"
+import { Component, JSX, Show, createMemo, createStore } from "solid-js"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import type { CharacterCapabilities, CharacterEmotion, CharacterGesture, CharacterState } from "@opencode-ai/wife-core"
 import {
@@ -8,6 +8,7 @@ import {
   suggestStateFallback,
   type SuggestedMappings,
 } from "@opencode-ai/wife-core"
+import { SettingsListV2 } from "@/components/settings-v2/parts/list"
 import { useLanguage } from "@/context/language"
 
 type MappingChange = (mappings: SuggestedMappings) => void
@@ -42,7 +43,7 @@ const MotionSelect: Component<{
         onSelect={(option) => props.onChange(option && option.value !== "" ? option.value : undefined)}
       />
       <Show when={props.group === undefined && props.fallback}>
-        <span class="text-11-regular text-text-weak">
+        <span class="text-11-regular text-v2-text-text-muted">
           {language.t("wife.mapping.fallback")} {props.fallback}
         </span>
       </Show>
@@ -81,9 +82,60 @@ const MappingRow: Component<{
   children: JSX.Element
 }> = (props) => {
   return (
-    <div class="flex items-center justify-between gap-4 py-1">
-      <span class="text-12-medium">{props.semantic}</span>
-      <div class="min-w-[160px]">{props.children}</div>
+    <div class="flex items-center justify-between gap-4">
+      <span class="truncate">{props.semantic}</span>
+      <div class="min-w-[160px] shrink-0">{props.children}</div>
+    </div>
+  )
+}
+
+const Chevron: Component<{ expanded: boolean }> = (props) => {
+  if (props.expanded) {
+    return (
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <path
+          d="M5.37624 6.75194C5.18184 6.41861 5.42224 6 5.80814 6H10.1921C10.578 6 10.8184 6.41861 10.624 6.75194L8.43203 10.5096C8.23909 10.8404 7.76119 10.8404 7.56825 10.5096L5.37624 6.75194Z"
+          fill="currentColor"
+        />
+      </svg>
+    )
+  }
+  return (
+    <svg width="5" height="6" viewBox="0 0 5 6" fill="none" aria-hidden="true">
+      <path
+        d="M0.75194 5.31663C0.41861 5.51103 0 5.27063 0 4.88473V0.500754C0 0.114854 0.41861 -0.125577 0.75194 0.0688635L4.5096 2.26084C4.8404 2.45378 4.8404 2.93168 4.5096 3.12462L0.75194 5.31663Z"
+        fill="currentColor"
+      />
+    </svg>
+  )
+}
+
+const MappingGroup: Component<{
+  title: string
+  expanded: boolean
+  onToggle: () => void
+  children: JSX.Element
+}> = (props) => {
+  return (
+    <div class="settings-v2-section" data-expanded={props.expanded ? "" : undefined}>
+      <h3 class="settings-v2-mapping-group-header">
+        <button
+          type="button"
+          class="settings-v2-mapping-group-trigger"
+          aria-expanded={props.expanded}
+          onClick={props.onToggle}
+        >
+          <span class="settings-v2-mapping-group-chevron">
+            <Chevron expanded={props.expanded} />
+          </span>
+          <span class="settings-v2-mapping-group-label">
+            <span class="settings-v2-section-title">{props.title}</span>
+          </span>
+        </button>
+      </h3>
+      <Show when={props.expanded}>
+        <SettingsListV2>{props.children}</SettingsListV2>
+      </Show>
     </div>
   )
 }
@@ -95,6 +147,7 @@ export const SemanticMappingEditor: Component<{
 }> = (props) => {
   const language = useLanguage()
   const noneLabel = language.t("wife.mapping.none")
+  const [collapsed, setCollapsed] = createStore({ states: true, gestures: true, emotions: true })
 
   const setState = (state: CharacterState, group: string | undefined) => {
     const states = { ...props.mappings.states }
@@ -131,9 +184,12 @@ export const SemanticMappingEditor: Component<{
   }
 
   return (
-    <div class="flex flex-col gap-4">
-      <div class="flex flex-col gap-1">
-        <span class="text-12-medium text-text-weak">{language.t("wife.mapping.states")}</span>
+    <div class="flex flex-col gap-2 settings-v2-mapping">
+      <MappingGroup
+        title={language.t("wife.mapping.states")}
+        expanded={!collapsed.states}
+        onToggle={() => setCollapsed("states", !collapsed.states)}
+      >
         {characterStates.map((state) => (
           <MappingRow semantic={state}>
             <MotionSelect
@@ -145,10 +201,13 @@ export const SemanticMappingEditor: Component<{
             />
           </MappingRow>
         ))}
-      </div>
+      </MappingGroup>
 
-      <div class="flex flex-col gap-1">
-        <span class="text-12-medium text-text-weak">{language.t("wife.mapping.gestures")}</span>
+      <MappingGroup
+        title={language.t("wife.mapping.gestures")}
+        expanded={!collapsed.gestures}
+        onToggle={() => setCollapsed("gestures", !collapsed.gestures)}
+      >
         {characterGestures.map((gesture) => (
           <MappingRow semantic={gesture}>
             <MotionSelect
@@ -159,10 +218,13 @@ export const SemanticMappingEditor: Component<{
             />
           </MappingRow>
         ))}
-      </div>
+      </MappingGroup>
 
-      <div class="flex flex-col gap-1">
-        <span class="text-12-medium text-text-weak">{language.t("wife.mapping.emotions")}</span>
+      <MappingGroup
+        title={language.t("wife.mapping.emotions")}
+        expanded={!collapsed.emotions}
+        onToggle={() => setCollapsed("emotions", !collapsed.emotions)}
+      >
         {characterEmotions.map((emotion) => (
           <MappingRow semantic={emotion}>
             <ExpressionSelect
@@ -173,7 +235,7 @@ export const SemanticMappingEditor: Component<{
             />
           </MappingRow>
         ))}
-      </div>
+      </MappingGroup>
     </div>
   )
 }
