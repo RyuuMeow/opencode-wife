@@ -776,6 +776,10 @@ export const dict = {
   "wife.characters.newDefault": "New character",
   "wife.characters.settings.changeModel": "Change model",
   // TODO: translate via translate:app
+  "wife.characters.settings.model": "Live2D model",
+  "wife.characters.settings.delete": "Delete character",
+  "wife.characters.settings.removeAvatar": "Remove avatar",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
