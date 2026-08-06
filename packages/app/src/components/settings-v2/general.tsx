@@ -442,6 +442,26 @@ export const SettingsGeneralV2: Component<{
     </div>
   )
 
+  const WifeSection = () => (
+    <div class="settings-v2-section">
+      <h3 class="settings-v2-section-title">{language.t("settings.general.section.wife")}</h3>
+
+      <SettingsListV2>
+        <SettingsRowV2
+          title={language.t("settings.general.row.wifeMode.title")}
+          description={language.t("settings.general.row.wifeMode.description")}
+        >
+          <div data-action="settings-wife-mode">
+            <Switch
+              checked={settings.general.wifeMode()}
+              onChange={(checked) => settings.general.setWifeMode(checked)}
+            />
+          </div>
+        </SettingsRowV2>
+      </SettingsListV2>
+    </div>
+  )
+
   const NotificationsSection = () => (
     <div class="settings-v2-section">
       <h3 class="settings-v2-section-title">{language.t("settings.general.section.notifications")}</h3>
@@ -551,6 +571,8 @@ export const SettingsGeneralV2: Component<{
         </Show>
 
         <GeneralSection />
+
+        <WifeSection />
 
         <AppearanceSection controller={appearance} />
 
