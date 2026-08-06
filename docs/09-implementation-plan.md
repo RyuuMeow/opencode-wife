@@ -41,13 +41,15 @@ Use Conventional Commits and keep commits independently revertible.
 
 ## Milestone 0 — Baseline and integration boundary
 
+> Status: delivered on `wife-baseline` (branch `wife-baseline`, commits `feat(wife-core)…`, `feat(app): add wife mode setting and toggle`, `chore(i18n)…`, `fix(app): restore custom-elements reference directive`, `feat(wife): add gated event bridge provider`).
+
 Deliverables:
 
 - fork builds and launches Desktop
-- Classic Mode switch
-- dedicated Wife module directories
-- minimal event bridge with no behavior change
-- logging namespace and feature flag
+- Classic Mode switch (app setting `general.wifeMode`, default off, settings UI section)
+- dedicated Wife module directories (`packages/wife-core`, `packages/app/src/features/wife/`)
+- minimal event bridge with no behavior change (per-server `wife.activity` debug logging, gated by the flag)
+- logging namespace (`wife.*` from `@opencode-ai/wife-core/log`) and feature flag
 
 Acceptance:
 
