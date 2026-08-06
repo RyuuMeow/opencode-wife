@@ -930,6 +930,10 @@ export const dict = {
   "wife.characters.title": "ਪਾਤਰ",
   "wife.characters.empty": "ਅਜੇ ਕੋਈ ਪਾਤਰ ਰਜਿਸਟਰ ਨਹੀਂ ਹੋਇਆ",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -941,7 +945,6 @@ export const dict = {
   "wife.import.chooseFolder": "ਫੋਲਡਰ ਚੁਣੋ",
   "wife.import.noModelFound": "ਇਸ ਫੋਲਡਰ ਵਿੱਚ ਕੋਈ .model3.json ਫਾਈਲ ਨਹੀਂ ਮਿਲੀ",
   "wife.import.oversized": "ਕੁਝ ਐਸੇਟ 200 MB ਸੀਮਾ ਤੋਂ ਵੱਧ ਹਨ ਅਤੇ ਛੱਡ ਦਿੱਤੀਆਂ ਜਾਣਗੀਆਂ",
-  "wife.import.back": "ਵਾਪਸ",
   "wife.import.name": "ਪਾਤਰ ਦਾ ਨਾਮ",
   "wife.scan.motions": "ਹਰਕਤਾਂ",
   "wife.scan.expressions": "ਅਭਿਵਿਅਕਤੀਆਂ",

@@ -1003,6 +1003,10 @@ export const dict = {
   "wife.characters.title": "Karakter",
   "wife.characters.empty": "Belum ada karakter yang terdaftar",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -1014,7 +1018,6 @@ export const dict = {
   "wife.import.chooseFolder": "Pilih folder",
   "wife.import.noModelFound": "Tidak ada file .model3.json yang ditemukan di folder ini",
   "wife.import.oversized": "Beberapa aset melebihi batas 200 MB dan akan dilewati",
-  "wife.import.back": "Kembali",
   "wife.import.name": "Nama karakter",
   "wife.scan.motions": "Gerakan",
   "wife.scan.expressions": "Ekspresi",

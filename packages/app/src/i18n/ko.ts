@@ -591,6 +591,10 @@ export const dict = {
   "wife.characters.title": "캐릭터",
   "wife.characters.empty": "등록된 캐릭터가 없습니다",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -602,7 +606,6 @@ export const dict = {
   "wife.import.chooseFolder": "폴더 선택",
   "wife.import.noModelFound": "이 폴더에서 .model3.json 파일을 찾을 수 없습니다",
   "wife.import.oversized": "일부 에셋이 200MB 크기 제한을 초과하여 건너뜁니다",
-  "wife.import.back": "뒤로",
   "wife.import.name": "캐릭터 이름",
   "wife.scan.motions": "모션",
   "wife.scan.expressions": "표정",

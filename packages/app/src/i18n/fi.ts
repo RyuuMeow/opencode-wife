@@ -823,6 +823,10 @@ export const dict = {
   "wife.characters.title": "Hahmot",
   "wife.characters.empty": "Hahmoja ei ole vielä rekisteröity",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -834,7 +838,6 @@ export const dict = {
   "wife.import.chooseFolder": "Valitse kansio",
   "wife.import.noModelFound": "Kansiosta ei löytynyt .model3.json-tiedostoa",
   "wife.import.oversized": "Jotkin resurssit ylittävät 200 MB:n rajan ja ohitetaan",
-  "wife.import.back": "Takaisin",
   "wife.import.name": "Hahmon nimi",
   "wife.scan.motions": "Liikkeet",
   "wife.scan.expressions": "Ilmeet",

@@ -1017,6 +1017,10 @@ export const dict = {
   "wife.characters.title": "Персонажі",
   "wife.characters.empty": "Персонажів ще не зареєстровано",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -1028,7 +1032,6 @@ export const dict = {
   "wife.import.chooseFolder": "Вибрати теку",
   "wife.import.noModelFound": "У цій теці не знайдено файл .model3.json",
   "wife.import.oversized": "Деякі ресурси перевищують ліміт 200 МБ і буде пропущено",
-  "wife.import.back": "Назад",
   "wife.import.name": "Ім'я персонажа",
   "wife.scan.motions": "Рухи",
   "wife.scan.expressions": "Вирази",

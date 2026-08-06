@@ -897,6 +897,10 @@ export const dict = {
   "wife.characters.title": "ตัวละคร",
   "wife.characters.empty": "ยังไม่ได้ลงทะเบียนตัวละครใด ๆ",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -908,7 +912,6 @@ export const dict = {
   "wife.import.chooseFolder": "เลือกโฟลเดอร์",
   "wife.import.noModelFound": "ไม่พบไฟล์ .model3.json ในโฟลเดอร์นี้",
   "wife.import.oversized": "บางแอสเซ็ตเกินขีดจำกัด 200 MB และจะถูกข้าม",
-  "wife.import.back": "ย้อนกลับ",
   "wife.import.name": "ชื่อตัวละคร",
   "wife.scan.motions": "การเคลื่อนไหว",
   "wife.scan.expressions": "สีหน้า",

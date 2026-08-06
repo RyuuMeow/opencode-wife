@@ -967,6 +967,9 @@ export const dict = {
 
   "wife.characters.title": "Characters",
   "wife.characters.empty": "No characters registered yet",
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -978,7 +981,6 @@ export const dict = {
   "wife.import.chooseFolder": "Choose folder",
   "wife.import.noModelFound": "No .model3.json file found in this folder",
   "wife.import.oversized": "Some assets exceed the 200 MB size limit and will be skipped",
-  "wife.import.back": "Back",
   "wife.import.name": "Character name",
   "wife.scan.motions": "Motions",
   "wife.scan.expressions": "Expressions",

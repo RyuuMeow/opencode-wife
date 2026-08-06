@@ -910,6 +910,10 @@ export const dict = {
   "wife.characters.title": "Likovi",
   "wife.characters.empty": "Još nijedan lik nije registrovan",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -921,7 +925,6 @@ export const dict = {
   "wife.import.chooseFolder": "Odaberi mapu",
   "wife.import.noModelFound": "U ovoj mapi nije pronađena datoteka .model3.json",
   "wife.import.oversized": "Neki resursi prelaze ograničenje od 200 MB i biće preskočeni",
-  "wife.import.back": "Nazad",
   "wife.import.name": "Ime lika",
   "wife.scan.motions": "Pokreti",
   "wife.scan.expressions": "Izrazi",

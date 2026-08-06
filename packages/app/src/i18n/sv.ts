@@ -929,6 +929,10 @@ export const dict = {
   "wife.characters.title": "Karaktärer",
   "wife.characters.empty": "Inga karaktärer registrerade ännu",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -940,7 +944,6 @@ export const dict = {
   "wife.import.chooseFolder": "Välj mapp",
   "wife.import.noModelFound": "Ingen .model3.json-fil hittades i den här mappen",
   "wife.import.oversized": "Vissa tillgångar överstiger gränsen på 200 MB och hoppas över",
-  "wife.import.back": "Tillbaka",
   "wife.import.name": "Karaktärsnamn",
   "wife.scan.motions": "Rörelser",
   "wife.scan.expressions": "Uttryck",

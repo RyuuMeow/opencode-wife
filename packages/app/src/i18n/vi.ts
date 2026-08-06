@@ -935,6 +935,10 @@ export const dict = {
   "wife.characters.title": "Nhân vật",
   "wife.characters.empty": "Chưa có nhân vật nào được đăng ký",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -946,7 +950,6 @@ export const dict = {
   "wife.import.chooseFolder": "Chọn thư mục",
   "wife.import.noModelFound": "Không tìm thấy tệp .model3.json trong thư mục này",
   "wife.import.oversized": "Một số tài nguyên vượt giới hạn 200 MB và sẽ bị bỏ qua",
-  "wife.import.back": "Quay lại",
   "wife.import.name": "Tên nhân vật",
   "wife.scan.motions": "Chuyển động",
   "wife.scan.expressions": "Biểu cảm",

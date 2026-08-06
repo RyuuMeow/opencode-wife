@@ -895,6 +895,10 @@ export const dict = {
   "wife.characters.title": "角色",
   "wife.characters.empty": "尚未注册任何角色",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -906,7 +910,6 @@ export const dict = {
   "wife.import.chooseFolder": "选择文件夹",
   "wife.import.noModelFound": "此文件夹中未找到 .model3.json 文件",
   "wife.import.oversized": "部分资源超过 200 MB 大小限制,将被跳过",
-  "wife.import.back": "返回",
   "wife.import.name": "角色名称",
   "wife.scan.motions": "动作",
   "wife.scan.expressions": "表情",

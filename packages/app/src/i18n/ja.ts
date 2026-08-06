@@ -831,6 +831,10 @@ export const dict = {
   "wife.characters.title": "キャラクター",
   "wife.characters.empty": "キャラクターがまだ登録されていません",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -842,7 +846,6 @@ export const dict = {
   "wife.import.chooseFolder": "フォルダーを選択",
   "wife.import.noModelFound": "このフォルダーに .model3.json ファイルが見つかりません",
   "wife.import.oversized": "一部のアセットが 200 MB のサイズ制限を超えているためスキップされます",
-  "wife.import.back": "戻る",
   "wife.import.name": "キャラクター名",
   "wife.scan.motions": "モーション",
   "wife.scan.expressions": "表情",

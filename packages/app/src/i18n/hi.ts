@@ -932,6 +932,10 @@ export const dict = {
   "wife.characters.title": "कैरेक्टर",
   "wife.characters.empty": "अभी कोई कैरेक्टर पंजीकृत नहीं है",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -943,7 +947,6 @@ export const dict = {
   "wife.import.chooseFolder": "फ़ोल्डर चुनें",
   "wife.import.noModelFound": "इस फ़ोल्डर में कोई .model3.json फ़ाइल नहीं मिली",
   "wife.import.oversized": "कुछ एसेट 200 MB सीमा से अधिक हैं और छोड़ दी जाएंगी",
-  "wife.import.back": "वापस",
   "wife.import.name": "कैरेक्टर का नाम",
   "wife.scan.motions": "गतियाँ",
   "wife.scan.expressions": "अभिव्यक्तियाँ",

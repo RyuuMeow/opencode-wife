@@ -915,6 +915,10 @@ export const dict = {
   "wife.characters.title": "Personajes",
   "wife.characters.empty": "Aún no hay personajes registrados",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -926,7 +930,6 @@ export const dict = {
   "wife.import.chooseFolder": "Elegir carpeta",
   "wife.import.noModelFound": "No se encontró ningún archivo .model3.json en esta carpeta",
   "wife.import.oversized": "Algunos recursos superan el límite de 200 MB y se omitirán",
-  "wife.import.back": "Atrás",
   "wife.import.name": "Nombre del personaje",
   "wife.scan.motions": "Movimientos",
   "wife.scan.expressions": "Expresiones",

@@ -933,6 +933,10 @@ export const dict = {
   "wife.characters.title": "Karakters",
   "wife.characters.empty": "Nog geen karakters geregistreerd",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -944,7 +948,6 @@ export const dict = {
   "wife.import.chooseFolder": "Map kiezen",
   "wife.import.noModelFound": "Geen .model3.json-bestand gevonden in deze map",
   "wife.import.oversized": "Sommige assets overschrijden de limiet van 200 MB en worden overgeslagen",
-  "wife.import.back": "Terug",
   "wife.import.name": "Karakternaam",
   "wife.scan.motions": "Bewegingen",
   "wife.scan.expressions": "Expressies",

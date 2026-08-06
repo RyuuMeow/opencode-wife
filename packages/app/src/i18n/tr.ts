@@ -915,6 +915,10 @@ export const dict = {
   "wife.characters.title": "Karakterler",
   "wife.characters.empty": "Henüz kayıtlı karakter yok",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -926,7 +930,6 @@ export const dict = {
   "wife.import.chooseFolder": "Klasör seç",
   "wife.import.noModelFound": "Bu klasörde .model3.json dosyası bulunamadı",
   "wife.import.oversized": "Bazı varlıklar 200 MB sınırını aşıyor ve atlanacak",
-  "wife.import.back": "Geri",
   "wife.import.name": "Karakter adı",
   "wife.scan.motions": "Hareketler",
   "wife.scan.expressions": "İfadeler",

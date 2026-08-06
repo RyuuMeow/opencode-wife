@@ -933,6 +933,10 @@ export const dict = {
   "wife.characters.title": "Personajlar",
   "wife.characters.empty": "Hələ heç bir personaj qeydiyyatdan keçməyib",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -944,7 +948,6 @@ export const dict = {
   "wife.import.chooseFolder": "Qovluq seçin",
   "wife.import.noModelFound": "Bu qovluqda .model3.json faylı tapılmadı",
   "wife.import.oversized": "Bəzi aktivlər 200 MB limitini aşır və atlanacaq",
-  "wife.import.back": "Geri",
   "wife.import.name": "Personaj adı",
   "wife.scan.motions": "Hərəkətlər",
   "wife.scan.expressions": "İfadələr",

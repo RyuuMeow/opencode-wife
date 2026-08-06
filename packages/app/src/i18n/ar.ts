@@ -843,6 +843,10 @@ export const dict = {
   "wife.characters.title": "الشخصيات",
   "wife.characters.empty": "لم يتم تسجيل أي شخصية بعد",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -854,7 +858,6 @@ export const dict = {
   "wife.import.chooseFolder": "اختيار مجلد",
   "wife.import.noModelFound": "لم يتم العثور على ملف .model3.json في هذا المجلد",
   "wife.import.oversized": "بعض الأصول تتجاوز حد 200 ميجابايت وسيتم تخطيها",
-  "wife.import.back": "رجوع",
   "wife.import.name": "اسم الشخصية",
   "wife.scan.motions": "الحركات",
   "wife.scan.expressions": "التعابير",

@@ -772,6 +772,10 @@ export const dict = {
   "wife.characters.title": "Karakterer",
   "wife.characters.empty": "Ingen karakterer registrert ennå",
   // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Not configured",
+  "wife.characters.newDefault": "New character",
+  "wife.characters.settings.changeModel": "Change model",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
@@ -783,7 +787,6 @@ export const dict = {
   "wife.import.chooseFolder": "Velg mappe",
   "wife.import.noModelFound": "Fant ingen .model3.json-fil i denne mappen",
   "wife.import.oversized": "Noen ressurser overskrider 200 MB-grensen og vil bli hoppet over",
-  "wife.import.back": "Tilbake",
   "wife.import.name": "Karakternavn",
   "wife.scan.motions": "Bevegelser",
   "wife.scan.expressions": "Uttrykk",
