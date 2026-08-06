@@ -10,6 +10,7 @@ import {
   resolveNewLayoutDesigns,
   shouldDisplayTabsToast,
   shouldEnableNewLayout,
+  wifeModeDefault,
 } from "./settings"
 
 describe("agent visibility", () => {
@@ -92,5 +93,11 @@ describe("layout transition", () => {
     expect(shouldEnableNewLayout("1.17.20", "1.17.21")).toBe(false)
     expect(shouldEnableNewLayout(undefined, "1.17.19")).toBe(false)
     expect(shouldEnableNewLayout("dev", "1.17.20")).toBe(false)
+  })
+})
+
+describe("wife mode", () => {
+  test("defaults to Classic Mode without the Wife layer", () => {
+    expect(wifeModeDefault).toBe(false)
   })
 })
