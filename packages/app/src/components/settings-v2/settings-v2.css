@@ -736,3 +736,40 @@
   line-height: 1;
   color: var(--v2-state-fg-danger);
 }
+
+/* Wife characters */
+.settings-v2-tab-header:has(+ .settings-v2-tab-body.settings-v2-characters) {
+  padding-bottom: 40px;
+}
+
+.wife-avatar-picker {
+  width: 72px;
+  height: 72px;
+  padding: 0;
+  border: 1px solid var(--v2-border-border-base);
+  border-radius: 8px;
+  background-color: var(--v2-background-bg-layer-01);
+  color: var(--v2-icon-icon-muted);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  overflow: hidden;
+}
+
+.wife-avatar-picker:hover {
+  background-image:
+    linear-gradient(90deg, var(--v2-overlay-simple-overlay-hover) 0%, var(--v2-overlay-simple-overlay-hover) 100%),
+    linear-gradient(90deg, var(--v2-background-bg-layer-01) 0%, var(--v2-background-bg-layer-01) 100%);
+}
+
+.wife-avatar-picker:focus-visible {
+  outline: 2px solid var(--v2-border-border-focus);
+  outline-offset: 2.5px;
+}
+
+.wife-avatar-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}

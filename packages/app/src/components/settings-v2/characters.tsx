@@ -21,7 +21,16 @@ export const SettingsCharactersV2: Component = () => {
   return (
     <>
       <div class="settings-v2-tab-header flex items-center justify-between">
-        <h2 class="settings-v2-tab-title">{language.t("wife.characters.title")}</h2>
+        <Show
+          when={view().type === "list"}
+          fallback={
+            <ButtonV2 size="small" variant="ghost" icon="arrow-left" onClick={() => setView({ type: "list" })}>
+              {language.t("wife.characters.backToList")}
+            </ButtonV2>
+          }
+        >
+          <h2 class="settings-v2-tab-title">{language.t("wife.characters.title")}</h2>
+        </Show>
         <Show when={view().type === "list"}>
           <ButtonV2 size="normal" variant="neutral" icon="plus" onClick={add}>
             {language.t("wife.import.title")}
@@ -29,7 +38,7 @@ export const SettingsCharactersV2: Component = () => {
         </Show>
       </div>
 
-      <div class="settings-v2-tab-body">
+      <div class="settings-v2-tab-body settings-v2-characters">
         <Switch>
           <Match when={view().type === "list"}>
             <CharacterList onEdit={(id) => setView({ type: "edit", id })} />
