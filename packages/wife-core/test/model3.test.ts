@@ -111,6 +111,47 @@ describe("scanLive2dModel", () => {
     expect(result.capabilities.lipSyncParameterIds).toEqual(["ParamMouthOpenY"])
   })
 
+  test("discovers loose motions and expressions when the model lacks sections", async () => {
+    const vts = {
+      "水色小熊.model3.json": JSON.stringify({
+        Version: 3,
+        FileReferences: { Moc: "水色小熊.moc3", Textures: ["水色小熊.4096/texture_00.png"] },
+      }),
+      "水色小熊.moc3": "\u0000moc",
+      "水色小熊.4096/texture_00.png": "\u0000png",
+      "待机动画.motion3.json": "{}",
+      "打瞌睡.motion3.json": "{}",
+      "发夹.exp3.json": "{}",
+      "星星.exp3.json": "{}",
+    }
+    const result = await scanLive2dModel("水色小熊.model3.json", fileSet(vts))
+    expect(result.issues).toEqual([])
+    expect(Object.keys(result.capabilities.motionGroups).sort()).toEqual(["待机动画", "打瞌睡"])
+    expect(result.capabilities.motionGroups["待机动画"]).toEqual([{ index: 0, file: "待机动画.motion3.json" }])
+    expect(result.capabilities.expressions.map((expression) => expression.id).sort()).toEqual(["发夹", "星星"])
+  })
+
+  test("does not merge loose files when the model declares its own sections", async () => {
+    const mixed = {
+      "m.model3.json": JSON.stringify({
+        Version: 3,
+        FileReferences: {
+          Moc: "m.moc3",
+          Expressions: [{ Name: "Smile", File: "smile.exp3.json" }],
+          Motions: { Idle: [{ File: "idle.motion3.json" }] },
+        },
+      }),
+      "m.moc3": "\u0000moc",
+      "smile.exp3.json": "{}",
+      "idle.motion3.json": "{}",
+      "loose.exp3.json": "{}",
+      "loose.motion3.json": "{}",
+    }
+    const result = await scanLive2dModel("m.model3.json", fileSet(mixed))
+    expect(result.capabilities.expressions.map((expression) => expression.id)).toEqual(["Smile"])
+    expect(Object.keys(result.capabilities.motionGroups)).toEqual(["Idle"])
+  })
+
   test("reports missing assets with resolved paths", async () => {
     const files = {
       "model/小熊.model3.json": JSON.stringify({

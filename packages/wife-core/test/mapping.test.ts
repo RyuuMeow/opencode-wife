@@ -37,4 +37,24 @@ describe("suggestMappings", () => {
     expect(suggestStateFallback("error", suggestMappings(caps).states)).toBe("idle")
     expect(suggestStateFallback("idle", suggestMappings(caps).states)).toBeUndefined()
   })
+
+  test("matches common CJK motion and expression names", () => {
+    const cjkCaps = extractCapabilities({
+      Version: 3,
+      FileReferences: {
+        Moc: "a.moc3",
+        Expressions: [{ Name: "开心", File: "开心.exp3.json" }],
+        Motions: {
+          待机动画: [{ File: "待机动画.motion3.json" }],
+          点头: [{ File: "点头.motion3.json" }],
+          挥手: [{ File: "挥手.motion3.json" }],
+        },
+      },
+    })
+    const mappings = suggestMappings(cjkCaps)
+    expect(mappings.states.idle?.motions).toEqual([{ group: "待机动画", index: 0 }])
+    expect(mappings.gestures.nod?.motions).toEqual([{ group: "点头", index: 0 }])
+    expect(mappings.gestures.wave?.motions).toEqual([{ group: "挥手", index: 0 }])
+    expect(mappings.emotions.happy?.expression).toBe("开心")
+  })
 })

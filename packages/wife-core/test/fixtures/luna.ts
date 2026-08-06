@@ -58,5 +58,6 @@ export function fileSet(files: Record<string, string>) {
   return {
     has: (path: string) => Object.hasOwn(files, path),
     readText: async (path: string) => files[path],
+    list: () => Object.keys(files),
   }
 }

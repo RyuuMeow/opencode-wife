@@ -12,6 +12,7 @@ export type ScanIssue = {
 export type Live2dFileSet = {
   has(path: string): boolean | Promise<boolean>
   readText(path: string): Promise<string | undefined>
+  list(): string[] | Promise<string[]>
 }
 
 export type Live2dScanResult = {
@@ -233,7 +234,41 @@ export async function scanLive2dModel(model3Path: string, files: Live2dFileSet):
     }
   }
 
-  return { capabilities: extractCapabilities(model), issues }
+  return { capabilities: discoverLooseAssets(model, modelDir, await files.list()), issues }
+}
+
+function discoverLooseAssets(model: Model3Json, modelDir: string, paths: string[]): CharacterCapabilities {
+  const capabilities = extractCapabilities(model)
+  const prefix = modelDir ? `${modelDir}/` : ""
+  const topLevel = paths.filter((path) => {
+    const rest = prefix ? path.slice(prefix.length) : path
+    return path.startsWith(prefix) && !rest.includes("/")
+  })
+
+  const referenced = new Set(
+    [
+      ...(model.FileReferences?.Expressions ?? []).flatMap((entry) => (entry.File ? [entry.File] : [])),
+      ...Object.values(model.FileReferences?.Motions ?? {}).flatMap((entries) =>
+        entries.flatMap((entry) => (entry.File ? [entry.File] : [])),
+      ),
+    ].map((path) => resolveModelPath(modelDir, path)),
+  )
+
+  if (capabilities.expressions.length === 0) {
+    for (const path of topLevel.filter((path) => path.endsWith(".exp3.json") && !referenced.has(path)).sort()) {
+      const id = path.slice(path.lastIndexOf("/") + 1).replace(/\.exp3\.json$/i, "")
+      capabilities.expressions.push({ id, file: path })
+    }
+  }
+
+  if (Object.keys(capabilities.motionGroups).length === 0) {
+    for (const path of topLevel.filter((path) => path.endsWith(".motion3.json") && !referenced.has(path)).sort()) {
+      const group = path.slice(path.lastIndexOf("/") + 1).replace(/\.motion3\.json$/i, "")
+      capabilities.motionGroups[group] = [{ index: 0, file: path }]
+    }
+  }
+
+  return capabilities
 }
 
 export function findModel3Files(paths: string[]) {
