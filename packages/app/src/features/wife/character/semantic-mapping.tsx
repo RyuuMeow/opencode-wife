@@ -1,4 +1,5 @@
-import { Component, JSX, Show, createMemo, createStore } from "solid-js"
+import { Component, JSX, Show, createMemo } from "solid-js"
+import { createStore } from "solid-js/store"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import type { CharacterCapabilities, CharacterEmotion, CharacterGesture, CharacterState } from "@opencode-ai/wife-core"
 import {

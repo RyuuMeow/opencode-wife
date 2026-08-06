@@ -34,6 +34,7 @@ function fileSetFromFiles(files: File[]) {
       if (!file || file.size > MAX_TEXT_BYTES) return undefined
       return file.text()
     },
+    list: () => [...byPath.keys()],
   }
 }
 
