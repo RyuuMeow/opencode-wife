@@ -873,6 +873,8 @@ export const dict = {
   "app.name.desktop": "OpenCode Desktop",
 
   "settings.section.desktop": "桌面",
+  "settings.section.wife": "Wife",
+  "settings.tab.wife": "Wife",
   "settings.section.server": "服务器",
 
   "settings.tab.general": "通用",
@@ -889,11 +891,8 @@ export const dict = {
   "settings.general.section.sounds": "音效",
   "settings.general.section.feed": "动态",
   "settings.general.section.display": "显示",
-  "settings.general.section.wife": "Wife",
   "settings.general.row.wifeMode.title": "Wife 模式",
-  "settings.general.row.wifeCharacters.description": "注册并管理角色伴侣",
   "wife.characters.title": "角色",
-  "wife.characters.manage": "管理",
   "wife.characters.empty": "尚未注册任何角色",
   "wife.import.title": "导入角色",
   "wife.import.step.folder.description": "选择包含 Live2D 模型(.model3.json)的文件夹",

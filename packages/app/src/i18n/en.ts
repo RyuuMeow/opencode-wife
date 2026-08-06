@@ -889,6 +889,8 @@ export const dict = {
   "app.name.desktop": "OpenCode Desktop",
 
   "settings.section.desktop": "Desktop",
+  "settings.section.wife": "Wife",
+  "settings.tab.wife": "Wife",
   "settings.section.server": "Server",
   "settings.tab.general": "General",
   "settings.tab.shortcuts": "Shortcuts",
@@ -903,7 +905,6 @@ export const dict = {
   "settings.general.section.sounds": "Sound effects",
   "settings.general.section.feed": "Feed",
   "settings.general.section.display": "Display",
-  "settings.general.section.wife": "Wife",
 
   "settings.general.row.language.title": "Language",
   "settings.general.row.language.description": "Change the display language for OpenCode",
@@ -963,10 +964,8 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife Mode",
   "settings.general.row.wifeMode.description":
     "Show a character companion that reacts to your coding session. Disable to use Classic Mode without the Wife layer.",
-  "settings.general.row.wifeCharacters.description": "Register and manage character companions",
 
   "wife.characters.title": "Characters",
-  "wife.characters.manage": "Manage",
   "wife.characters.empty": "No characters registered yet",
   "wife.import.title": "Import character",
   "wife.import.step.folder.description": "Choose the folder containing your Live2D model (.model3.json)",
