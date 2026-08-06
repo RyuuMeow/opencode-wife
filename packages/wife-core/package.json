@@ -6,7 +6,9 @@
   "license": "MIT",
   "exports": {
     ".": "./src/index.ts",
-    "./log": "./src/log.ts"
+    "./log": "./src/log.ts",
+    "./schema/character": "./src/schema/character.ts",
+    "./live2d/model3": "./src/live2d/model3.ts"
   },
   "scripts": {
     "typecheck": "tsgo --noEmit",
