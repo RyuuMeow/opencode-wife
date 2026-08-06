@@ -602,7 +602,8 @@ export const dict = {
   "wife.characters.settings.general": "General",
   "wife.characters.settings.dangerZone": "Danger zone",
   "wife.characters.settings.nameDescription": "Character display name",
-  "wife.characters.settings.modelDescription": "Live2D model used to render this character",
+  "wife.characters.settings.modelDescription":
+    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
   "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
   "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
   "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
@@ -612,7 +613,6 @@ export const dict = {
   "wife.characters.settings.avatar": "Avatar",
   "wife.characters.backToList": "Back to characters",
   "wife.import.title": "캐릭터 가져오기",
-  "wife.import.step.folder.description": "Live2D 모델(.model3.json)이 포함된 폴더를 선택하세요",
   "wife.import.step.scan.title": "검사 결과",
   "wife.import.step.mapping.title": "의미 매핑",
   "wife.import.chooseFolder": "폴더 선택",

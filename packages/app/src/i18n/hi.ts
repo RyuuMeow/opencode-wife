@@ -943,7 +943,8 @@ export const dict = {
   "wife.characters.settings.general": "General",
   "wife.characters.settings.dangerZone": "Danger zone",
   "wife.characters.settings.nameDescription": "Character display name",
-  "wife.characters.settings.modelDescription": "Live2D model used to render this character",
+  "wife.characters.settings.modelDescription":
+    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
   "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
   "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
   "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
@@ -953,7 +954,6 @@ export const dict = {
   "wife.characters.settings.avatar": "Avatar",
   "wife.characters.backToList": "Back to characters",
   "wife.import.title": "कैरेक्टर आयात करें",
-  "wife.import.step.folder.description": "अपना Live2D मॉडल (.model3.json) वाला फ़ोल्डर चुनें",
   "wife.import.step.scan.title": "स्कैन परिणाम",
   "wife.import.step.mapping.title": "शब्दार्थ मैपिंग",
   "wife.import.chooseFolder": "फ़ोल्डर चुनें",

@@ -842,7 +842,8 @@ export const dict = {
   "wife.characters.settings.general": "General",
   "wife.characters.settings.dangerZone": "Danger zone",
   "wife.characters.settings.nameDescription": "Character display name",
-  "wife.characters.settings.modelDescription": "Live2D model used to render this character",
+  "wife.characters.settings.modelDescription":
+    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
   "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
   "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
   "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
@@ -852,7 +853,6 @@ export const dict = {
   "wife.characters.settings.avatar": "Avatar",
   "wife.characters.backToList": "Back to characters",
   "wife.import.title": "キャラクターをインポート",
-  "wife.import.step.folder.description": "Live2D モデル(.model3.json)が含まれるフォルダーを選択してください",
   "wife.import.step.scan.title": "スキャン結果",
   "wife.import.step.mapping.title": "意味マッピング",
   "wife.import.chooseFolder": "フォルダーを選択",

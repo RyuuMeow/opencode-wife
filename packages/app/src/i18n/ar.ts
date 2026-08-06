@@ -854,7 +854,8 @@ export const dict = {
   "wife.characters.settings.general": "General",
   "wife.characters.settings.dangerZone": "Danger zone",
   "wife.characters.settings.nameDescription": "Character display name",
-  "wife.characters.settings.modelDescription": "Live2D model used to render this character",
+  "wife.characters.settings.modelDescription":
+    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
   "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
   "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
   "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
@@ -864,7 +865,6 @@ export const dict = {
   "wife.characters.settings.avatar": "Avatar",
   "wife.characters.backToList": "Back to characters",
   "wife.import.title": "استيراد شخصية",
-  "wife.import.step.folder.description": "اختر المجلد الذي يحتوي على نموذج Live2D (.model3.json)",
   "wife.import.step.scan.title": "نتائج الفحص",
   "wife.import.step.mapping.title": "الربط الدلالي",
   "wife.import.chooseFolder": "اختيار مجلد",
