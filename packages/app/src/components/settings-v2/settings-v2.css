@@ -211,7 +211,8 @@
   display: contents;
 }
 
-.settings-v2-provider-row {
+.settings-v2-provider-row,
+.settings-v2-character-row {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -221,21 +222,25 @@
   border-bottom: 0.5px solid var(--v2-border-border-base);
 }
 
-.settings-v2-provider-row:last-child {
+.settings-v2-provider-row:last-child,
+.settings-v2-character-row:last-child {
   border-bottom: none;
 }
 
 @media (min-width: 640px) {
-  .settings-v2-provider-row {
+  .settings-v2-provider-row,
+  .settings-v2-character-row {
     flex-wrap: nowrap;
   }
 }
 
-.settings-v2-providers [data-component="provider-icon"] {
+.settings-v2-providers [data-component="provider-icon"],
+.settings-v2-character-row [data-component="icon"] {
   color: var(--v2-icon-icon-base);
 }
 
-.settings-v2-provider-lead {
+.settings-v2-provider-lead,
+.settings-v2-character-lead {
   display: flex;
   min-width: 0;
   flex: 1;
@@ -243,7 +248,8 @@
   gap: 10px;
 }
 
-.settings-v2-provider-lead:not(:has(.settings-v2-provider-copy)) {
+.settings-v2-provider-lead:not(:has(.settings-v2-provider-copy)),
+.settings-v2-character-lead:not(:has(.settings-v2-provider-copy)) {
   align-items: center;
 }
 
@@ -255,7 +261,8 @@
   gap: 6px;
 }
 
-.settings-v2-provider-main {
+.settings-v2-provider-main,
+.settings-v2-character-main {
   display: flex;
   min-width: 0;
   flex-wrap: wrap;
@@ -263,7 +270,8 @@
   gap: 8px;
 }
 
-.settings-v2-provider-name {
+.settings-v2-provider-name,
+.settings-v2-character-name {
   font-size: 13px;
   font-weight: 530;
   line-height: 16px;
@@ -278,7 +286,8 @@
   color: var(--v2-text-text-muted);
 }
 
-.settings-v2-provider-empty {
+.settings-v2-provider-empty,
+.settings-v2-character-empty {
   padding-block: 20px;
   font-size: 13px;
   font-weight: 440;
