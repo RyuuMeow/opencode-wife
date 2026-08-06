@@ -153,6 +153,9 @@ export const CharacterSettings: Component<{
     >
       <div class="settings-v2-section">
         <h3 class="settings-v2-section-title">{language.t("wife.characters.settings.avatar")}</h3>
+        <span class="text-12-regular text-v2-text-text-muted">
+          {language.t("wife.characters.settings.avatarDescription")}
+        </span>
         <div class="flex items-center gap-3">
           <button
             type="button"
@@ -182,8 +185,12 @@ export const CharacterSettings: Component<{
       </div>
 
       <div class="settings-v2-section">
+        <h3 class="settings-v2-section-title">{language.t("wife.characters.settings.general")}</h3>
         <SettingsListV2>
-          <SettingsRowV2 title={language.t("wife.import.name")}>
+          <SettingsRowV2
+            title={language.t("wife.import.name")}
+            description={language.t("wife.characters.settings.nameDescription")}
+          >
             <div class="w-64">
               <TextInputV2
                 type="text"
@@ -196,7 +203,10 @@ export const CharacterSettings: Component<{
             </div>
           </SettingsRowV2>
 
-          <SettingsRowV2 title={language.t("wife.characters.settings.model")}>
+          <SettingsRowV2
+            title={language.t("wife.characters.settings.model")}
+            description={language.t("wife.characters.settings.modelDescription")}
+          >
             <Show
               when={!character()?.avatar || changingModel()}
               fallback={
@@ -260,6 +270,9 @@ export const CharacterSettings: Component<{
         {(caps) => (
           <div class="settings-v2-section">
             <h3 class="settings-v2-section-title">{language.t("wife.import.step.mapping.title")}</h3>
+            <span class="text-12-regular text-v2-text-text-muted">
+              {language.t("wife.characters.settings.mappingDescription")}
+            </span>
             <CapabilitySummary capabilities={caps()} />
             <SemanticMappingEditor capabilities={caps()} mappings={mappings()} onChange={updateMappings} />
           </div>
@@ -267,8 +280,12 @@ export const CharacterSettings: Component<{
       </Show>
 
       <div class="settings-v2-section">
+        <h3 class="settings-v2-section-title">{language.t("wife.characters.settings.dangerZone")}</h3>
         <SettingsListV2>
-          <SettingsRowV2 title={language.t("wife.characters.settings.delete")}>
+          <SettingsRowV2
+            title={language.t("wife.characters.settings.delete")}
+            description={language.t("wife.characters.settings.deleteDescription")}
+          >
             <ButtonV2 size="normal" variant="danger" onClick={remove}>
               {language.t("common.delete")}
             </ButtonV2>

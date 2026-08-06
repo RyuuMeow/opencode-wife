@@ -918,6 +918,14 @@ export const dict = {
   "wife.characters.settings.delete": "Delete character",
   "wife.characters.settings.removeAvatar": "Remove avatar",
   // TODO: translate via translate:app
+  "wife.characters.settings.general": "General",
+  "wife.characters.settings.dangerZone": "Danger zone",
+  "wife.characters.settings.nameDescription": "Character display name",
+  "wife.characters.settings.modelDescription": "Live2D model used to render this character",
+  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
+  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
+  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
+  // TODO: translate via translate:app
   "wife.characters.edit": "Edit",
   "wife.characters.settings": "Character settings",
   "wife.characters.settings.avatar": "Avatar",
