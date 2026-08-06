@@ -929,6 +929,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife ਮੋਡ",
   "wife.characters.title": "ਪਾਤਰ",
   "wife.characters.empty": "ਅਜੇ ਕੋਈ ਪਾਤਰ ਰਜਿਸਟਰ ਨਹੀਂ ਹੋਇਆ",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "ਪਾਤਰ ਆਯਾਤ ਕਰੋ",
   "wife.import.step.folder.description": "ਆਪਣਾ Live2D ਮਾਡਲ (.model3.json) ਵਾਲਾ ਫੋਲਡਰ ਚੁਣੋ",
   "wife.import.step.scan.title": "ਸਕੈਨ ਨਤੀਜੇ",

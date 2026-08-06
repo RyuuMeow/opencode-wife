@@ -842,6 +842,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "وضع Wife",
   "wife.characters.title": "الشخصيات",
   "wife.characters.empty": "لم يتم تسجيل أي شخصية بعد",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "استيراد شخصية",
   "wife.import.step.folder.description": "اختر المجلد الذي يحتوي على نموذج Live2D (.model3.json)",
   "wife.import.step.scan.title": "نتائج الفحص",

@@ -896,6 +896,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "โหมด Wife",
   "wife.characters.title": "ตัวละคร",
   "wife.characters.empty": "ยังไม่ได้ลงทะเบียนตัวละครใด ๆ",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "นำเข้าตัวละคร",
   "wife.import.step.folder.description": "เลือกโฟลเดอร์ที่มีโมเดล Live2D (.model3.json) ของคุณ",
   "wife.import.step.scan.title": "ผลการสแกน",

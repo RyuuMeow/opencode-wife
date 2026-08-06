@@ -822,6 +822,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife-tila",
   "wife.characters.title": "Hahmot",
   "wife.characters.empty": "Hahmoja ei ole vielä rekisteröity",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Tuo hahmo",
   "wife.import.step.folder.description": "Valitse kansio, joka sisältää Live2D-mallisi (.model3.json)",
   "wife.import.step.scan.title": "Skannauksen tulokset",

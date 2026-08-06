@@ -928,6 +928,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife-läge",
   "wife.characters.title": "Karaktärer",
   "wife.characters.empty": "Inga karaktärer registrerade ännu",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Importera karaktär",
   "wife.import.step.folder.description": "Välj mappen som innehåller din Live2D-modell (.model3.json)",
   "wife.import.step.scan.title": "Skanningsresultat",

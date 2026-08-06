@@ -911,6 +911,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Режим Wife",
   "wife.characters.title": "Персонажи",
   "wife.characters.empty": "Персонажи ещё не зарегистрированы",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Импортировать персонажа",
   "wife.import.step.folder.description": "Выберите папку, содержащую модель Live2D (.model3.json)",
   "wife.import.step.scan.title": "Результаты сканирования",

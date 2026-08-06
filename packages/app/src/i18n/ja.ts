@@ -830,6 +830,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife モード",
   "wife.characters.title": "キャラクター",
   "wife.characters.empty": "キャラクターがまだ登録されていません",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "キャラクターをインポート",
   "wife.import.step.folder.description": "Live2D モデル(.model3.json)が含まれるフォルダーを選択してください",
   "wife.import.step.scan.title": "スキャン結果",

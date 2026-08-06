@@ -914,6 +914,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife Modu",
   "wife.characters.title": "Karakterler",
   "wife.characters.empty": "Henüz kayıtlı karakter yok",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Karakter içe aktar",
   "wife.import.step.folder.description": "Live2D modelinizi (.model3.json) içeren klasörü seçin",
   "wife.import.step.scan.title": "Tarama sonuçları",

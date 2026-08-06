@@ -590,6 +590,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife 모드",
   "wife.characters.title": "캐릭터",
   "wife.characters.empty": "등록된 캐릭터가 없습니다",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "캐릭터 가져오기",
   "wife.import.step.folder.description": "Live2D 모델(.model3.json)이 포함된 폴더를 선택하세요",
   "wife.import.step.scan.title": "검사 결과",

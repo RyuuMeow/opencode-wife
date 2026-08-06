@@ -967,7 +967,11 @@ export const dict = {
 
   "wife.characters.title": "Characters",
   "wife.characters.empty": "No characters registered yet",
-  "wife.import.title": "Import character",
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
+  "wife.import.title": "Add character",
   "wife.import.step.folder.description": "Choose the folder containing your Live2D model (.model3.json)",
   "wife.import.step.scan.title": "Scan results",
   "wife.import.step.mapping.title": "Semantic mapping",

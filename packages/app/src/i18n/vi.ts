@@ -934,6 +934,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Chế độ Wife",
   "wife.characters.title": "Nhân vật",
   "wife.characters.empty": "Chưa có nhân vật nào được đăng ký",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Nhập nhân vật",
   "wife.import.step.folder.description": "Chọn thư mục chứa mô hình Live2D (.model3.json) của bạn",
   "wife.import.step.scan.title": "Kết quả quét",

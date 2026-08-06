@@ -1002,6 +1002,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Mode Wife",
   "wife.characters.title": "Karakter",
   "wife.characters.empty": "Belum ada karakter yang terdaftar",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "Impor karakter",
   "wife.import.step.folder.description": "Pilih folder yang berisi model Live2D (.model3.json) Anda",
   "wife.import.step.scan.title": "Hasil pemindaian",

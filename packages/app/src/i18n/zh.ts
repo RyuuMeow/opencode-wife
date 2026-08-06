@@ -894,6 +894,11 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife 模式",
   "wife.characters.title": "角色",
   "wife.characters.empty": "尚未注册任何角色",
+  // TODO: translate via translate:app
+  "wife.characters.edit": "Edit",
+  "wife.characters.settings": "Character settings",
+  "wife.characters.settings.avatar": "Avatar",
+  "wife.characters.backToList": "Back to characters",
   "wife.import.title": "导入角色",
   "wife.import.step.folder.description": "选择包含 Live2D 模型(.model3.json)的文件夹",
   "wife.import.step.scan.title": "扫描结果",
