@@ -1,6 +1,6 @@
 # OpenCode Desktop Wife — Documentation Index
 
-> Status: Milestone 0 (baseline) and Milestone 1 (character registry) delivered on `wife-baseline` / `character-registry`; character management UI iterations delivered on `wife-settings`. Live2D runtime (Phase A) planned — see [12-handoff.md](./12-handoff.md).
+> Status: Milestone 0 (baseline), Milestone 1 (character registry) and Phase A (Live2D runtime) delivered on `wife-baseline` / `character-registry` / `wife-settings` / `live2d-runtime`. Voice engine (Milestone 2) planned — see [12-handoff.md](./12-handoff.md).
 > Basis: the design discussion around extending `anomalyco/opencode` with a low-impact presentation layer.
 
 ## Project position
@@ -78,4 +78,4 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 6. Add multi-session arbitration.
 7. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
 
-Current progress: steps 1 is in progress (Live2D runtime Phase A pending, see 12-handoff.md).
+Current progress: Phase A (Live2D runtime) delivered; Milestone 2 (voice) is next, see 12-handoff.md.

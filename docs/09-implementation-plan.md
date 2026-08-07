@@ -81,9 +81,9 @@ Implementation notes (delivered on `wife-settings`):
 - mapping suggestions match English and CJK names; `custom.*` gestures/emotions are type-level only (UI pending)
 - Settings → Wife sidebar category with General / Characters tabs; i18n policy: en + zht translated, other locales carry English placeholders with `// TODO: translate via translate:app` comments until `translate:app` is run
 
-## Phase A — Live2D runtime (in progress)
+## Phase A — Live2D runtime (delivered)
 
-> Plan approved; implementation pending. Decided details: runtime = `pixi.js@7` + `pixi-live2d-display-lipsyncpatch`; Cubism core downloaded at build time and bundled (users download nothing); desktop reads model folders via native picker + `wife://` protocol; panel is a right-side split between the conversation and the review panel (`chat | wife | review`), toggled by a Toggle Wife button next to Toggle Review.
+> Status: delivered on `live2d-runtime`. Runtime = `pixi.js@7` + `pixi-live2d-display-lipsyncpatch`; Cubism core downloaded at build time by `script/fetch-cubism-core.ts` and bundled (users download nothing); desktop reads model folders via a native dialog IPC (`wife-pick-model-folder`, which also scans the folder and whitelists it in Electron Main) + `wife://` protocol; panel is a right-side split between the conversation and the review panel (`chat | wife | review`), fixed 320px, toggled by a Toggle Wife button next to Toggle Review (keybind `mod+alt+w`); web build shows an empty state in the panel (desktop-first). The panel has a manual intent test strip (state / gesture / emotion) driving `applyIntent` until the Milestone 4 event pipeline lands.
 
 Commits:
 
@@ -100,7 +100,9 @@ Acceptance:
 - toggling the panel behaves like the review panel
 - web build shows an empty state for the panel (desktop-first)
 
-## Milestone 2 — Voice engine and lip sync
+## > Status: delivered on `live2d-runtime` (above).
+
+Milestone 2 — Voice engine and lip sync
 
 Deliverables:
 

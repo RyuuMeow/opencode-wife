@@ -16,7 +16,8 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 |---|---|
 | `wife-baseline` | Milestone 0: wife-core package, Classic Mode flag, gated event bridge |
 | `character-registry` | Milestone 1: schemas, scanner, registry, mapping suggestions |
-| `wife-settings` | All character management UI iterations (current base for Phase A) |
+| `wife-settings` | Character management UI iterations |
+| `live2d-runtime` | Phase A: Live2D runtime (current base for Milestone 2) |
 
 ## What is delivered
 
@@ -36,14 +37,13 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 - **Characters tab** (Settings → Wife → Characters): provider-style list (icon + name + capability tag + Edit), instant "Add character", character settings page with sections — Avatar (square picker + remove), General (name, Live2D model folder), Semantic mapping (collapsible narrow groups, collapsed by default, autosave), Danger zone (delete).
 - **i18n**: all wife keys present in 27 locales; en + zht translated, others English placeholders with `// TODO: translate via translate:app` (policy D15).
 
-## Phase A — Live2D runtime (planned, not implemented)
+## Phase A — Live2D runtime (delivered on `live2d-runtime`)
 
-Approved plan (docs/09 Phase A + docs/07 + D11–D14):
-
-1. deps `pixi.js@7` + `pixi-live2d-display-lipsyncpatch`; `script/fetch-cubism-core.ts` → `packages/app/public/vendor/live2dcubismcore.min.js` (gitignored) + script tag in `app/index.html`
-2. `layout.tsx` `wifePanel` contract (mirror `reviewPanel`), session-header Toggle Wife button (next to Toggle Review, `wife-sparks` icon), i18n `command.wife.toggle` / `session.panel.wife`
-3. desktop: `pick-model-folder` IPC (native dialog) + registry `modelFolders: Record<characterId, string>` + `wife://` protocol serving whitelisted folders
-4. `features/wife/live2d/live2d-view.tsx` (pixi Application + `Live2DModel.from("wife://<id>/<model3>")` + `applyIntent` mapping state/gesture/emotion → `motion(group,index,priority)` + `expression(name)`) and `wife-panel.tsx` aside (chat | wife | review); settings model picker switches to the native dialog on desktop; web shows empty state
+- deps `pixi.js@7` + `pixi-live2d-display-lipsyncpatch`; `script/fetch-cubism-core.ts` (repo root) → `packages/app/public/vendor/live2dcubismcore.min.js` (gitignored) + script tag in `app/index.html`
+- `context/layout.tsx` `wifePanel` contract (mirrors `reviewPanel`, persisted `wife.panelOpened`); session-header Toggle Wife buttons in both titlebar variants (legacy ghost + V2 ghost-muted, `wife-sparks` icon now in the V2 icon set); `wife.toggle` command with keybind `mod+alt+w` (+ command palette suggestion); i18n `command.wife.toggle` / `session.panel.wife` / `wife.panel.*` (D15)
+- desktop: `wife-pick-model-folder` IPC (`packages/desktop/src/main/wife.ts`) — native dialog + recursive folder scan (json text up to 5MB, files up to 200MB) + electron-store whitelist `wife.modelFolders` in one call; `wife://` protocol (privileged scheme + `protocol.handle` with Range passthrough; pure `resolveWifePath` in `wife-path.ts`, tested); preload `ElectronAPI.pickWifeModelFolder` + `Platform.pickWifeModelFolder`
+- `features/wife/live2d/live2d-view.tsx` (pixi Application + `Live2DModel.from("wife://<id>/<model3>")` + `applyIntent`: state motion NORMAL priority, gesture FORCE with onFinish return-to-state, expression) and `wife-panel.tsx` aside (320px, `chat | wife | review` in `pages/session.tsx`); panel header has character SelectV2, canvas area, and a bottom manual intent test strip (state/gesture/emotion); empty states for web / no model / load failure; the view is lazy-loaded so pixi stays out of the main bundle
+- settings model picker: native dialog on desktop (folder path stored in registry `modelFolders` + main whitelist), webkitdirectory input on web; both reuse `scanLive2dModel` (manifest → `Live2dFileSet`)
 
 Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文件` (VTS pack; 2 motions 待机动画/打瞌睡, 22 expressions). Synthetic `wife-demo\luna` fixture files do NOT render (placeholder moc3).
 
@@ -67,12 +67,12 @@ Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文�
 
 - `custom.*` gestures/emotions: types accept them, mapping editor does not render or add them yet.
 - Loose-scan motion/expression file paths live in capabilities but are not persisted as assets; the runtime reads them back from the model folder (desktop protocol), so re-picking a folder after re-import is not required as long as the folder path is stored.
+- The panel's intent test strip is a manual driver; event-driven states (Milestone 4) will replace it. No voice/lip sync (Milestone 2), project binding (Milestone 3), or persona (Milestone 5) yet.
+- Web build intentionally shows an empty state (no `wife://` protocol in browsers).
 - i18n: run `bun run translate:app -- all` (needs the opencode CLI) to replace placeholders in non-en/zht locales.
-- Event-driven states (Milestone 4), voice (Milestone 2), project binding (Milestone 3), persona (Milestone 5) are untouched.
 - Registry store is localStorage-backed; large avatar images are downscaled to 128px data URLs, but a future move to IndexedDB may be worth it if many characters accumulate.
 
 ## Suggested next steps
 
-1. Implement Phase A (commits listed in docs/09).
-2. Then Milestone 2 (voice engine + lip sync) — depends on the Live2D runtime being visible.
-3. Then Milestone 3 (project binding) and Milestone 4 (deterministic activity pipeline driving the character).
+1. Milestone 2 (voice engine + lip sync) — the Live2D runtime is visible; `model.speak()` + playback-side energy analysis can be wired next.
+2. Milestone 3 (project binding) and Milestone 4 (deterministic activity pipeline driving the character).
