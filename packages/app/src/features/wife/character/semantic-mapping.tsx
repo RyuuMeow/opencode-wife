@@ -65,16 +65,18 @@ const ExpressionSelect: Component<{
   const current = () => options().find((option) => option.value === props.expression) ?? options()[0]
 
   return (
-    <SelectV2
-      appearance="inline"
-      options={options()}
-      current={current()}
-      placement="bottom-end"
-      gutter={6}
-      value={(option) => option.value}
-      label={(option) => option.label}
-      onSelect={(option) => props.onChange(option && option.value !== "" ? option.value : undefined)}
-    />
+    <div class="flex flex-col items-end gap-1">
+      <SelectV2
+        appearance="inline"
+        options={options()}
+        current={current()}
+        placement="bottom-end"
+        gutter={6}
+        value={(option) => option.value}
+        label={(option) => option.label}
+        onSelect={(option) => props.onChange(option && option.value !== "" ? option.value : undefined)}
+      />
+    </div>
   )
 }
 
