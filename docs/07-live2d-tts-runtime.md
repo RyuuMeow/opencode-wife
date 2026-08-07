@@ -1,5 +1,25 @@
 # Live2D and TTS Runtime
 
+## Runtime selection (decided — Phase A)
+
+The Live2D renderer uses **pixi.js 7 + `pixi-live2d-display-lipsyncpatch`** (MIT, maintained fork). Its API aligns directly with the semantic model:
+
+- `model.motion(group, index, priority)` maps 1:1 to `MotionRef { group, index }` plus the `MotionPriority` ladder from the character system.
+- `model.expression(name)` maps to `EmotionBinding.expression`.
+- Automatic blink/gaze and physics are built in; `model.speak()` covers Milestone 2 audio-driven lip sync.
+
+### Cubism core provisioning
+
+The proprietary `live2dcubismcore.min.js` cannot be committed to the repository. It is downloaded once at build time by `script/fetch-cubism-core.ts` into `packages/app/public/vendor/` (gitignored) and bundled with the app, so end users do not download anything extra. If the download fails, the file can be placed manually at that path.
+
+### Model asset access (decided — Phase A)
+
+The sandboxed renderer cannot read arbitrary files and blob URLs cannot resolve the model's relative references. Instead:
+
+- Desktop picks the model folder through a native directory dialog (`pick-model-folder` IPC); the absolute path is stored machine-locally in the registry (`modelFolders`).
+- Electron Main registers a `wife://` custom protocol: `wife://<characterId>/<relativePath>` reads files from the whitelisted registered folder and returns them, so `Live2DModel.from("wife://<id>/<model3path>")` resolves relative references naturally.
+- Web build shows an empty state for the runtime panel (desktop-first for the renderer).
+
 ## Runtime responsibilities
 
 The presentation runtime turns a semantic `PresentationIntent` into:

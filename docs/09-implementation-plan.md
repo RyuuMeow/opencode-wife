@@ -58,15 +58,15 @@ Acceptance:
 
 ## Milestone 1 — Character registry
 
-> Status: delivered on `character-registry`. Preview player is a static avatar/capability summary; WebGL Live2D preview is deferred to the Live2D runtime milestone (Cubism SDK core cannot be committed to the repo). Settings entry lives under its own sidebar category (Settings → Wife → General / Characters), delivered on `wife-settings`.
+> Status: delivered on `character-registry` + `wife-settings`. The original linear import wizard was replaced by an instant "Add character" flow plus a per-character settings page (avatar / general / semantic mapping / danger zone), delivered on `wife-settings`. Live WebGL preview is the next step (Phase A below).
 
 Deliverables:
 
 - import character package or Live2D model
 - asset validation
 - motion/expression/parameter scan
-- preview player
-- semantic mapping UI
+- preview player (static avatar picker delivered; live WebGL preview pending Phase A)
+- semantic mapping UI (collapsible groups, narrow rows)
 - persisted character definition and capability cache
 
 Acceptance:
@@ -75,14 +75,30 @@ Acceptance:
 - missing mappings use visible fallbacks
 - invalid imports do not crash the app
 
-Suggested commits:
+Implementation notes (delivered on `wife-settings`):
+
+- model references resolve relative to the `.model3.json` directory; VTS-style loose `.motion3.json` / `.exp3.json` files are discovered when the model declares none; missing optional assets warn instead of block
+- mapping suggestions match English and CJK names; `custom.*` gestures/emotions are type-level only (UI pending)
+- Settings → Wife sidebar category with General / Characters tabs; i18n policy: en + zht translated, other locales carry English placeholders with `// TODO: translate via translate:app` comments until `translate:app` is run
+
+## Phase A — Live2D runtime (in progress)
+
+> Plan approved; implementation pending. Decided details: runtime = `pixi.js@7` + `pixi-live2d-display-lipsyncpatch`; Cubism core downloaded at build time and bundled (users download nothing); desktop reads model folders via native picker + `wife://` protocol; panel is a right-side split between the conversation and the review panel (`chat | wife | review`), toggled by a Toggle Wife button next to Toggle Review.
+
+Commits:
 
 ```text
-feat(wife-schema): add character and asset schemas
-feat(wife-registry): persist registered characters
-feat(wife-live2d): scan and preview model capabilities
-feat(wife-settings): add semantic motion mapping
+feat(wife): add live2d runtime dependencies and cubism core fetch script
+feat(wife): add wife panel state and toggle button
+feat(desktop): serve model files via wife protocol
+feat(wife): add live2d view and wife side panel
 ```
+
+Acceptance:
+
+- the model renders in the wife panel and plays mapped motions/expressions
+- toggling the panel behaves like the review panel
+- web build shows an empty state for the panel (desktop-first)
 
 ## Milestone 2 — Voice engine and lip sync
 

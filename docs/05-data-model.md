@@ -31,12 +31,15 @@ type CharacterDefinition = {
   id: string
   name: string
   version: string
-  avatar: AvatarProfile
+  avatar?: AvatarProfile        // optional: a character can exist without a Live2D model yet
+  avatarImage?: string          // square profile picture as a downscaled data URL
   voicePresetId?: string
   personaPresetId?: string
   behavior?: CharacterBehaviorDefaults
 }
 ```
+
+> Implementation note: the model folder path for a character is machine-local state and lives outside `CharacterDefinition` — the registry keeps `modelFolders: Record<characterId, string>` (absolute path, used by the desktop `wife://` protocol to serve model files to the runtime).
 
 ## Avatar profile
 

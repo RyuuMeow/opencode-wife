@@ -76,6 +76,8 @@ Users may configure:
 
 Users do not redefine the meaning of system states, because the event pipeline depends on stable semantics.
 
+> Implementation status: `custom.*` gestures/emotions are accepted by the type system but the mapping editor currently renders only the fixed lists; adding custom entries is not yet implemented (see 12-handoff.md).
+
 ## Capability scanning
 
 When importing a model, scan `.model3.json` and referenced files to build:
@@ -94,6 +96,13 @@ type CharacterCapabilities = {
 ```
 
 Cache the scan result, but regenerate it when assets change.
+
+Implementation notes (delivered):
+
+- References are resolved relative to the `.model3.json` directory (`..` segments are collapsed; absolute paths and URLs are rejected). Any ancestor folder can be picked.
+- When the model declares no expressions/motions (VTube Studio packs), the top level of the model folder is scanned for loose `*.exp3.json` / `*.motion3.json` files; each loose motion becomes its own group named after the file.
+- Missing physics/pose/display-info/user-data assets produce warnings; missing moc/textures/motions/expressions block the attach.
+- Semantic mapping suggestions match both English and common CJK motion/expression names (e.g. 待机动画 → state.idle).
 
 ## Motion model
 

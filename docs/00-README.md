@@ -1,6 +1,6 @@
 # OpenCode Desktop Wife — Documentation Index
 
-> Status: Milestone 0 delivered on `wife-baseline`; Milestone 1 (character registry) delivered on `character-registry`.
+> Status: Milestone 0 (baseline) and Milestone 1 (character registry) delivered on `wife-baseline` / `character-registry`; character management UI iterations delivered on `wife-settings`. Live2D runtime (Phase A) planned — see [12-handoff.md](./12-handoff.md).
 > Basis: the design discussion around extending `anomalyco/opencode` with a low-impact presentation layer.
 
 ## Project position
@@ -42,6 +42,7 @@ The key constraint is **failure isolation**: disabling or crashing the Wife laye
 | [09-implementation-plan.md](./09-implementation-plan.md) | Milestones, branches, commits, verification and delivery order |
 | [10-decisions-open-questions.md](./10-decisions-open-questions.md) | Agreed decisions, unresolved choices and explicit non-goals |
 | [11-testing-observability.md](./11-testing-observability.md) | Tests, diagnostics, fallbacks and runtime telemetry |
+| [12-handoff.md](./12-handoff.md) | Current implementation state, verification commands, pending decisions and next steps |
 
 ## Recommended source layout
 
@@ -49,14 +50,15 @@ The key constraint is **failure isolation**: disabling or crashing the Wife laye
 packages/
 ├── wife-core/
 │   ├── activity/
+│   ├── live2d/          (model3 scanning, path resolution, semantic mapping suggestions)
 │   ├── persona/
 │   ├── presentation/
 │   └── schema/
 ├── app/src/features/wife/
-│   ├── character/
-│   ├── live2d/
-│   ├── settings/
-│   └── workspace/
+│   ├── bridge/          (gated event observation)
+│   ├── registry/        (persisted character registry)
+│   ├── character/       (list, settings page, semantic mapping editor)
+│   └── live2d/          (Live2D view and panel — Phase A)
 └── desktop/src/main/wife/
     ├── character-registry/
     ├── runtime/
@@ -75,3 +77,5 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 5. Add lightweight persona requests for spoken text and semantic gestures.
 6. Add multi-session arbitration.
 7. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
+
+Current progress: steps 1 is in progress (Live2D runtime Phase A pending, see 12-handoff.md).

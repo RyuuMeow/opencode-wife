@@ -44,6 +44,26 @@ It must bypass character, persona and TTS resources and remain useful for debugg
 
 Split panes and detachable tabs are separate, high-conflict workstreams after the character pipeline is validated.
 
+### D11 — Live2D runtime: pixi.js 7 + lipsyncpatch fork
+
+The renderer uses `pixi-live2d-display-lipsyncpatch` (MIT). Its `motion(group, index, priority)` and `expression(name)` APIs map directly onto the semantic model. Decided during Phase A planning.
+
+### D12 — Cubism core is downloaded at build time and bundled
+
+The proprietary `live2dcubismcore.min.js` never enters the repository. `script/fetch-cubism-core.ts` downloads it into `packages/app/public/vendor/` (gitignored) and it ships inside the app, so end users perform no extra setup. A documented manual-placement fallback exists.
+
+### D13 — Desktop-first runtime with a `wife://` protocol
+
+The sandboxed renderer cannot read model folders and blob URLs cannot resolve relative model references. Desktop picks the folder via a native dialog, stores the absolute path machine-locally, and Electron Main serves model files through a whitelisted `wife://<characterId>/<path>` protocol. The web build shows an empty state in the panel.
+
+### D14 — Wife panel placement and toggle
+
+The character renders in a right-side split between the conversation and the review panel (`chat | wife | review`), toggled by a Toggle Wife titlebar button that mirrors Toggle Review. Left edge stays free for future navigation; RTL ordering falls out of flex direction automatically.
+
+### D15 — i18n policy for new keys
+
+New UI keys are translated in English and Traditional Chinese; other locales receive English placeholders with a `// TODO: translate via translate:app` comment so the parity test stays green until `translate:app` is run.
+
 ## Open product questions
 
 ### Q1 — Character visibility model
@@ -54,7 +74,7 @@ Choose the initial supported surface:
 - persistent side dock
 - detached always-on-top window
 
-Recommendation: build one reusable `WifeView`, ship a dock or tab first, and add detached ownership later.
+> Resolved: a right-side split panel toggled from the titlebar (chat | wife | review), delivered as Phase A. Detached ownership remains a later option.
 
 ### Q2 — Persona model provider
 
