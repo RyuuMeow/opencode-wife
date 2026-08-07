@@ -16,7 +16,18 @@ import { usePlatform } from "@/context/platform"
 import { useWifeRegistry } from "../registry/wife-registry"
 import type { PresentationIntent } from "./live2d-view"
 
-const Live2DView = lazy(() => import("./live2d-view").then((module) => ({ default: module.Live2DView })))
+const Live2DView = lazy(async () => {
+  try {
+    return { default: (await import("./live2d-view")).Live2DView }
+  } catch {
+    return { default: RuntimeMissing }
+  }
+})
+
+function RuntimeMissing() {
+  const language = useLanguage()
+  return <EmptyState title={language.t("wife.panel.empty.runtimeMissing")} />
+}
 
 const WIFE_PANEL_WIDTH = 320
 

@@ -1014,6 +1014,7 @@ export const dict = {
   "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
   "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
   "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
+  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
   "wife.panel.empty.openSettings": "Open settings",
   "wife.panel.selectCharacter": "Select character",
   "wife.panel.test.none": "None",

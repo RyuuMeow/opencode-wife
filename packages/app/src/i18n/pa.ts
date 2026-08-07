@@ -985,6 +985,8 @@ export const dict = {
   // TODO: translate via translate:app
   "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
   // TODO: translate via translate:app
+  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
+  // TODO: translate via translate:app
   "wife.panel.empty.openSettings": "Open settings",
   // TODO: translate via translate:app
   "wife.panel.selectCharacter": "Select character",

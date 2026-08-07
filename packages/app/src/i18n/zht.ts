@@ -943,6 +943,7 @@ export const dict = {
   "wife.panel.test.state.waiting_user": "等待您",
   "wife.panel.test.state.idle": "閒置",
   "wife.panel.empty.loadFailed": "無法載入 Live2D 模型",
+  "wife.panel.empty.runtimeMissing": "Live2D 執行環境不可用",
   "wife.panel.test.gesture.shake_head": "搖頭",
   "wife.panel.test.gesture.thinking": "思考",
   "wife.panel.test.state.listening": "聆聽",

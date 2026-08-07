@@ -1,6 +1,6 @@
 import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import { Application, Ticker } from "pixi.js"
-import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch"
+import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
 import type {
   AvatarProfile,
   CharacterEmotion,
