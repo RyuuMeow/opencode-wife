@@ -11,12 +11,14 @@ import {
   scanHasErrors,
   scanLive2dModel,
   suggestMappings,
+  type Live2dFileSet,
   type ScanIssue,
   type SuggestedMappings,
 } from "@opencode-ai/wife-core"
 import { SettingsListV2 } from "@/components/settings-v2/parts/list"
 import { SettingsRowV2 } from "@/components/settings-v2/parts/row"
 import { useLanguage } from "@/context/language"
+import { usePlatform, type WifeModelFolderManifestEntry } from "@/context/platform"
 import { useWifeRegistry } from "../registry/wife-registry"
 import { CapabilitySummary } from "./capability-summary"
 import { SemanticMappingEditor } from "./semantic-mapping"
@@ -25,7 +27,7 @@ const MAX_TEXT_BYTES = 5 * 1024 * 1024
 const MAX_ASSET_BYTES = 200 * 1024 * 1024
 const AVATAR_SIZE = 128
 
-function fileSetFromFiles(files: File[]) {
+function fileSetFromFiles(files: File[]): Live2dFileSet {
   const byPath = new Map(files.map((file) => [normalizeModelPath(file.webkitRelativePath || file.name), file]))
   return {
     has: (path: string) => byPath.has(normalizeModelPath(path)),
@@ -33,6 +35,19 @@ function fileSetFromFiles(files: File[]) {
       const file = byPath.get(normalizeModelPath(path))
       if (!file || file.size > MAX_TEXT_BYTES) return undefined
       return file.text()
+    },
+    list: () => [...byPath.keys()],
+  }
+}
+
+function fileSetFromManifest(files: WifeModelFolderManifestEntry[]): Live2dFileSet {
+  const byPath = new Map(files.map((file) => [normalizeModelPath(file.relativePath), file]))
+  return {
+    has: (path: string) => byPath.has(normalizeModelPath(path)),
+    readText: async (path: string) => {
+      const file = byPath.get(normalizeModelPath(path))
+      if (!file || !file.text) return undefined
+      return file.text
     },
     list: () => [...byPath.keys()],
   }
@@ -56,6 +71,7 @@ export const CharacterSettings: Component<{
 }> = (props) => {
   const language = useLanguage()
   const registry = useWifeRegistry()
+  const platform = usePlatform()
   const character = createMemo(() => registry.character()(props.id))
   const capabilities = createMemo(() => registry.capabilities()(props.id))
   const mappings = createMemo<SuggestedMappings>(() => ({
@@ -64,13 +80,14 @@ export const CharacterSettings: Component<{
     emotions: character()?.avatar?.emotions ?? {},
   }))
   const [changingModel, setChangingModel] = createSignal(false)
-  const [files, setFiles] = createSignal<File[]>([])
+  const [pickedSource, setPickedSource] = createSignal<Array<{ size: number }>>([])
   const [models, setModels] = createSignal<string[]>([])
   const [modelPath, setModelPath] = createSignal<string>()
   const [scanning, setScanning] = createSignal(false)
   const [notice, setNotice] = createSignal<string>()
   const [issues, setIssues] = createSignal<ScanIssue[]>([])
   const [oversizedFiles, setOversizedFiles] = createSignal(0)
+  const [activeFileSet, setActiveFileSet] = createSignal<Live2dFileSet>()
 
   const setName = (value: string) => {
     registry.update(props.id, { name: value })
@@ -102,7 +119,7 @@ export const CharacterSettings: Component<{
   const pickModel = async (list: FileList | null) => {
     if (!list) return
     const picked = Array.from(list)
-    setFiles(picked)
+    setPickedSource(picked)
     setNotice(undefined)
     setIssues([])
     const model3Files = findModel3Files(picked.map((file) => file.webkitRelativePath || file.name))
@@ -111,16 +128,54 @@ export const CharacterSettings: Component<{
       return
     }
     setModels(model3Files)
+    setActiveFileSet(fileSetFromFiles(picked))
     if (model3Files.length === 1) {
-      await beginScan(model3Files[0]!, picked)
+      await beginScan(model3Files[0]!)
     }
   }
 
-  const beginScan = async (path: string, picked: File[]) => {
+  const pickModelFolder = async () => {
+    if (platform.platform !== "desktop" || !platform.pickWifeModelFolder) return
+    setNotice(undefined)
+    setIssues([])
+    setScanning(true)
+    try {
+      const pick = await platform.pickWifeModelFolder(props.id)
+      if (!pick) return
+      const model3Files = findModel3Files(pick.files.map((file) => file.relativePath))
+      if (model3Files.length === 0) {
+        setNotice(language.t("wife.import.noModelFound"))
+        return
+      }
+      registry.setModelFolder(props.id, pick.path)
+      setPickedSource(pick.files)
+      setModels(model3Files)
+      setActiveFileSet(fileSetFromManifest(pick.files))
+      if (model3Files.length === 1) {
+        await beginScan(model3Files[0]!)
+      }
+    } catch (error) {
+      setNotice(error instanceof Error ? error.message : String(error))
+    } finally {
+      setScanning(false)
+    }
+  }
+
+  const chooseFolder = () => {
+    if (platform.platform === "desktop" && platform.pickWifeModelFolder) {
+      void pickModelFolder()
+      return
+    }
+    document.querySelector<HTMLInputElement>('input[type="file"][webkitdirectory]')?.click()
+  }
+
+  const beginScan = async (path: string) => {
+    const fileSet = activeFileSet()
+    if (!fileSet) return
     setModelPath(path)
     setScanning(true)
     try {
-      const scan = await scanLive2dModel(path, fileSetFromFiles(picked))
+      const scan = await scanLive2dModel(path, fileSet)
       if (scanHasErrors(scan.issues)) {
         setIssues(scan.issues)
         return
@@ -138,7 +193,7 @@ export const CharacterSettings: Component<{
       setChangingModel(false)
       setNotice(undefined)
       setIssues([])
-      setOversizedFiles(picked.filter((file) => file.size > MAX_ASSET_BYTES).length)
+      setOversizedFiles(pickedSource().filter((file) => file.size > MAX_ASSET_BYTES).length)
     } catch (error) {
       setNotice(error instanceof Error ? error.message : String(error))
     } finally {
@@ -232,13 +287,7 @@ export const CharacterSettings: Component<{
                   onChange={(event) => void pickModel(event.currentTarget.files)}
                   {...({ webkitdirectory: "", directory: "" } as unknown as JSX.InputHTMLAttributes<HTMLInputElement>)}
                 />
-                <ButtonV2
-                  size="normal"
-                  variant="neutral"
-                  onClick={() =>
-                    document.querySelector<HTMLInputElement>('input[type="file"][webkitdirectory]')?.click()
-                  }
-                >
+                <ButtonV2 size="normal" variant="neutral" onClick={chooseFolder}>
                   {language.t("wife.import.chooseFolder")}
                 </ButtonV2>
                 <Show when={models().length > 1}>
@@ -249,7 +298,7 @@ export const CharacterSettings: Component<{
                     placement="bottom-end"
                     gutter={6}
                     label={(option) => option}
-                    onSelect={(option) => option && void beginScan(option, files())}
+                    onSelect={(option) => option && void beginScan(option)}
                   />
                 </Show>
                 <Show when={scanning()}>

@@ -24,6 +24,7 @@ import type { UpdaterController } from "./updater-controller"
 import { createUpdaterSubscriptions } from "./updater-subscriptions"
 import { createDesktopDraftStore } from "./draft-store"
 import { nativeT } from "./native-translations"
+import { pickWifeModelFolder } from "./wife"
 
 const pickerFilters = (ext?: string[]) => {
   if (!ext || ext.length === 0) return undefined
@@ -207,6 +208,10 @@ export function registerIpcHandlers(deps: Deps) {
       return result.filePath ?? null
     },
   )
+
+  ipcMain.handle("wife-pick-model-folder", (_event: IpcMainInvokeEvent, characterId: string) => {
+    return pickWifeModelFolder(characterId)
+  })
 
   ipcMain.on("open-external", (_event: IpcMainEvent, url: string) => {
     openExternalURL(url)

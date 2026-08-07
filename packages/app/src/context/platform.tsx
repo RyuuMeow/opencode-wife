@@ -20,6 +20,17 @@ type SaveFilePickerOptions = { title?: string; defaultPath?: string }
 type PlatformName = "web" | "desktop"
 type DesktopOS = "macos" | "windows" | "linux"
 
+export type WifeModelFolderManifestEntry = {
+  relativePath: string
+  size: number
+  text: string | null
+}
+
+export type WifeModelFolderPick = {
+  path: string
+  files: WifeModelFolderManifestEntry[]
+}
+
 export type FatalRendererErrorLog = {
   error: string
   url: string
@@ -61,6 +72,9 @@ type PlatformBase = {
 
   /** Open a native save file picker dialog (desktop only) */
   saveFilePickerDialog?(opts?: SaveFilePickerOptions): Promise<string | null>
+
+  /** Pick a Live2D model folder with a native dialog, scan it, and whitelist it for the wife:// protocol (desktop only) */
+  pickWifeModelFolder?(characterId: string): Promise<WifeModelFolderPick | null>
 
   /** Storage mechanism, defaults to localStorage */
   storage?: (name?: string) => SyncStorage | AsyncStorage

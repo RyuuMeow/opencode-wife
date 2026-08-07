@@ -16,6 +16,7 @@ import { nativeT } from "./native-translations"
 import { createWindowRegistry } from "./window-registry"
 import { safeWindowURL } from "./window-state"
 import { resolveExternalURL, resolveLocalFilePath } from "./external-url"
+import { wifeProtocol } from "./wife"
 
 const root = dirname(fileURLToPath(import.meta.url))
 const rendererRoot = join(root, "../renderer")
@@ -35,6 +36,15 @@ const jsCallStacksDocumentPolicy = "include-js-call-stacks-in-crash-reports"
 protocol.registerSchemesAsPrivileged([
   {
     scheme: rendererProtocol,
+    privileges: {
+      secure: true,
+      standard: true,
+      supportFetchAPI: true,
+      stream: true,
+    },
+  },
+  {
+    scheme: wifeProtocol,
     privileges: {
       secure: true,
       standard: true,

@@ -7,6 +7,7 @@ import type { CharacterCapabilities, CharacterDefinition } from "@opencode-ai/wi
 export type WifeRegistryState = {
   characters: CharacterDefinition[]
   capabilities: Record<string, CharacterCapabilities>
+  modelFolders: Record<string, string>
 }
 
 export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSimpleContext({
@@ -15,12 +16,13 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
   init: () => {
     const [store, setStore, , ready] = persisted(
       "wife.registry.v1",
-      createStore<WifeRegistryState>({ characters: [], capabilities: {} }),
+      createStore<WifeRegistryState>({ characters: [], capabilities: {}, modelFolders: {} }),
     )
 
     const list = createMemo(() => store.characters)
     const character = createMemo(() => (id: string) => store.characters.find((item) => item.id === id))
     const capabilities = createMemo(() => (id: string) => store.capabilities[id])
+    const modelFolder = createMemo(() => (id: string) => store.modelFolders[id])
 
     const register = (name: string) => {
       const id = crypto.randomUUID()
@@ -42,10 +44,19 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
       setStore("capabilities", id, caps)
     }
 
+    const setModelFolder = (id: string, folder: string) => {
+      setStore("modelFolders", id, folder)
+    }
+
     const remove = (id: string) => {
       setStore("characters", (characters) => characters.filter((item) => item.id !== id))
       setStore("capabilities", (capabilities) => {
         const next = { ...capabilities }
+        delete next[id]
+        return next
+      })
+      setStore("modelFolders", (folders) => {
+        const next = { ...folders }
         delete next[id]
         return next
       })
@@ -56,9 +67,11 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
       list,
       character,
       capabilities,
+      modelFolder,
       register,
       update,
       setCapabilities,
+      setModelFolder,
       remove,
     }
   },
