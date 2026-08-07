@@ -160,6 +160,8 @@ export const dict = {
   "command.terminal.toggle": "Перемкнути термінал",
   "command.fileTree.toggle": "Перемкнути дерево файлів",
   "command.review.toggle": "Перемкнути огляд",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Новий термінал",
   "command.terminal.new.description": "Створити нову вкладку термінала",
   "command.steps.toggle": "Перемкнути кроки",
@@ -771,6 +773,8 @@ export const dict = {
   "session.tab.context": "Контекст",
   "session.tab.unknown": "Невідома сесія",
   "session.panel.reviewAndFiles": "Огляд і файли",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Цю сесію не знайдено",
   "session.error.notFound.description": "Ця вкладка посилається на сесію, якої більше немає на цьому сервері.",
   "session.error.notFound.closeTab": "Закрити вкладку",

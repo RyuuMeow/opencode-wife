@@ -154,6 +154,8 @@ export const dict = {
   "command.terminal.toggle": "ٹرمینل دکھائیں یا چھپائیں",
   "command.fileTree.toggle": "فائل ٹری دکھائیں یا چھپائیں",
   "command.review.toggle": "جائزہ دکھائیں یا چھپائیں",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "نیا ٹرمینل",
   "command.terminal.new.description": "ایک نیا ٹرمینل ٹیب بنائیں",
   "command.steps.toggle": "اقدامات دکھائیں یا چھپائیں",
@@ -712,6 +714,8 @@ export const dict = {
   "session.tab.context": "سیاق و سباق",
   "session.tab.unknown": "نامعلوم سیشن",
   "session.panel.reviewAndFiles": "جائزہ اور فائلیں۔",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "یہ سیشن نہیں مل سکتا",
   "session.error.notFound.description": "یہ ٹیب ایک سیشن کی طرف اشارہ کرتا ہے جو اس سرور پر اب موجود نہیں ہے۔",
   "session.error.notFound.closeTab": "ٹیب بند کریں",

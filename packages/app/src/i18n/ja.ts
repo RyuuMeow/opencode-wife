@@ -152,6 +152,8 @@ export const dict = {
   "command.terminal.toggle": "ターミナルの切り替え",
   "command.fileTree.toggle": "ファイルツリーを切り替え",
   "command.review.toggle": "レビューの切り替え",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "新しいターミナル",
   "command.terminal.new.description": "新しいターミナルタブを作成",
   "command.steps.toggle": "ステップの切り替え",
@@ -691,6 +693,8 @@ export const dict = {
   "session.tab.context": "コンテキスト",
   "session.tab.unknown": "不明なセッション",
   "session.panel.reviewAndFiles": "レビューとファイル",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "このセッションが見つかりません",
   "session.error.notFound.description": "このタブが参照するセッションは、このサーバーには存在しません。",
   "session.error.notFound.closeTab": "タブを閉じる",

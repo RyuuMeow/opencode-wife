@@ -158,6 +158,8 @@ export const dict = {
   "command.terminal.toggle": "สลับเทอร์มินัล",
   "command.fileTree.toggle": "สลับแผนผังไฟล์",
   "command.review.toggle": "สลับการตรวจสอบ",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "เทอร์มินัลใหม่",
   "command.terminal.new.description": "สร้างแท็บเทอร์มินัลใหม่",
   "command.steps.toggle": "สลับขั้นตอน",
@@ -740,6 +742,8 @@ export const dict = {
   "session.tab.context": "บริบท",
   "session.tab.unknown": "เซสชันที่ไม่รู้จัก",
   "session.panel.reviewAndFiles": "ตรวจสอบและไฟล์",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "ไม่พบเซสชันนี้",
   "session.error.notFound.description": "แท็บนี้อ้างถึงเซสชันที่ไม่มีอยู่บนเซิร์ฟเวอร์นี้แล้ว",
   "session.error.notFound.closeTab": "ปิดแท็บ",

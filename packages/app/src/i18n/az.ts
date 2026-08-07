@@ -148,6 +148,8 @@ export const dict = {
   "command.terminal.toggle": "Terminalı aç/bağla",
   "command.fileTree.toggle": "Fayl ağacını aç/bağla",
   "command.review.toggle": "İcmalı aç/bağla",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Yeni terminal",
   "command.terminal.new.description": "Yeni terminal tabı yarat",
   "command.steps.toggle": "Addımları aç/bağla",
@@ -711,6 +713,8 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Naməlum sessiya",
   "session.panel.reviewAndFiles": "İcmal və fayllar",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Bu sessiyanı tapmaq mümkün deyil",
   "session.error.notFound.description": "Bu tab artıq bu serverdə olmayan sessiyaya işarə edir.",
   "session.error.notFound.closeTab": "Tabı bağla",

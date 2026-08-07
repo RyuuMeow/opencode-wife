@@ -41,6 +41,7 @@ const COMMON_COMMAND_IDS = [
   "session.next",
   "terminal.toggle",
   "review.toggle",
+  "wife.toggle",
 ] as const
 
 export function uniqueCommandPaletteEntries(items: CommandPaletteEntry[]) {

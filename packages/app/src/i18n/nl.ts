@@ -146,6 +146,8 @@ export const dict = {
   "command.terminal.toggle": "Terminal tonen of verbergen",
   "command.fileTree.toggle": "Bestandsstructuur tonen of verbergen",
   "command.review.toggle": "Beoordeling tonen of verbergen",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Nieuwe terminal",
   "command.terminal.new.description": "Maak een nieuw terminaltabblad",
   "command.steps.toggle": "Stappen tonen of verbergen",
@@ -709,6 +711,8 @@ export const dict = {
   "session.tab.context": "Context",
   "session.tab.unknown": "Onbekende sessie",
   "session.panel.reviewAndFiles": "Beoordeling en bestanden",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Deze sessie kan niet worden gevonden",
   "session.error.notFound.description": "Dit tabblad verwijst naar een sessie die niet meer bestaat op deze server.",
   "session.error.notFound.closeTab": "Tabblad sluiten",

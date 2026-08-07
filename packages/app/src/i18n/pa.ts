@@ -152,6 +152,8 @@ export const dict = {
   "command.terminal.toggle": "ٹرمینل نوں ٹوگل کرو",
   "command.fileTree.toggle": "فائل ٹری نوں ٹوگل کرو",
   "command.review.toggle": "جائزہ ٹوگل کرو",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "نواں ٹرمینل",
   "command.terminal.new.description": "اک نواں ٹرمینل ٹیب بناؤ",
   "command.steps.toggle": "قدم ٹوگل کرو",
@@ -711,6 +713,8 @@ export const dict = {
   "session.tab.context": "تناظر",
   "session.tab.unknown": "نامعلوم سیشن",
   "session.panel.reviewAndFiles": "جائزہ تے فائلاں",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "ایہہ سیشن نئیں لبیا جا سکدا",
   "session.error.notFound.description": "ایہ ٹیب اک سیشن ول اشارہ کردا اے جہڑا ہن اس سرور تے موجود نئیں اے۔",
   "session.error.notFound.closeTab": "ٹیب بند کرو",

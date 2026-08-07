@@ -160,6 +160,8 @@ export const dict = {
   "command.terminal.toggle": "Alihkan terminal",
   "command.fileTree.toggle": "Alihkan pohon berkas",
   "command.review.toggle": "Alihkan tinjauan",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Terminal baru",
   "command.terminal.new.description": "Buat tab terminal baru",
   "command.steps.toggle": "Alihkan langkah",
@@ -766,6 +768,8 @@ export const dict = {
   "session.tab.context": "Konteks",
   "session.tab.unknown": "Sesi Tidak Dikenal",
   "session.panel.reviewAndFiles": "Tinjauan dan berkas",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Sesi ini tidak dapat ditemukan",
   "session.error.notFound.description": "Tab ini mengarah ke sesi yang sudah tidak ada di server ini.",
   "session.error.notFound.closeTab": "Tutup Tab",

@@ -158,6 +158,8 @@ export const dict = {
   "command.terminal.toggle": "Veksle terminal",
   "command.fileTree.toggle": "Veksle filtre",
   "command.review.toggle": "Veksle gjennomgang",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Ny terminal",
   "command.terminal.new.description": "Opprett en ny terminalfane",
   "command.steps.toggle": "Veksle trinn",
@@ -632,6 +634,8 @@ export const dict = {
   "session.tab.review": "Gjennomgang",
   "session.tab.context": "Kontekst",
   "session.panel.reviewAndFiles": "Gjennomgang og filer",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.review.filesChanged": "{{count}} filer endret",
   "session.review.change.one": "Endring",
   "session.review.change.other": "Endringer",

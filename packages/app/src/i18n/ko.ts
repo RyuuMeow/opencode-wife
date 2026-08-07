@@ -49,6 +49,8 @@ export const dict = {
   "command.terminal.toggle": "터미널 표시/숨기기",
   "command.fileTree.toggle": "파일 트리 표시/숨기기",
   "command.review.toggle": "검토 표시/숨기기",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "새 터미널",
   "command.terminal.new.description": "새 터미널 탭 생성",
   "command.steps.toggle": "단계 표시/숨기기",
@@ -473,6 +475,8 @@ export const dict = {
   "session.tab.review": "검토",
   "session.tab.context": "컨텍스트",
   "session.panel.reviewAndFiles": "검토 및 파일",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.review.filesChanged": "{{count}}개 파일 변경됨",
   "session.review.change.one": "변경",
   "session.review.change.other": "변경",

@@ -57,6 +57,8 @@ export const dict = {
   "command.terminal.toggle": "Terminal umschalten",
   "command.fileTree.toggle": "Dateibaum umschalten",
   "command.review.toggle": "Überprüfung umschalten",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Neues Terminal",
   "command.terminal.new.description": "Neuen Terminal-Tab erstellen",
   "command.steps.toggle": "Schritte umschalten",
@@ -587,6 +589,8 @@ export const dict = {
   "session.tab.context": "Kontext",
   "session.tab.unknown": "Unbekannte Sitzung",
   "session.panel.reviewAndFiles": "Überprüfung und Dateien",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Diese Sitzung wurde nicht gefunden",
   "session.error.notFound.description":
     "Dieser Tab verweist auf eine Sitzung, die auf diesem Server nicht mehr existiert.",

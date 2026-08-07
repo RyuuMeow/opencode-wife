@@ -147,6 +147,8 @@ export const dict = {
   "command.terminal.toggle": "Växla terminal",
   "command.fileTree.toggle": "Växla filträdet",
   "command.review.toggle": "Växla granskning",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Ny terminal",
   "command.terminal.new.description": "Skapa en ny terminalflik",
   "command.steps.toggle": "Växla steg",
@@ -706,6 +708,8 @@ export const dict = {
   "session.tab.context": "Kontext",
   "session.tab.unknown": "Okänd session",
   "session.panel.reviewAndFiles": "Granskning och filer",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Denna session kan inte hittas",
   "session.error.notFound.description": "Den här fliken pekar på en session som inte längre finns på den här servern.",
   "session.error.notFound.closeTab": "Stäng flik",

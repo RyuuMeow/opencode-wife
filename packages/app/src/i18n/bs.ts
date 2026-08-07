@@ -160,6 +160,8 @@ export const dict = {
   "command.terminal.toggle": "Prikaži/sakrij terminal",
   "command.fileTree.toggle": "Prikaži/sakrij stablo datoteka",
   "command.review.toggle": "Prikaži/sakrij pregled",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Novi terminal",
   "command.terminal.new.description": "Kreiraj novu karticu terminala",
   "command.steps.toggle": "Prikaži/sakrij korake",
@@ -748,6 +750,8 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Nepoznata sesija",
   "session.panel.reviewAndFiles": "Pregled i datoteke",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Ova sesija nije pronađena",
   "session.error.notFound.description": "Ova kartica upućuje na sesiju koja više ne postoji na ovom serveru.",
   "session.error.notFound.closeTab": "Zatvori karticu",

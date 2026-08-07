@@ -152,6 +152,8 @@ export const dict = {
   "command.terminal.toggle": "تبديل المحطة الطرفية",
   "command.fileTree.toggle": "تبديل شجرة الملفات",
   "command.review.toggle": "تبديل المراجعة",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "محطة طرفية جديدة",
   "command.terminal.new.description": "إنشاء علامة تبويب جديدة للمحطة الطرفية",
   "command.steps.toggle": "تبديل الخطوات",
@@ -688,6 +690,8 @@ export const dict = {
   "session.tab.context": "سياق",
   "session.tab.unknown": "جلسة غير معروفة",
   "session.panel.reviewAndFiles": "المراجعة والملفات",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "لا يمكن العثور على هذه الجلسة",
   "session.error.notFound.description": "يشير هذا التبويب إلى جلسة لم تعد موجودة على هذا الخادم.",
   "session.error.notFound.closeTab": "إغلاق علامة التبويب",

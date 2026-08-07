@@ -154,6 +154,8 @@ export const dict = {
   "command.terminal.toggle": "Alternar terminal",
   "command.fileTree.toggle": "Alternar árvore de arquivos",
   "command.review.toggle": "Alternar revisão",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Novo terminal",
   "command.terminal.new.description": "Criar uma nova aba de terminal",
   "command.steps.toggle": "Alternar passos",
@@ -695,6 +697,8 @@ export const dict = {
   "session.tab.context": "Contexto",
   "session.tab.unknown": "Sessão desconhecida",
   "session.panel.reviewAndFiles": "Revisão e arquivos",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Esta sessão não foi encontrada",
   "session.error.notFound.description": "Esta aba aponta para uma sessão que não existe mais neste servidor.",
   "session.error.notFound.closeTab": "Fechar aba",

@@ -32,6 +32,7 @@ const DEFAULT_FILE_TREE_WIDTH = 200
 const DEFAULT_SESSION_WIDTH = 600
 const DEFAULT_TERMINAL_HEIGHT = 280
 const DEFAULT_REVIEW_PANEL_OPENED = false
+const DEFAULT_WIFE_PANEL_OPENED = false
 export type AvatarColorKey = (typeof AVATAR_COLOR_KEYS)[number]
 
 export function getAvatarColors(key?: string) {
@@ -284,6 +285,9 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
         review: {
           diffStyle: "split" as ReviewDiffStyle,
           panelOpened: DEFAULT_REVIEW_PANEL_OPENED,
+        },
+        wife: {
+          panelOpened: DEFAULT_WIFE_PANEL_OPENED,
         },
         fileTree: {
           opened: false,
@@ -820,6 +824,7 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
         const terminalOpened = createMemo(() => store.terminal?.opened ?? false)
         const reviewPanelOpened = createMemo(() => store.review?.panelOpened ?? DEFAULT_REVIEW_PANEL_OPENED)
         const reviewPanelSource = createMemo(() => (reviewPanelOpened() ? ephemeral.reviewPanelSource : "other"))
+        const wifePanelOpened = createMemo(() => store.wife?.panelOpened ?? DEFAULT_WIFE_PANEL_OPENED)
 
         function setTerminalOpened(next: boolean) {
           const current = store.terminal
@@ -853,6 +858,18 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
             setStore("review", "panelOpened", next)
             setEphemeral("reviewPanelSource", nextSource)
           })
+        }
+
+        function setWifePanelOpened(next: boolean) {
+          const current = store.wife
+          if (!current) {
+            setStore("wife", { panelOpened: next })
+            return
+          }
+
+          const value = current.panelOpened ?? DEFAULT_WIFE_PANEL_OPENED
+          if (value === next) return
+          setStore("wife", "panelOpened", next)
         }
 
         return {
@@ -897,6 +914,18 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
             },
             toggle() {
               setReviewPanelOpened(!reviewPanelOpened(), "other")
+            },
+          },
+          wifePanel: {
+            opened: wifePanelOpened,
+            open() {
+              setWifePanelOpened(true)
+            },
+            close() {
+              setWifePanelOpened(false)
+            },
+            toggle() {
+              setWifePanelOpened(!wifePanelOpened())
             },
           },
           review: {

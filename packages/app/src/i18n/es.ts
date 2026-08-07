@@ -160,6 +160,8 @@ export const dict = {
   "command.terminal.toggle": "Mostrar u ocultar terminal",
   "command.fileTree.toggle": "Mostrar u ocultar árbol de archivos",
   "command.review.toggle": "Mostrar u ocultar revisión",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Nueva terminal",
   "command.terminal.new.description": "Crear una nueva pestaña de terminal",
   "command.steps.toggle": "Mostrar u ocultar pasos",
@@ -751,6 +753,8 @@ export const dict = {
   "session.tab.context": "Contexto",
   "session.tab.unknown": "Sesión desconocida",
   "session.panel.reviewAndFiles": "Revisión y archivos",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "No se encuentra esta sesión",
   "session.error.notFound.description": "Esta pestaña apunta a una sesión que ya no existe en este servidor.",
   "session.error.notFound.closeTab": "Cerrar pestaña",

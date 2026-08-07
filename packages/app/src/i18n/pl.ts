@@ -153,6 +153,8 @@ export const dict = {
   "command.terminal.toggle": "Przełącz terminal",
   "command.fileTree.toggle": "Przełącz drzewo plików",
   "command.review.toggle": "Przełącz przegląd",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Nowy terminal",
   "command.terminal.new.description": "Utwórz nową kartę terminala",
   "command.steps.toggle": "Przełącz kroki",
@@ -695,6 +697,8 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Nieznana sesja",
   "session.panel.reviewAndFiles": "Przegląd i pliki",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Nie można znaleźć tej sesji",
   "session.error.notFound.description": "Ta karta wskazuje sesję, która nie istnieje już na tym serwerze.",
   "session.error.notFound.closeTab": "Zamknij kartę",

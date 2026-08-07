@@ -153,6 +153,8 @@ export const dict = {
   "command.terminal.toggle": "टर्मिनल टॉगल करें",
   "command.fileTree.toggle": "फ़ाइल ट्री टॉगल करें",
   "command.review.toggle": "समीक्षा टॉगल करें",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "नया टर्मिनल",
   "command.terminal.new.description": "एक नया टर्मिनल टैब बनाएं",
   "command.steps.toggle": "चरण टॉगल करें",
@@ -711,6 +713,8 @@ export const dict = {
   "session.tab.context": "कॉन्टेक्स्ट",
   "session.tab.unknown": "अज्ञात सेशन",
   "session.panel.reviewAndFiles": "समीक्षा और फ़ाइलें",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "यह सेशन नहीं मिल सका",
   "session.error.notFound.description": "यह टैब एक सेशन की ओर इशारा करता है जो अब इस सर्वर पर मौजूद नहीं है।",
   "session.error.notFound.closeTab": "टैब बंद करें",

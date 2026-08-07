@@ -54,6 +54,8 @@ export const dict = {
   "command.terminal.toggle": "Mostra o nascondi il terminale",
   "command.fileTree.toggle": "Mostra o nascondi l'albero dei file",
   "command.review.toggle": "Mostra o nascondi la revisione",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Nuovo terminale",
   "command.terminal.new.description": "Crea una nuova scheda terminale",
   "command.steps.toggle": "Mostra o nascondi i passaggi",
@@ -617,6 +619,8 @@ export const dict = {
   "session.tab.context": "Contesto",
   "session.tab.unknown": "Sessione sconosciuta",
   "session.panel.reviewAndFiles": "Revisione e file",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Impossibile trovare questa sessione",
   "session.error.notFound.description": "Questa scheda punta a una sessione che non esiste più su questo server.",
   "session.error.notFound.closeTab": "Chiudi scheda",

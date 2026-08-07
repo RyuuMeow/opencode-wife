@@ -153,6 +153,8 @@ export const dict = {
   "command.terminal.toggle": "Bật/tắt terminal",
   "command.fileTree.toggle": "Bật/tắt cây tệp",
   "command.review.toggle": "Bật/tắt phần xem lại",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Terminal mới",
   "command.terminal.new.description": "Tạo một tab terminal mới",
   "command.steps.toggle": "Bật/tắt các bước",
@@ -711,6 +713,8 @@ export const dict = {
   "session.tab.context": "Ngữ cảnh",
   "session.tab.unknown": "Phiên không xác định",
   "session.panel.reviewAndFiles": "Xem lại và tệp",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Không thể tìm thấy phiên này",
   "session.error.notFound.description": "Tab này trỏ đến một phiên không còn tồn tại trên máy chủ này.",
   "session.error.notFound.closeTab": "Đóng tab",

@@ -31,7 +31,7 @@ import { IconButtonV2 } from "@opencode-ai/ui/v2/icon-button-v2"
 import { Icon as IconV2 } from "@opencode-ai/ui/v2/icon"
 import { KeybindV2 } from "@opencode-ai/ui/v2/keybind-v2"
 import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
-import { reviewTooltipKeybind } from "../command-tooltip-keybind"
+import { reviewTooltipKeybind, wifeTooltipKeybind } from "../command-tooltip-keybind"
 import { useTitlebarRightMount } from "../titlebar"
 
 const OPEN_APPS = [
@@ -242,6 +242,11 @@ export function SessionHeader() {
     reviewVisible: isDesktop(),
     reviewOpened: view().reviewPanel.opened(),
     onReviewToggle: () => view().reviewPanel.toggle(),
+    wifeLabel: language.t("command.wife.toggle"),
+    wifeKeybind: wifeTooltipKeybind(command),
+    wifeVisible: isDesktop() && settings.general.wifeMode(),
+    wifeOpened: view().wifePanel.opened(),
+    onWifeToggle: () => view().wifePanel.toggle(),
   }))
 
   const selectApp = (app: OpenApp) => {
@@ -478,6 +483,24 @@ export function SessionHeader() {
                         </Button>
                       </TooltipKeybind>
 
+                      <Show when={settings.general.wifeMode()}>
+                        <TooltipKeybind
+                          title={language.t("command.wife.toggle")}
+                          keybind={command.keybind("wife.toggle")}
+                        >
+                          <Button
+                            variant="ghost"
+                            class="group/wife-toggle titlebar-icon w-8 h-6 p-0 box-border"
+                            onClick={() => view().wifePanel.toggle()}
+                            aria-label={language.t("command.wife.toggle")}
+                            aria-expanded={view().wifePanel.opened()}
+                            aria-controls="wife-panel"
+                          >
+                            <Icon size="small" name="wife-sparks" />
+                          </Button>
+                        </TooltipKeybind>
+                      </Show>
+
                       <TooltipKeybind
                         title={language.t("command.fileTree.toggle")}
                         keybind={command.keybind("fileTree.toggle")}
@@ -524,6 +547,11 @@ type SessionHeaderV2ActionsState = {
   reviewVisible: boolean
   reviewOpened: boolean
   onReviewToggle: () => void
+  wifeLabel: string
+  wifeKeybind: string[]
+  wifeVisible: boolean
+  wifeOpened: boolean
+  onWifeToggle: () => void
 }
 
 function SessionHeaderV2Actions(props: { state: SessionHeaderV2ActionsState }) {
@@ -560,6 +588,33 @@ function SessionHeaderV2Actions(props: { state: SessionHeaderV2ActionsState }) {
             aria-expanded={props.state.reviewOpened}
             aria-controls="review-panel"
             icon={<IconV2 name="sidebar-right" />}
+          />
+        </TooltipV2>
+      </Show>
+      <Show when={props.state.wifeVisible}>
+        <TooltipV2
+          class="shrink-0"
+          placement="bottom"
+          value={
+            <>
+              {props.state.wifeLabel}
+              <Show when={props.state.wifeKeybind.length > 0}>
+                <KeybindV2 keys={props.state.wifeKeybind} variant="neutral" />
+              </Show>
+            </>
+          }
+        >
+          <IconButtonV2
+            type="button"
+            variant="ghost-muted"
+            size="large"
+            class="!w-9 shrink-0"
+            state={props.state.wifeOpened ? "pressed" : undefined}
+            onClick={props.state.onWifeToggle}
+            aria-label={props.state.wifeLabel}
+            aria-expanded={props.state.wifeOpened}
+            aria-controls="wife-panel"
+            icon={<IconV2 name="wife-sparks" />}
           />
         </TooltipV2>
       </Show>

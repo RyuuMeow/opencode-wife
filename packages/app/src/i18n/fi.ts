@@ -53,6 +53,8 @@ export const dict = {
   "command.terminal.toggle": "Näytä tai piilota terminaali",
   "command.fileTree.toggle": "Näytä tai piilota tiedostopuu",
   "command.review.toggle": "Näytä tai piilota tarkistus",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Uusi terminaali",
   "command.terminal.new.description": "Luo uusi terminaalivälilehti",
   "command.steps.toggle": "Näytä tai piilota vaiheet",
@@ -599,6 +601,8 @@ export const dict = {
   "session.tab.context": "Konteksti",
   "session.tab.unknown": "Tuntematon istunto",
   "session.panel.reviewAndFiles": "Tarkistus ja tiedostot",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Tätä istuntoa ei löydy",
   "session.error.notFound.description": "Tämä välilehti osoittaa istuntoon, jota ei enää ole tällä palvelimella.",
   "session.error.notFound.closeTab": "Sulje välilehti",

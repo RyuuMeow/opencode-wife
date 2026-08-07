@@ -59,6 +59,8 @@ export const dict = {
   "command.terminal.toggle": "Skift terminal",
   "command.fileTree.toggle": "Skift filtræ",
   "command.review.toggle": "Skift gennemgang",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Ny terminal",
   "command.terminal.new.description": "Opret en ny terminalfane",
   "command.steps.toggle": "Skift trin",
@@ -628,6 +630,8 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Ukendt session",
   "session.panel.reviewAndFiles": "Gennemgang og filer",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Denne session kan ikke findes",
   "session.error.notFound.description": "Denne fane henviser til en session, der ikke længere findes på denne server.",
   "session.error.notFound.closeTab": "Luk fane",

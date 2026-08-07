@@ -548,6 +548,12 @@ export const useSessionCommands = (actions: SessionCommandContext) => {
       keybind: "mod+shift+r",
       onSelect: () => view().reviewPanel.toggle(),
     }),
+    viewCommand({
+      id: "wife.toggle",
+      title: language.t("command.wife.toggle"),
+      keybind: "mod+alt+w",
+      onSelect: () => view().wifePanel.toggle(),
+    }),
     ...(shown()
       ? [
           viewCommand({

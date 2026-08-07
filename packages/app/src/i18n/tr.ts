@@ -164,6 +164,8 @@ export const dict = {
   "command.terminal.toggle": "Terminali aç/kapat",
   "command.fileTree.toggle": "Dosya ağacını aç/kapat",
   "command.review.toggle": "İncelemeyi aç/kapat",
+  // TODO: translate via translate:app
+  "command.wife.toggle": "Toggle wife",
   "command.terminal.new": "Yeni terminal",
   "command.terminal.new.description": "Yeni bir terminal sekmesi oluştur",
   "command.steps.toggle": "Adımları aç/kapat",
@@ -752,6 +754,8 @@ export const dict = {
   "session.tab.context": "Bağlam",
   "session.tab.unknown": "Bilinmeyen Oturum",
   "session.panel.reviewAndFiles": "İnceleme ve dosyalar",
+  // TODO: translate via translate:app
+  "session.panel.wife": "Wife",
   "session.error.notFound": "Bu oturum bulunamıyor",
   "session.error.notFound.description": "Bu sekme, artık bu sunucuda bulunmayan bir oturuma yönlendiriyor.",
   "session.error.notFound.closeTab": "Sekmeyi kapat",
