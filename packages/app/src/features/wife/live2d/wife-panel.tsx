@@ -29,7 +29,7 @@ function RuntimeMissing() {
   return <EmptyState title={language.t("wife.panel.empty.runtimeMissing")} />
 }
 
-const WIFE_PANEL_WIDTH = 320
+export const WIFE_PANEL_WIDTH = 320
 
 function EmptyState(props: { title: string; action?: { label: string; onClick: () => void } }) {
   return (
