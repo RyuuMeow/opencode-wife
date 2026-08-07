@@ -963,6 +963,60 @@ export const dict = {
   "wife.mapping.emotions": "Emociones",
   "wife.mapping.none": "Ninguno",
   "wife.mapping.fallback": "Revierte a",
+  // TODO: translate via translate:app
+  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
+  // TODO: translate via translate:app
+  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
+  // TODO: translate via translate:app
+  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
+  // TODO: translate via translate:app
+  "wife.panel.empty.openSettings": "Open settings",
+  // TODO: translate via translate:app
+  "wife.panel.selectCharacter": "Select character",
+  // TODO: translate via translate:app
+  "wife.panel.test.none": "None",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.idle": "Idle",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.listening": "Listening",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.thinking": "Thinking",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.working": "Working",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.waiting_user": "Waiting for you",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.speaking": "Speaking",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.success": "Success",
+  // TODO: translate via translate:app
+  "wife.panel.test.state.error": "Error",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.thinking": "Thinking",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.nod": "Nod",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.shake_head": "Shake head",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.wave": "Wave",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.look_at_user": "Look at you",
+  // TODO: translate via translate:app
+  "wife.panel.test.gesture.celebrate": "Celebrate",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.neutral": "Neutral",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.focused": "Focused",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.happy": "Happy",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.concerned": "Concerned",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.confused": "Confused",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.annoyed": "Annoyed",
+  // TODO: translate via translate:app
+  "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Muestra un compañero que reacciona a tu sesión de codificación. Desactívalo para usar el modo clásico sin la capa Wife.",
 
