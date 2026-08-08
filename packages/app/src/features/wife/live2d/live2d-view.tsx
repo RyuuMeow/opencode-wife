@@ -49,12 +49,14 @@ export function Live2DView(props: {
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
   active: boolean
+  initialView?: { zoom: number; offsetX: number; offsetY: number }
+  onViewChange: (view: { zoom: number; offsetX: number; offsetY: number }) => void
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
   const [app, setApp] = createSignal<Application>()
-  const [zoom, setZoom] = createSignal(1)
-  const [offset, setOffset] = createSignal({ x: 0, y: 0 })
+  const [zoom, setZoom] = createSignal(props.initialView?.zoom ?? 1)
+  const [offset, setOffset] = createSignal({ x: props.initialView?.offsetX ?? 0, y: props.initialView?.offsetY ?? 0 })
   const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
@@ -80,10 +82,16 @@ export function Live2DView(props: {
     fit()
   }
 
+  const reportView = () => {
+    const current = offset()
+    props.onViewChange({ zoom: zoom(), offsetX: current.x, offsetY: current.y })
+  }
+
   const resetView = () => {
     setZoom(1)
     setOffset({ x: 0, y: 0 })
     fit()
+    reportView()
   }
 
   const onDblClick = (event: MouseEvent) => {
@@ -118,6 +126,7 @@ export function Live2DView(props: {
         Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current * Math.exp(-normalizedDeltaY(event) * 0.001))),
       )
       fit()
+      reportView()
     }
     container.addEventListener("wheel", onWheel, { passive: false })
 
@@ -179,6 +188,7 @@ export function Live2DView(props: {
     if (!pan || event.pointerId !== pan.pointerId) return
     setOffset({ x: pan.offsetX + event.clientX - pan.startX, y: pan.offsetY + event.clientY - pan.startY })
     fit()
+    reportView()
   }
 
   const endPan = (event: PointerEvent) => {
@@ -192,7 +202,6 @@ export function Live2DView(props: {
       ref={container}
       class="relative w-full h-full overflow-hidden"
       classList={{
-        "cursor-grab": !!model() && !panning(),
         "cursor-grabbing": !!panning(),
       }}
       onPointerDown={startPan}

@@ -1,4 +1,4 @@
-import { createMemo, createSignal, lazy, Show, Suspense } from "solid-js"
+import { createMemo, createSignal, lazy, onCleanup, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
@@ -66,6 +66,20 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
   )
   const [loadError, setLoadError] = createSignal<string>()
   const [intent, setIntent] = createStore<PresentationIntent>({ state: "idle", emotion: "neutral" })
+
+  const initialView = createMemo(() => {
+    const character = selectedCharacter()
+    return character ? registry.viewState()(character.id) : undefined
+  })
+
+  let saveTimer: ReturnType<typeof setTimeout> | undefined
+  const saveView = (view: { zoom: number; offsetX: number; offsetY: number }) => {
+    const character = selectedCharacter()
+    if (!character) return
+    clearTimeout(saveTimer)
+    saveTimer = setTimeout(() => registry.setViewState(character.id, view), 250)
+  }
+  onCleanup(() => clearTimeout(saveTimer))
 
   const modelUrl = createMemo(() => {
     const character = selectedCharacter()
@@ -145,6 +159,8 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
                         avatar={() => character.avatar!}
                         intent={() => intent}
                         active={props.active}
+                        initialView={initialView()}
+                        onViewChange={saveView}
                         onError={(message) => setLoadError(message)}
                       />
                     </Suspense>

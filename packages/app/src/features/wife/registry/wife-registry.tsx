@@ -4,10 +4,17 @@ import { createSimpleContext } from "@opencode-ai/ui/context"
 import { persisted } from "@/utils/persist"
 import type { CharacterCapabilities, CharacterDefinition } from "@opencode-ai/wife-core"
 
+export type WifeCharacterViewState = {
+  zoom: number
+  offsetX: number
+  offsetY: number
+}
+
 export type WifeRegistryState = {
   characters: CharacterDefinition[]
   capabilities: Record<string, CharacterCapabilities>
   modelFolders: Record<string, string>
+  viewState: Record<string, WifeCharacterViewState>
 }
 
 export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSimpleContext({
@@ -16,13 +23,19 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
   init: () => {
     const [store, setStore, , ready] = persisted(
       "wife.registry.v1",
-      createStore<WifeRegistryState>({ characters: [], capabilities: {}, modelFolders: {} }),
+      createStore<WifeRegistryState>({
+        characters: [],
+        capabilities: {},
+        modelFolders: {},
+        viewState: {},
+      }),
     )
 
     const list = createMemo(() => store.characters)
     const character = createMemo(() => (id: string) => store.characters.find((item) => item.id === id))
     const capabilities = createMemo(() => (id: string) => store.capabilities[id])
     const modelFolder = createMemo(() => (id: string) => store.modelFolders[id])
+    const viewState = createMemo(() => (id: string) => store.viewState[id])
 
     const register = (name: string) => {
       const id = crypto.randomUUID()
@@ -48,6 +61,10 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
       setStore("modelFolders", id, folder)
     }
 
+    const setViewState = (id: string, state: WifeCharacterViewState) => {
+      setStore("viewState", id, state)
+    }
+
     const remove = (id: string) => {
       setStore("characters", (characters) => characters.filter((item) => item.id !== id))
       setStore("capabilities", (capabilities) => {
@@ -60,6 +77,11 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
         delete next[id]
         return next
       })
+      setStore("viewState", (viewState) => {
+        const next = { ...viewState }
+        delete next[id]
+        return next
+      })
     }
 
     return {
@@ -68,10 +90,12 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
       character,
       capabilities,
       modelFolder,
+      viewState,
       register,
       update,
       setCapabilities,
       setModelFolder,
+      setViewState,
       remove,
     }
   },
