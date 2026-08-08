@@ -1,4 +1,4 @@
-import { createMemo, createSignal, lazy, onCleanup, Show, Suspense } from "solid-js"
+import { createMemo, createSignal, For, lazy, onCleanup, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
@@ -15,6 +15,7 @@ import {
 } from "@opencode-ai/wife-core"
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
+import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { wifeLogger } from "@opencode-ai/wife-core/log"
 import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { useSettingsDialog } from "@/components/settings-dialog"
@@ -24,6 +25,7 @@ import { useLocal } from "@/context/local"
 import { usePlatform } from "@/context/platform"
 import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
+import { Avatar, WifeChatArea, type WifeChatMessage } from "../chat/wife-chat-area"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
@@ -81,7 +83,20 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     cursor: 0,
     context: { items: [] },
   })
+  const [wifeMessages, setWifeMessages] = createSignal<WifeChatMessage[]>([])
+  const [wifeChatExpanded, setWifeChatExpanded] = createSignal(false)
+  let wifePanStart: ((event: PointerEvent) => void) | undefined
   const local = useLocal()
+  const submitWifeMessage = (text: string) => {
+    setWifeMessages((messages) => [...messages, { id: crypto.randomUUID(), role: "user", content: text }])
+    // Placeholder reply until the read-only wife session lands (Milestone 2).
+    setTimeout(() => {
+      setWifeMessages((messages) => [
+        ...messages,
+        { id: crypto.randomUUID(), role: "assistant", content: `收到！你說的是：「${text}」` },
+      ])
+    }, 600)
+  }
   const wifeInputController = createPromptInputV2Controller({
     store: [wifeInput, setWifeInput],
     commands: () => [],
@@ -96,7 +111,12 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
       },
       submit: {
         stopping: () => false,
-        onSubmit: () => log.info("submit", wifeInputController.value()),
+        onSubmit: () => {
+          const text = wifeInputController.value()
+          if (!text.trim()) return
+          submitWifeMessage(text)
+          wifeInputController.onInput("", [{ type: "text", content: "", start: 0, end: 0 }], 0)
+        },
         onStop: () => {},
       },
     },
@@ -195,14 +215,23 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                         initialView={initialView()}
                         onViewChange={saveView}
                         onError={(message) => setLoadError(message)}
+                        onPanReady={(start) => (wifePanStart = start)}
                       />
                     </Suspense>
                   )}
                 </Show>
               </Show>
               <Show when={selectedCharacter()}>
-                <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 pt-3 pb-3">
-                  <div class="pointer-events-auto w-full px-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end pb-3">
+                  <WifeChatArea
+                    messages={wifeMessages}
+                    avatarImage={() => selectedCharacter()?.avatarImage}
+                    characterName={() => selectedCharacter()?.name}
+                    expanded={wifeChatExpanded()}
+                    onExpandChange={setWifeChatExpanded}
+                    onPanStart={(event) => wifePanStart?.(event)}
+                  />
+                  <div class="pointer-events-auto w-full px-3 pt-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
                     <PromptInputV2
                       controller={wifeInputController}
                       modelControl={
@@ -237,6 +266,63 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                         />
                       }
                     />
+                  </div>
+                </div>
+              </Show>
+
+              <Show when={wifeChatExpanded()}>
+                <div class="pointer-events-auto absolute inset-0 z-30 flex flex-col bg-black/50 backdrop-blur-sm">
+                  <header class="flex h-10 shrink-0 items-center justify-between px-3">
+                    <span class="text-13-regular text-v2-text-text-base">
+                      {language.t("wife.panel.chat.historyTitle")}
+                    </span>
+                    <ButtonV2
+                      size="small"
+                      variant="ghost-muted"
+                      onClick={() => setWifeChatExpanded(false)}
+                      aria-label={language.t("wife.panel.chat.historyClose")}
+                    >
+                      <Icon name="outline-xmark" />
+                    </ButtonV2>
+                  </header>
+                  <div
+                    class="flex-1 min-h-0 overflow-y-auto px-3 pb-3"
+                    onWheel={(event) => {
+                      if (event.currentTarget.scrollTop === 0 && event.deltaY < 0) {
+                        event.stopPropagation()
+                        setWifeChatExpanded(false)
+                      }
+                    }}
+                  >
+                    <div class="flex flex-col gap-3">
+                      <For each={wifeMessages()}>
+                        {(message) => (
+                          <div class="flex flex-col">
+                            <div class="flex items-center gap-2">
+                              <Show when={message.role === "assistant"}>
+                                <Avatar image={selectedCharacter()?.avatarImage} />
+                              </Show>
+                              <span class="text-11-regular text-v2-text-text-muted">
+                                {message.role === "assistant"
+                                  ? (selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant"))
+                                  : language.t("wife.panel.chat.roleUser")}
+                              </span>
+                            </div>
+                            <div class="mt-1 flex">
+                              <div
+                                class={`max-w-[85%] rounded-xl px-3 py-2 backdrop-blur-sm ${
+                                  message.role === "user"
+                                    ? "ms-auto bg-v2-background-bg-layer-01"
+                                    : "bg-v2-background-bg-layer-02"
+                                }`}
+                              >
+                                <Markdown text={message.content} />
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                      </For>
+                    </div>
                   </div>
                 </div>
               </Show>

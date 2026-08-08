@@ -958,6 +958,10 @@ export const dict = {
   "wife.panel.test.gesture.nod": "點頭",
   "wife.panel.empty.openSettings": "開啟設定",
   "wife.panel.chat.placeholder": "跟你的夥伴說說話…",
+  "wife.panel.chat.historyTitle": "聊天記錄",
+  "wife.panel.chat.historyClose": "關閉聊天記錄",
+  "wife.panel.chat.roleAssistant": "夥伴",
+  "wife.panel.chat.roleUser": "你",
   "wife.panel.empty.noModel": "為角色掛載 Live2D 模型後,即可在此顯示",
 
   "settings.general.row.wifeMode.description":

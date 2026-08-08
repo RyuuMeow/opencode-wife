@@ -51,6 +51,8 @@ export function Live2DView(props: {
   initialView?: { zoom: number; offsetX: number; offsetY: number }
   onViewChange: (view: { zoom: number; offsetX: number; offsetY: number }) => void
   onError: (message: string) => void
+  /** Exposes the right-drag pan handler so overlays above the canvas can forward right-drags. */
+  onPanReady?: (start: (event: PointerEvent) => void) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
   const [app, setApp] = createSignal<Application>()
@@ -179,6 +181,10 @@ export function Live2DView(props: {
     if (!pan || event.pointerId !== pan.pointerId) return
     setPanning(undefined)
   }
+
+  onMount(() => {
+    props.onPanReady?.(startPan)
+  })
 
   return (
     <div

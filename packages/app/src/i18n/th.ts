@@ -956,6 +956,10 @@ export const dict = {
   // TODO: translate via translate:app
   "wife.panel.empty.openSettings": "Open settings",
   "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
+  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
+  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
+  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
+  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
   // TODO: translate via translate:app
   "wife.panel.selectCharacter": "Select character",
   // TODO: translate via translate:app
