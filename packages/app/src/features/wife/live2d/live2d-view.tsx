@@ -1,6 +1,8 @@
 import { createEffect, createSignal, onCleanup, onMount, Show, untrack } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
+import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
+import { wifeLogger } from "@opencode-ai/wife-core/log"
 import type {
   AvatarProfile,
   CharacterEmotion,
@@ -17,6 +19,7 @@ export type PresentationIntent = {
 const FIT_MARGIN = 0.92
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 3
+const log = wifeLogger("live2d")
 
 function normalizedDeltaY(event: WheelEvent) {
   if (event.deltaMode === 1) return event.deltaY * 16
@@ -78,6 +81,10 @@ export function Live2DView(props: {
   const resizeNow = () => {
     const next = app()
     if (!next || !container) return
+    // Never resize to 0x0 while the panel is hidden; 0-sized canvas churn can
+    // trigger WebGL context loss on some drivers. The hidden canvas keeps its
+    // last real size (invisible anyway) and is sized on the next show.
+    if (container.clientWidth === 0 || container.clientHeight === 0) return
     next.renderer.resize(container.clientWidth, container.clientHeight)
     fit()
   }
@@ -110,6 +117,7 @@ export function Live2DView(props: {
 
   onMount(() => {
     if (!container) return
+    let disposed = false
     const next = new Application({
       backgroundAlpha: 0,
       antialias: true,
@@ -118,7 +126,8 @@ export function Live2DView(props: {
       resolution: window.devicePixelRatio || 1,
     })
     setApp(next)
-    container.appendChild(next.view as HTMLCanvasElement)
+    const canvas = next.view as HTMLCanvasElement
+    container.appendChild(canvas)
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -133,20 +142,44 @@ export function Live2DView(props: {
     const observer = new ResizeObserver(resizeNow)
     observer.observe(container)
 
-    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
-      .then((loaded) => {
-        setModel(loaded)
-        next.stage.addChild(loaded)
-        setReady(true)
-        fit()
-      })
-      .catch((cause: unknown) => {
-        props.onError(cause instanceof Error ? cause.message : String(cause))
-      })
+    const loadModel = () => {
+      void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+        .then((loaded) => {
+          if (disposed) {
+            loaded.destroy()
+            return
+          }
+          model()?.destroy()
+          setModel(loaded)
+          next.stage.addChild(loaded)
+          setReady(true)
+          fit()
+        })
+        .catch((cause: unknown) => {
+          props.onError(cause instanceof Error ? cause.message : String(cause))
+        })
+    }
+
+    // When the WebGL context is lost (which hidden 0-sized canvases can
+    // trigger on some drivers), pixi restores its own resources but the
+    // Cubism internal model's GL objects are stale; reload the model against
+    // the restored context.
+    const onContextLost = () => log.warn("webgl context lost")
+    const onContextRestored = () => {
+      log.warn("webgl context restored, reloading model")
+      loadModel()
+    }
+    canvas.addEventListener("webglcontextlost", onContextLost)
+    canvas.addEventListener("webglcontextrestored", onContextRestored)
+
+    loadModel()
 
     onCleanup(() => {
+      disposed = true
       observer.disconnect()
       container.removeEventListener("wheel", onWheel)
+      canvas.removeEventListener("webglcontextlost", onContextLost)
+      canvas.removeEventListener("webglcontextrestored", onContextRestored)
       model()?.destroy()
       app()?.destroy(true, { children: true })
     })
