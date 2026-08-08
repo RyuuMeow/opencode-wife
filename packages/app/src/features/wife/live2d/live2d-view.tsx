@@ -1,6 +1,7 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
+import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
 import type {
   AvatarProfile,
   CharacterEmotion,
@@ -53,6 +54,7 @@ export function Live2DView(props: {
   const [model, setModel] = createSignal<Live2DModel>()
   const [zoom, setZoom] = createSignal(1)
   const [offset, setOffset] = createSignal({ x: 0, y: 0 })
+  const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
 
@@ -92,13 +94,10 @@ export function Live2DView(props: {
 
   onMount(() => {
     if (!container) return
-    const app = new Application({
-      backgroundAlpha: 0,
-      antialias: true,
-      autoDensity: true,
-      resolution: window.devicePixelRatio || 1,
-    })
-    container.appendChild(app.view as HTMLCanvasElement)
+    let disposed = false
+    let app: Application | undefined
+    let observer: ResizeObserver | undefined
+    let frame = 0
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -107,30 +106,60 @@ export function Live2DView(props: {
       )
       fit()
     }
-    container.addEventListener("wheel", onWheel, { passive: false })
 
-    const resize = () => {
-      app.renderer.resize(container.clientWidth, container.clientHeight)
-      fit()
-    }
-    const observer = new ResizeObserver(resize)
-    observer.observe(container)
+    // Defer the heavy runtime start until after the first paint so the panel
+    // chrome and the loading placeholder show immediately when reopened.
+    const start = () => {
+      if (disposed || !container) return
+      app = new Application({
+        backgroundAlpha: 0,
+        antialias: true,
+        autoDensity: true,
+        resolution: window.devicePixelRatio || 1,
+      })
+      const canvas = app.view as HTMLCanvasElement
+      canvas.style.opacity = "0"
+      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        canvas.style.transition = "opacity 120ms ease-in-out"
+      }
+      container.appendChild(canvas)
+      container.addEventListener("wheel", onWheel, { passive: false })
 
-    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
-      .then((loaded) => {
-        setModel(loaded)
-        app.stage.addChild(loaded)
+      const resize = () => {
+        app?.renderer.resize(container.clientWidth, container.clientHeight)
         fit()
-      })
-      .catch((cause: unknown) => {
-        props.onError(cause instanceof Error ? cause.message : String(cause))
-      })
+      }
+      observer = new ResizeObserver(resize)
+      observer.observe(container)
+
+      void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+        .then((loaded) => {
+          if (disposed) {
+            loaded.destroy()
+            return
+          }
+          setModel(loaded)
+          app?.stage.addChild(loaded)
+          canvas.style.opacity = "1"
+          setReady(true)
+          fit()
+        })
+        .catch((cause: unknown) => {
+          if (!disposed) props.onError(cause instanceof Error ? cause.message : String(cause))
+        })
+    }
+
+    frame = requestAnimationFrame(() => {
+      frame = requestAnimationFrame(start)
+    })
 
     onCleanup(() => {
-      observer.disconnect()
+      disposed = true
+      cancelAnimationFrame(frame)
+      observer?.disconnect()
       container.removeEventListener("wheel", onWheel)
       model()?.destroy()
-      app.destroy(true, { children: true })
+      app?.destroy(true, { children: true })
     })
   })
 
@@ -176,6 +205,12 @@ export function Live2DView(props: {
       onPointerCancel={endPan}
       onContextMenu={(event) => event.preventDefault()}
       onDblClick={onDblClick}
-    />
+    >
+      <Show when={!ready()}>
+        <div class="absolute inset-0 flex items-center justify-center">
+          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+        </div>
+      </Show>
+    </div>
   )
 }

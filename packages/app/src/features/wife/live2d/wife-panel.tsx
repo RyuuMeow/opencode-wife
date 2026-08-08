@@ -1,6 +1,7 @@
 import { createMemo, createSignal, lazy, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import {
@@ -138,7 +139,13 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
                 <Show when={selectedCharacter()} keyed>
                   {(character) => (
-                    <Suspense fallback={<span class="sr-only">{language.t("common.loading")}</span>}>
+                    <Suspense
+                      fallback={
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+                        </div>
+                      }
+                    >
                       <Live2DView
                         modelUrl={url()}
                         avatar={() => character.avatar!}
