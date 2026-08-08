@@ -74,10 +74,10 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
 
   let saveTimer: ReturnType<typeof setTimeout> | undefined
   const saveView = (view: { zoom: number; offsetX: number; offsetY: number }) => {
-    const character = selectedCharacter()
-    if (!character) return
+    const id = selectedCharacter()?.id
+    if (!id) return
     clearTimeout(saveTimer)
-    saveTimer = setTimeout(() => registry.setViewState(character.id, view), 250)
+    saveTimer = setTimeout(() => registry.setViewState(id, view), 250)
   }
   onCleanup(() => clearTimeout(saveTimer))
 
