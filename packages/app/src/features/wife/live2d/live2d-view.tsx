@@ -2,6 +2,7 @@ import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
 import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
+import { wifeLogger } from "@opencode-ai/wife-core/log"
 import type {
   AvatarProfile,
   CharacterEmotion,
@@ -18,6 +19,7 @@ export type PresentationIntent = {
 const FIT_MARGIN = 0.92
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 3
+const log = wifeLogger("live2d")
 
 function normalizedDeltaY(event: WheelEvent) {
   if (event.deltaMode === 1) return event.deltaY * 16
@@ -62,7 +64,9 @@ export function Live2DView(props: {
 
   const fit = () => {
     const loaded = model()
-    if (!loaded || !container || container.clientWidth === 0 || container.clientHeight === 0) return
+    if (!loaded || !container) return
+    log.debug("fit", { width: container.clientWidth, height: container.clientHeight })
+    if (container.clientWidth === 0 || container.clientHeight === 0) return
     // getLocalBounds is scale-independent; model.width/height would compound
     // the current zoom into the fit base and oscillate between two sizes.
     const bounds = loaded.getLocalBounds()
@@ -77,6 +81,15 @@ export function Live2DView(props: {
     loaded.scale.set(base * zoom())
     loaded.anchor.set(0.5, 0.5)
     loaded.position.set(container.clientWidth / 2 + offset().x, container.clientHeight / 2 + offset().y)
+    log.debug("fit applied", { base, zoom: zoom(), scale: base * zoom() })
+  }
+
+  const resizeNow = () => {
+    const next = app()
+    if (!next || !container) return
+    log.debug("resize", { width: container.clientWidth, height: container.clientHeight })
+    next.renderer.resize(container.clientWidth, container.clientHeight)
+    fit()
   }
 
   const resetView = () => {
@@ -101,9 +114,14 @@ export function Live2DView(props: {
 
   onMount(() => {
     if (!container) return
-    let disposed = false
-    let observer: ResizeObserver | undefined
-    let frame = 0
+    const next = new Application({
+      backgroundAlpha: 0,
+      antialias: true,
+      autoDensity: true,
+      resolution: window.devicePixelRatio || 1,
+    })
+    setApp(next)
+    container.appendChild(next.view as HTMLCanvasElement)
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -112,55 +130,30 @@ export function Live2DView(props: {
       )
       fit()
     }
+    container.addEventListener("wheel", onWheel, { passive: false })
 
-    // Defer the heavy runtime start until after the first paint so the panel
-    // chrome and the loading placeholder show immediately on first open.
-    const start = () => {
-      if (disposed || !container) return
-      const next = new Application({
-        backgroundAlpha: 0,
-        antialias: true,
-        autoDensity: true,
-        resolution: window.devicePixelRatio || 1,
-      })
-      setApp(next)
-      container.appendChild(next.view as HTMLCanvasElement)
-      container.addEventListener("wheel", onWheel, { passive: false })
+    const observer = new ResizeObserver(resizeNow)
+    observer.observe(container)
 
-      const resize = () => {
-        next.renderer.resize(container.clientWidth, container.clientHeight)
+    log.debug("start", { width: container.clientWidth, height: container.clientHeight, url: props.modelUrl })
+    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+      .then((loaded) => {
+        setModel(loaded)
+        next.stage.addChild(loaded)
+        setReady(true)
+        log.debug("model loaded", { bounds: loaded.getLocalBounds() })
         fit()
-      }
-      observer = new ResizeObserver(resize)
-      observer.observe(container)
-
-      void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
-        .then((loaded) => {
-          if (disposed) {
-            loaded.destroy()
-            return
-          }
-          setModel(loaded)
-          next.stage.addChild(loaded)
-          setReady(true)
-          fit()
-        })
-        .catch((cause: unknown) => {
-          if (!disposed) props.onError(cause instanceof Error ? cause.message : String(cause))
-        })
-    }
-
-    frame = requestAnimationFrame(() => {
-      frame = requestAnimationFrame(start)
-    })
+      })
+      .catch((cause: unknown) => {
+        log.error("model load failed", cause)
+        props.onError(cause instanceof Error ? cause.message : String(cause))
+      })
 
     onCleanup(() => {
-      disposed = true
-      cancelAnimationFrame(frame)
-      observer?.disconnect()
+      observer.disconnect()
       container.removeEventListener("wheel", onWheel)
       model()?.destroy()
-      app()?.destroy(true, { children: true })
+      next.destroy(true, { children: true })
     })
   })
 
@@ -172,12 +165,17 @@ export function Live2DView(props: {
   })
 
   // Keep-alive: the view stays mounted while the panel is closed; pause the
-  // render loop when hidden and resume when shown.
+  // render loop when hidden and force a resize+fit when shown so the canvas
+  // is sized from live layout instead of relying on observer callbacks.
   createEffect(() => {
     const next = app()
     if (!next) return
-    if (props.active) next.start()
-    else next.stop()
+    if (props.active) {
+      next.start()
+      resizeNow()
+    } else {
+      next.stop()
+    }
   })
 
   const startPan = (event: PointerEvent) => {

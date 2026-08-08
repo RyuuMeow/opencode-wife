@@ -84,6 +84,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
       id="wife-panel"
       aria-label={language.t("session.panel.wife")}
       class="relative shrink-0 h-full min-w-0 flex flex-col overflow-hidden bg-v2-background-bg-base rounded-[10px] shadow-[var(--v2-elevation-raised)]"
+      classList={{ hidden: !props.active }}
       style={{ width: `${layout.wife.width()}px` }}
     >
       <div onPointerDown={() => props.size.start()}>
