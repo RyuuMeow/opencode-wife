@@ -33,6 +33,7 @@ const DEFAULT_SESSION_WIDTH = 600
 const DEFAULT_TERMINAL_HEIGHT = 280
 const DEFAULT_REVIEW_PANEL_OPENED = false
 const DEFAULT_WIFE_PANEL_OPENED = false
+const DEFAULT_WIFE_PANEL_WIDTH = 320
 export type AvatarColorKey = (typeof AVATAR_COLOR_KEYS)[number]
 
 export function getAvatarColors(key?: string) {
@@ -288,6 +289,7 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
         },
         wife: {
           panelOpened: DEFAULT_WIFE_PANEL_OPENED,
+          width: DEFAULT_WIFE_PANEL_WIDTH,
         },
         fileTree: {
           opened: false,
@@ -705,6 +707,16 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
           setStore("review", "diffStyle", diffStyle)
         },
       },
+      wife: {
+        width: createMemo(() => store.wife?.width ?? DEFAULT_WIFE_PANEL_WIDTH),
+        resize(width: number) {
+          if (!store.wife) {
+            setStore("wife", { panelOpened: DEFAULT_WIFE_PANEL_OPENED, width })
+            return
+          }
+          setStore("wife", "width", width)
+        },
+      },
       fileTree: {
         opened: createMemo(() => store.fileTree?.opened ?? true),
         width: createMemo(() => store.fileTree?.width ?? DEFAULT_FILE_TREE_WIDTH),
@@ -863,7 +875,7 @@ export const { use: useLayout, provider: LayoutProvider } = createSimpleContext(
         function setWifePanelOpened(next: boolean) {
           const current = store.wife
           if (!current) {
-            setStore("wife", { panelOpened: next })
+            setStore("wife", { panelOpened: next, width: DEFAULT_WIFE_PANEL_WIDTH })
             return
           }
 

@@ -82,7 +82,7 @@ import {
   sessionPanelWidthMax,
 } from "@/pages/session/session-panel-width"
 import { SessionSidePanel } from "@/pages/session/session-side-panel"
-import { WifePanel, WIFE_PANEL_WIDTH } from "@/features/wife/live2d/wife-panel"
+import { WifePanel } from "@/features/wife/live2d/wife-panel"
 import { sessionPanelLayout } from "@/pages/session/session-panel-layout"
 import { SessionReviewEmptyChangesV2 } from "@opencode-ai/session-ui/v2/session-review-empty-changes-v2"
 import { SessionReviewEmptyNoGitV2 } from "@opencode-ai/session-ui/v2/session-review-empty-no-git-v2"
@@ -501,7 +501,7 @@ export default function Page() {
   const sessionPanelWidth = createMemo(() => {
     if (desktopSessionResizeOpen()) return `${sessionPanelResizedWidth()}px`
     const occupied =
-      (desktopFileTreeOpen() ? layout.fileTree.width() : 0) + (desktopWifeOpen() ? WIFE_PANEL_WIDTH : 0)
+      (desktopFileTreeOpen() ? layout.fileTree.width() : 0) + (desktopWifeOpen() ? layout.wife.width() : 0)
     if (occupied === 0) return "100%"
     return `calc(100% - ${occupied}px)`
   })
@@ -2302,7 +2302,7 @@ export default function Page() {
         </div>
 
         <Show when={isDesktop() && settings.general.wifeMode() && view().wifePanel.opened()}>
-          <WifePanel />
+          <WifePanel size={size} />
         </Show>
 
         <Show when={!newSessionDesign() && desktopSidePanelOpen()}>

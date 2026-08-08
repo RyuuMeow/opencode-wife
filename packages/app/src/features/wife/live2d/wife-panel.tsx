@@ -1,6 +1,7 @@
 import { createMemo, createSignal, lazy, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import {
   characterEmotions,
@@ -12,9 +13,14 @@ import {
 } from "@opencode-ai/wife-core"
 import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
+import { useLayout } from "@/context/layout"
 import { usePlatform } from "@/context/platform"
+import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
 import type { PresentationIntent } from "./live2d-view"
+
+const WIFE_PANEL_WIDTH_MIN = 260
+const WIFE_PANEL_WIDTH_MAX = 480
 
 const Live2DView = lazy(async () => {
   try {
@@ -29,8 +35,6 @@ function RuntimeMissing() {
   return <EmptyState title={language.t("wife.panel.empty.runtimeMissing")} />
 }
 
-export const WIFE_PANEL_WIDTH = 320
-
 function EmptyState(props: { title: string; action?: { label: string; onClick: () => void } }) {
   return (
     <div class="flex flex-col items-center justify-center gap-3 h-full px-6 text-center">
@@ -44,10 +48,11 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel() {
+export function WifePanel(props: { size: Sizing }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
+  const layout = useLayout()
   const openCharacters = useSettingsDialog("wife-characters")
 
   const usableCharacters = createMemo(() => {
@@ -79,8 +84,21 @@ export function WifePanel() {
       id="wife-panel"
       aria-label={language.t("session.panel.wife")}
       class="relative shrink-0 h-full min-w-0 flex flex-col overflow-hidden bg-v2-background-bg-base rounded-[10px] shadow-[var(--v2-elevation-raised)]"
-      style={{ width: `${WIFE_PANEL_WIDTH}px` }}
+      style={{ width: `${layout.wife.width()}px` }}
     >
+      <div onPointerDown={() => props.size.start()}>
+        <ResizeHandle
+          direction="horizontal"
+          edge="start"
+          size={layout.wife.width()}
+          min={WIFE_PANEL_WIDTH_MIN}
+          max={WIFE_PANEL_WIDTH_MAX}
+          onResize={(width) => {
+            props.size.touch()
+            layout.wife.resize(width)
+          }}
+        />
+      </div>
       <Show
         when={platform.platform === "desktop" && modelUrl()}
         fallback={

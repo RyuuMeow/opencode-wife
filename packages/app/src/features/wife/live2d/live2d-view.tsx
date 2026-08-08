@@ -15,6 +15,8 @@ export type PresentationIntent = {
 }
 
 const FIT_MARGIN = 0.92
+const MIN_ZOOM = 0.2
+const MAX_ZOOM = 3
 
 function applyIntent(model: Live2DModel, intent: PresentationIntent, avatar: AvatarProfile) {
   const state = avatar.states[intent.state]
@@ -43,6 +45,7 @@ export function Live2DView(props: {
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
+  const [zoom, setZoom] = createSignal(1)
   let container: HTMLDivElement | undefined
 
   onMount(() => {
@@ -58,12 +61,20 @@ export function Live2DView(props: {
     const fit = () => {
       const loaded = model()
       if (!loaded || container.clientWidth === 0 || container.clientHeight === 0) return
-      const scale =
+      const base =
         Math.min(container.clientWidth / loaded.width, container.clientHeight / loaded.height) * FIT_MARGIN
+      const scale = base * zoom()
       loaded.scale.set(scale)
       loaded.anchor.set(0.5, 0.5)
       loaded.position.set(container.clientWidth / 2, container.clientHeight / 2)
     }
+
+    const onWheel = (event: WheelEvent) => {
+      event.preventDefault()
+      setZoom((current) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current * Math.exp(-event.deltaY * 0.001))))
+      fit()
+    }
+    container.addEventListener("wheel", onWheel, { passive: false })
 
     const resize = () => {
       app.renderer.resize(container.clientWidth, container.clientHeight)
@@ -84,6 +95,7 @@ export function Live2DView(props: {
 
     onCleanup(() => {
       observer.disconnect()
+      container.removeEventListener("wheel", onWheel)
       model()?.destroy()
       app.destroy(true, { children: true })
     })
