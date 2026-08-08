@@ -324,7 +324,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                   </header>
                   <div
                     ref={historyScroll}
-                    class="flex-1 min-h-0 overflow-y-auto px-3 pb-3"
+                    class="flex-1 min-h-0 select-text overflow-y-auto px-3 pb-3"
                     onWheel={(event) => {
                       const target = event.currentTarget
                       const progress = historyProgress()
@@ -347,16 +347,14 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                       <For each={wifeMessages()}>
                         {(message) => (
                           <div class="flex flex-col">
-                            <div class="flex items-center gap-2">
-                              <Show when={message.role === "assistant"}>
+                            <Show when={message.role === "assistant"}>
+                              <div class="flex items-center gap-2">
                                 <Avatar image={selectedCharacter()?.avatarImage} />
-                              </Show>
-                              <span class="text-11-regular text-v2-text-text-muted">
-                                {message.role === "assistant"
-                                  ? (selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant"))
-                                  : language.t("wife.panel.chat.roleUser")}
-                              </span>
-                            </div>
+                                <span class="text-11-regular text-v2-text-text-muted">
+                                  {selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant")}
+                                </span>
+                              </div>
+                            </Show>
                             <div class="mt-1 flex">
                               <div
                                 class={`max-w-[85%] rounded-xl px-3 py-2 backdrop-blur-sm ${

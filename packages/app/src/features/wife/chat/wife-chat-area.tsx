@@ -1,4 +1,4 @@
-import { createEffect, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
+import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
 
@@ -18,7 +18,7 @@ export function WifeChatArea(props: {
   messages: () => WifeChatMessage[]
   avatarImage: () => string | undefined
   characterName: () => string | undefined
-  /** Ratio of the container height that bubbles may fill before the oldest fades out. */
+  /** Ratio of the Live2D area used for bubbles and history-scroll detection. */
   heightRatio: () => number
   historyProgress: () => number
   onHistoryProgress: (next: number) => void
@@ -26,19 +26,21 @@ export function WifeChatArea(props: {
   onPanStart?: (event: PointerEvent) => void
 }) {
   const [leavingIds, setLeavingIds] = createSignal<string[]>([])
+  const [enteringIds, setEnteringIds] = createSignal<string[]>([])
   const [visibleCount, setVisibleCount] = createSignal(INITIAL_VISIBLE_COUNT)
   let root: HTMLDivElement | undefined
   let content: HTMLDivElement | undefined
   let messageCount = 0
+  let messageIds = new Set<string>()
   let heightRatio = props.heightRatio()
-  const exitTimers = new Set<ReturnType<typeof setTimeout>>()
+  const animationTimers = new Set<ReturnType<typeof setTimeout>>()
 
   const evaluate = () => {
     const messages = props.messages()
     const list = content
     if (messages.length === 0 || !root || !list) return
     if (leavingIds().length > 0) return
-    const threshold = props.heightRatio() * root.clientHeight
+    const threshold = root.clientHeight
     const count = visibleCount()
     const total = messages.length
     if (count > total) {
@@ -48,12 +50,15 @@ export function WifeChatArea(props: {
     if (list.getBoundingClientRect().height <= threshold || count <= 1) return
     const expelled = messages[total - count]
     if (!expelled || leavingIds().includes(expelled.id)) return
-    setLeavingIds((ids) => [...ids, expelled.id])
+    batch(() => {
+      setEnteringIds((ids) => ids.filter((id) => id !== expelled.id))
+      setLeavingIds((ids) => [...ids, expelled.id])
+    })
     const timer = setTimeout(() => {
-      exitTimers.delete(timer)
+      animationTimers.delete(timer)
       setLeavingIds((ids) => ids.filter((id) => id !== expelled.id))
     }, EXIT_DURATION_MS)
-    exitTimers.add(timer)
+    animationTimers.add(timer)
     setVisibleCount(count - 1)
   }
 
@@ -61,12 +66,26 @@ export function WifeChatArea(props: {
   // the ratio restores the full candidate set so a larger ratio reveals more
   // history instead of remaining stuck at the previous visible count.
   createEffect(() => {
-    const total = props.messages().length
+    const messages = props.messages()
+    const total = messages.length
     const ratio = props.heightRatio()
     const added = Math.max(0, total - messageCount)
+    const nextIds = new Set(messages.map((message) => message.id))
+    const entering = messages.filter((message) => !messageIds.has(message.id)).map((message) => message.id)
+    if (entering.length > 0) {
+      setEnteringIds((ids) => [...ids.filter((id) => nextIds.has(id)), ...entering])
+      entering.forEach((id) => {
+        const timer = setTimeout(() => {
+          animationTimers.delete(timer)
+          setEnteringIds((ids) => ids.filter((candidate) => candidate !== id))
+        }, EXIT_DURATION_MS)
+        animationTimers.add(timer)
+      })
+    }
     if (ratio !== heightRatio) setVisibleCount(total)
     if (ratio === heightRatio && added > 0) setVisibleCount((count) => Math.min(total, count + added))
     messageCount = total
+    messageIds = nextIds
     heightRatio = ratio
   })
 
@@ -86,7 +105,7 @@ export function WifeChatArea(props: {
     props.messages()
     return content
   }, evaluate)
-  onCleanup(() => exitTimers.forEach(clearTimeout))
+  onCleanup(() => animationTimers.forEach(clearTimeout))
 
   const visible = () => {
     const messages = props.messages()
@@ -111,8 +130,11 @@ export function WifeChatArea(props: {
     <Show when={props.messages().length > 0}>
       <div
         ref={root}
-        class="pointer-events-auto absolute inset-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
-        style={{ opacity: 1 - props.historyProgress() }}
+        class="pointer-events-auto absolute inset-x-0 bottom-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
+        style={{
+          height: `${props.heightRatio() * 100}%`,
+          opacity: 1 - props.historyProgress(),
+        }}
         onWheel={openHistory}
         onPointerDown={(event) => {
           if (event.button !== 2) return
@@ -127,7 +149,7 @@ export function WifeChatArea(props: {
               <div
                 classList={{
                   "animate-out fade-out duration-300": leavingIds().includes(message.id),
-                  "animate-in fade-in slide-in-from-bottom-2 duration-300": !leavingIds().includes(message.id),
+                  "animate-in fade-in slide-in-from-bottom-2 duration-300": enteringIds().includes(message.id),
                 }}
               >
                 {message.role === "assistant" ? (
