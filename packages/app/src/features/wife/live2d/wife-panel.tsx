@@ -148,7 +148,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                 </div>
               </Show>
             </header>
-            <div class="relative flex-1 min-h-0 bg-v2-background-bg-layer-01">
+            <div class="relative flex-1 min-h-0 bg-v2-background-bg-base">
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
                 <Show when={selectedCharacter()} keyed>
                   {(character) => (
