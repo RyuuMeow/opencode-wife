@@ -1,6 +1,6 @@
 # OpenCode Desktop Wife — Documentation Index
 
-> Status: Milestone 0 (baseline), Milestone 1 (character registry) and Phase A (Live2D runtime) delivered on `wife-baseline` / `character-registry` / `wife-settings` / `live2d-runtime`. Voice engine (Milestone 2) planned — see [12-handoff.md](./12-handoff.md).
+> Status: Milestone 0 (baseline), Milestone 1 (character registry) and Phase A (Live2D runtime) delivered on `wife-baseline` / `character-registry` / `wife-settings` / `live2d-runtime`. Roadmap revised (docs/09): Wife Assistant Chat (Milestone 2) planned next — see [12-handoff.md](./12-handoff.md).
 > Basis: the design discussion around extending `anomalyco/opencode` with a low-impact presentation layer.
 
 ## Project position
@@ -70,12 +70,13 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 
 ## Suggested implementation order
 
-1. Register and preview one character.
-2. Bind characters to projects.
-3. Drive deterministic states from OpenCode events.
-4. Add GPT-SoVITS streaming and audio-driven lip sync.
-5. Add lightweight persona requests for spoken text and semantic gestures.
-6. Add multi-session arbitration.
-7. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
+1. Register and preview one character. (done)
+2. Polish the wife panel (resizable width, wheel zoom), then add the Wife Assistant Chat (read-only assistant + `/wife-context`).
+3. Bind characters to projects.
+4. Drive deterministic states from OpenCode events (observation loop).
+5. Add lightweight persona requests for spoken text, gestures and dialogue choices.
+6. Add GPT-SoVITS streaming and audio-driven lip sync.
+7. Add multi-session arbitration and runtime hardening.
+8. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
 
-Current progress: Phase A (Live2D runtime) delivered; Milestone 2 (voice) is next, see 12-handoff.md.
+Current progress: Phase A (Live2D runtime) delivered; next is panel polish + Milestone 2 (Wife Assistant Chat), see 12-handoff.md.

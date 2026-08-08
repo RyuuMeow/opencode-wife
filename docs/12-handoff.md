@@ -17,7 +17,7 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 | `wife-baseline` | Milestone 0: wife-core package, Classic Mode flag, gated event bridge |
 | `character-registry` | Milestone 1: schemas, scanner, registry, mapping suggestions |
 | `wife-settings` | Character management UI iterations |
-| `live2d-runtime` | Phase A: Live2D runtime (current base for Milestone 2) |
+| `live2d-runtime` | Phase A: Live2D runtime (current base for the roadmap) |
 
 ## What is delivered
 
@@ -67,12 +67,13 @@ Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文�
 
 - `custom.*` gestures/emotions: types accept them, mapping editor does not render or add them yet.
 - Loose-scan motion/expression file paths live in capabilities but are not persisted as assets; the runtime reads them back from the model folder (desktop protocol), so re-picking a folder after re-import is not required as long as the folder path is stored.
-- The panel's intent test strip is a manual driver; event-driven states (Milestone 4) will replace it. No voice/lip sync (Milestone 2), project binding (Milestone 3), or persona (Milestone 5) yet.
+- The panel's intent test strip is a manual driver; event-driven states (Milestone 4) will replace it. No assistant chat (Milestone 2), project binding (Milestone 3), persona (Milestone 5), or voice/lip sync (Milestone 6) yet.
 - Web build intentionally shows an empty state (no `wife://` protocol in browsers).
 - i18n: run `bun run translate:app -- all` (needs the opencode CLI) to replace placeholders in non-en/zht locales.
 - Registry store is localStorage-backed; large avatar images are downscaled to 128px data URLs, but a future move to IndexedDB may be worth it if many characters accumulate.
 
 ## Suggested next steps
 
-1. Milestone 2 (voice engine + lip sync) — the Live2D runtime is visible; `model.speak()` + playback-side energy analysis can be wired next.
-2. Milestone 3 (project binding) and Milestone 4 (deterministic activity pipeline driving the character).
+1. Phase A polish — resizable wife panel width (260–480 px, persisted) and wheel zoom on the Live2D canvas (0.2x–3x, runtime-only). See docs/09.
+2. Milestone 2 — Wife Assistant Chat: verify legacy API session creation with a `permission` deny ruleset from the desktop renderer, then build the chat tab (read-only assistant, `/wife-context`).
+3. Then Milestone 3 (project binding), Milestone 4 (activity pipeline / observation), Milestone 5 (persona), Milestone 6 (voice + lip sync).

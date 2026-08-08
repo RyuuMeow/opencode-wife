@@ -63,7 +63,7 @@ On desktop, folder selection uses a native directory dialog and the folder path 
 
 ### Voice configuration
 
-(Planned — Milestone 2) Choose an existing TTS engine installation, then register a voice preset:
+(Planned — Milestone 6) Choose an existing TTS engine installation, then register a voice preset:
 
 - GPT model
 - SoVITS model

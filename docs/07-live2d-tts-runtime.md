@@ -6,7 +6,7 @@ The Live2D renderer uses **pixi.js 7 + `pixi-live2d-display-lipsyncpatch`** (MIT
 
 - `model.motion(group, index, priority)` maps 1:1 to `MotionRef { group, index }` plus the `MotionPriority` ladder from the character system.
 - `model.expression(name)` maps to `EmotionBinding.expression`.
-- Automatic blink/gaze and physics are built in; `model.speak()` covers Milestone 2 audio-driven lip sync.
+- Automatic blink/gaze and physics are built in; `model.speak()` covers Milestone 6 audio-driven lip sync.
 
 ### Cubism core provisioning
 
