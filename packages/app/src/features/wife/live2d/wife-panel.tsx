@@ -5,14 +5,6 @@ import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
 import { Icon } from "@opencode-ai/ui/v2/icon"
-import {
-  characterEmotions,
-  characterGestures,
-  characterStates,
-  type CharacterEmotion,
-  type CharacterGesture,
-  type CharacterState,
-} from "@opencode-ai/wife-core"
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
@@ -76,7 +68,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     () => usableCharacters().find((character) => character.id === selectedId()) ?? usableCharacters()[0],
   )
   const [loadError, setLoadError] = createSignal<string>()
-  const [intent, setIntent] = createStore<PresentationIntent>({ state: "idle", emotion: "neutral" })
+  const intent: PresentationIntent = { state: "idle", emotion: "neutral" }
 
   const [wifeInput, setWifeInput] = createStore<PromptInputV2PersistedState>({
     prompt: [{ type: "text", content: "", start: 0, end: 0 }],
@@ -84,9 +76,12 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     context: { items: [] },
   })
   const [wifeMessages, setWifeMessages] = createSignal<WifeChatMessage[]>([])
+  const [wifeChoices, setWifeChoices] = createSignal<string[]>([])
   const [historyProgress, setHistoryProgress] = createSignal(0)
   let historyScroll: HTMLDivElement | undefined
   let wifePanStart: ((event: PointerEvent) => void) | undefined
+  let replyVersion = 0
+  const replyTimers = new Set<ReturnType<typeof setTimeout>>()
   const local = useLocal()
   createEffect(() => {
     if (historyProgress() < 1) return
@@ -98,6 +93,8 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   })
 
   const submitWifeMessage = (text: string) => {
+    const version = ++replyVersion
+    setWifeChoices([])
     setWifeMessages((messages) => [...messages, { id: crypto.randomUUID(), role: "user", content: text }])
     // Placeholder reply until the read-only wife session lands (Milestone 2).
     // Deliver it sentence by sentence so the bubbles feel conversational.
@@ -110,14 +107,23 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
           .reduce((total, sentence) => total + Math.min(3600, Math.max(1400, sentence.length * 90)), 0),
     )
     sentences.forEach((sentence, index) => {
-      setTimeout(() => {
+      const timer = setTimeout(() => {
+        replyTimers.delete(timer)
+        if (version !== replyVersion) return
         setWifeMessages((messages) => [
           ...messages,
           { id: crypto.randomUUID(), role: "assistant", content: sentence },
         ])
+        if (index !== sentences.length - 1) return
+        setWifeChoices(["再多說一點", "換個方向看看", "先到這裡"])
       }, delays[index])
+      replyTimers.add(timer)
     })
   }
+  onCleanup(() => {
+    replyVersion += 1
+    replyTimers.forEach(clearTimeout)
+  })
   const wifeInputController = createPromptInputV2Controller({
     store: [wifeInput, setWifeInput],
     commands: () => [],
@@ -207,22 +213,19 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
       >
         {(url) => (
           <>
-            <header class="flex items-center gap-2 h-10 shrink-0 px-3 border-b border-v2-border-border-base">
-              <span class="text-13-regular text-v2-text-text-base truncate">{selectedCharacter()!.name}</span>
-              <Show when={usableCharacters().length > 1}>
-                <div class="ms-auto w-32 shrink-0">
-                  <SelectV2
-                    appearance="inline"
-                    options={usableCharacters().map((character) => character.id)}
-                    current={selectedCharacter()!.id}
-                    placement="bottom-end"
-                    gutter={6}
-                    label={(id) => usableCharacters().find((character) => character.id === id)?.name ?? id}
-                    onSelect={(id) => id && onSelectCharacter(id)}
-                    aria-label={language.t("wife.panel.selectCharacter")}
-                  />
-                </div>
-              </Show>
+            <header class="flex items-center h-10 shrink-0 px-3 border-b border-v2-border-border-base">
+              <div class="w-40 min-w-0 shrink-0">
+                <SelectV2
+                  appearance="inline"
+                  options={usableCharacters().map((character) => character.id)}
+                  current={selectedCharacter().id}
+                  placement="bottom-start"
+                  gutter={6}
+                  label={(id) => usableCharacters().find((character) => character.id === id)?.name ?? id}
+                  onSelect={(id) => id && onSelectCharacter(id)}
+                  aria-label={language.t("wife.panel.selectCharacter")}
+                />
+              </div>
             </header>
             <div class="relative flex-1 min-h-0 bg-v2-background-bg-base">
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
@@ -247,15 +250,17 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                   <div class="relative min-h-0 flex-1">
                     <WifeChatArea
                       messages={wifeMessages}
+                      choices={wifeChoices}
                       avatarImage={() => selectedCharacter()?.avatarImage}
                       characterName={() => selectedCharacter()?.name}
                       heightRatio={() => settings.general.wifeChatHeightRatio()}
                       historyProgress={historyProgress}
                       onHistoryProgress={setHistoryProgress}
+                      onChoice={submitWifeMessage}
                       onPanStart={(event) => wifePanStart?.(event)}
                     />
                   </div>
-                  <div class="pointer-events-auto w-full px-3 pt-3 pb-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
+                  <div class="pointer-events-auto w-full px-3 pt-4 pb-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
                     <PromptInputV2
                       controller={wifeInputController}
                       modelControl={
@@ -374,41 +379,6 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                 </div>
               </Show>
             </div>
-            <footer class="flex items-center gap-2 h-11 shrink-0 px-3 border-t border-v2-border-border-base">
-              <SelectV2
-                appearance="inline"
-                options={[...characterStates]}
-                current={intent.state}
-                placement="top-start"
-                gutter={6}
-                label={(state) => language.t(`wife.panel.test.state.${state}`)}
-                onSelect={(state) => state && setIntent("state", state as CharacterState)}
-              />
-              <SelectV2
-                appearance="inline"
-                options={["none", ...characterGestures]}
-                current={intent.gesture ?? "none"}
-                placement="top-start"
-                gutter={6}
-                label={(gesture) =>
-                  gesture === "none"
-                    ? language.t("wife.panel.test.none")
-                    : language.t(`wife.panel.test.gesture.${gesture}`)
-                }
-                onSelect={(gesture) =>
-                  setIntent("gesture", gesture && gesture !== "none" ? (gesture as CharacterGesture) : undefined)
-                }
-              />
-              <SelectV2
-                appearance="inline"
-                options={[...characterEmotions]}
-                current={intent.emotion}
-                placement="top-start"
-                gutter={6}
-                label={(emotion) => language.t(`wife.panel.test.emotion.${emotion}`)}
-                onSelect={(emotion) => emotion && setIntent("emotion", emotion as CharacterEmotion)}
-              />
-            </footer>
           </>
         )}
       </Show>

@@ -1,6 +1,7 @@
 import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
+import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 
 export type WifeChatMessage = {
   id: string
@@ -16,16 +17,19 @@ const BUBBLE_STYLE = { "--font-size-base": "15px" } as JSX.CSSProperties
 
 export function WifeChatArea(props: {
   messages: () => WifeChatMessage[]
+  choices: () => string[]
   avatarImage: () => string | undefined
   characterName: () => string | undefined
   /** Ratio of the Live2D area used for bubbles and history-scroll detection. */
   heightRatio: () => number
   historyProgress: () => number
   onHistoryProgress: (next: number) => void
+  onChoice: (choice: string) => void
   /** Forwards right-drags to the Live2D view so the model can be panned through this area. */
   onPanStart?: (event: PointerEvent) => void
 }) {
   const [leavingIds, setLeavingIds] = createSignal<string[]>([])
+  const [exitedIds, setExitedIds] = createSignal<string[]>([])
   const [enteringIds, setEnteringIds] = createSignal<string[]>([])
   const [visibleCount, setVisibleCount] = createSignal(INITIAL_VISIBLE_COUNT)
   let root: HTMLDivElement | undefined
@@ -47,7 +51,8 @@ export function WifeChatArea(props: {
       setVisibleCount(total)
       return
     }
-    if (list.getBoundingClientRect().height <= threshold || count <= 1) return
+    if (count <= 1) return
+    if (props.choices().length === 0 && list.getBoundingClientRect().height <= threshold) return
     const expelled = messages[total - count]
     if (!expelled || leavingIds().includes(expelled.id)) return
     batch(() => {
@@ -56,7 +61,13 @@ export function WifeChatArea(props: {
     })
     const timer = setTimeout(() => {
       animationTimers.delete(timer)
-      setLeavingIds((ids) => ids.filter((id) => id !== expelled.id))
+      setExitedIds((ids) => [...ids, expelled.id])
+      queueMicrotask(() => {
+        batch(() => {
+          setLeavingIds((ids) => ids.filter((id) => id !== expelled.id))
+          setExitedIds((ids) => ids.filter((id) => id !== expelled.id))
+        })
+      })
     }, EXIT_DURATION_MS)
     animationTimers.add(timer)
     setVisibleCount(count - 1)
@@ -91,6 +102,7 @@ export function WifeChatArea(props: {
 
   createEffect(() => {
     props.messages()
+    props.choices()
     props.heightRatio()
     leavingIds()
     visibleCount()
@@ -103,6 +115,7 @@ export function WifeChatArea(props: {
   }, evaluate)
   createResizeObserver(() => {
     props.messages()
+    props.choices()
     return content
   }, evaluate)
   onCleanup(() => animationTimers.forEach(clearTimeout))
@@ -111,9 +124,12 @@ export function WifeChatArea(props: {
     const messages = props.messages()
     const recent = messages.slice(-Math.min(visibleCount(), messages.length))
     const recentIds = new Set(recent.map((message) => message.id))
+    const exited = new Set(exitedIds())
     const leaving = leavingIds()
       .map((id) => messages.find((message) => message.id === id))
-      .filter((message): message is WifeChatMessage => !!message && !recentIds.has(message.id))
+      .filter((message): message is WifeChatMessage =>
+        !!message && !recentIds.has(message.id) && !exited.has(message.id)
+      )
     return [...leaving, ...recent]
   }
 
@@ -143,41 +159,70 @@ export function WifeChatArea(props: {
         }}
         onContextMenu={(event) => event.preventDefault()}
       >
-        <div ref={content} class="absolute inset-x-0 bottom-0 flex flex-col gap-1.5 px-3 pb-3">
-          <For each={visible()}>
-            {(message) => (
-              <div
-                classList={{
-                  "animate-out fade-out duration-300": leavingIds().includes(message.id),
-                  "animate-in fade-in slide-in-from-bottom-2 duration-300": enteringIds().includes(message.id),
-                }}
-              >
-                {message.role === "assistant" ? (
-                  <div class="flex flex-col items-start">
-                    <div class="flex items-center gap-2">
-                      <Avatar image={props.avatarImage()} />
-                      <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
+        <div ref={content} class="absolute inset-x-0 bottom-0 flex flex-col px-3">
+          <div class="flex flex-col gap-3">
+            <For each={visible()}>
+              {(message) => (
+                <div
+                  classList={{
+                    "animate-out fade-out duration-300": leavingIds().includes(message.id),
+                    "animate-in fade-in slide-in-from-bottom-2 duration-300": enteringIds().includes(message.id),
+                  }}
+                >
+                  {message.role === "assistant" ? (
+                    <div class="flex flex-col items-start">
+                      <div class="flex items-center gap-2">
+                        <Avatar image={props.avatarImage()} />
+                        <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
+                      </div>
+                      <div
+                        class={`${BUBBLE_BASE} mt-1 max-w-[85%] bg-v2-background-bg-layer-02`}
+                        style={BUBBLE_STYLE}
+                      >
+                        <Markdown text={message.content} />
+                      </div>
                     </div>
-                    <div
-                      class={`${BUBBLE_BASE} mt-1 max-w-[85%] bg-v2-background-bg-layer-02`}
-                      style={BUBBLE_STYLE}
+                  ) : (
+                    <div class="flex flex-col items-end">
+                      <div
+                        class={`${BUBBLE_BASE} max-w-[85%] bg-v2-background-bg-layer-01`}
+                        style={BUBBLE_STYLE}
+                      >
+                        <Markdown text={message.content} />
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </For>
+          </div>
+          <div
+            class="grid transition-[grid-template-rows,margin,opacity] duration-150 ease-out motion-reduce:transition-none"
+            classList={{
+              "mt-3 grid-rows-[1fr] opacity-100": props.choices().length > 0,
+              "pointer-events-none mt-0 grid-rows-[0fr] opacity-0": props.choices().length === 0,
+            }}
+            aria-hidden={props.choices().length === 0}
+          >
+            <div class="min-h-0 overflow-hidden">
+              <div class="flex flex-col gap-1.5">
+                <For each={props.choices()}>
+                  {(choice) => (
+                    <ButtonV2
+                      type="button"
+                      size="large"
+                      variant="neutral"
+                      class="w-full justify-start text-start"
+                      style={{ "background-color": "var(--v2-background-bg-layer-01)" }}
+                      onClick={() => props.onChoice(choice)}
                     >
-                      <Markdown text={message.content} />
-                    </div>
-                  </div>
-                ) : (
-                  <div class="flex flex-col items-end">
-                    <div
-                      class={`${BUBBLE_BASE} max-w-[85%] bg-v2-background-bg-layer-01`}
-                      style={BUBBLE_STYLE}
-                    >
-                      <Markdown text={message.content} />
-                    </div>
-                  </div>
-                )}
+                      {choice}
+                    </ButtonV2>
+                  )}
+                </For>
               </div>
-            )}
-          </For>
+            </div>
+          </div>
         </div>
       </div>
     </Show>
