@@ -82,7 +82,7 @@ import {
   sessionPanelWidthMax,
 } from "@/pages/session/session-panel-width"
 import { SessionSidePanel } from "@/pages/session/session-side-panel"
-import { WifePanel } from "@/features/wife/live2d/wife-panel"
+import { WifePanel, WIFE_PANEL_WIDTH_MIN } from "@/features/wife/live2d/wife-panel"
 import { sessionPanelLayout } from "@/pages/session/session-panel-layout"
 import { SessionReviewEmptyChangesV2 } from "@opencode-ai/session-ui/v2/session-review-empty-changes-v2"
 import { SessionReviewEmptyNoGitV2 } from "@opencode-ai/session-ui/v2/session-review-empty-no-git-v2"
@@ -468,6 +468,12 @@ export default function Page() {
   )
   const desktopSidePanelOpen = createMemo(() => desktopSessionResizeOpen() || desktopFileTreeOpen())
   const desktopWifeOpen = createMemo(() => isDesktop() && view().wifePanel.opened())
+  const wifePanelMax = createMemo(() => {
+    const available = sessionPanelAvailable()
+    if (available === undefined) return 1200
+    const reserved = SESSION_PANEL_WIDTH_MIN + (desktopFileTreeOpen() ? layout.fileTree.width() : 0)
+    return Math.max(WIFE_PANEL_WIDTH_MIN, available - reserved)
+  })
   let panelRow: HTMLDivElement | undefined
   const [panelRowWidth, setPanelRowWidth] = createSignal<number>()
   createResizeObserver(
@@ -2302,7 +2308,7 @@ export default function Page() {
         </div>
 
         <Show when={isDesktop() && settings.general.wifeMode() && view().wifePanel.opened()}>
-          <WifePanel size={size} />
+          <WifePanel size={size} maxWidth={wifePanelMax()} />
         </Show>
 
         <Show when={!newSessionDesign() && desktopSidePanelOpen()}>

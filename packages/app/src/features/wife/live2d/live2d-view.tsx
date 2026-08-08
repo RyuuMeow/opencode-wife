@@ -18,6 +18,12 @@ const FIT_MARGIN = 0.92
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 3
 
+function normalizedDeltaY(event: WheelEvent) {
+  if (event.deltaMode === 1) return event.deltaY * 16
+  if (event.deltaMode === 2) return event.deltaY * 100
+  return event.deltaY
+}
+
 function applyIntent(model: Live2DModel, intent: PresentationIntent, avatar: AvatarProfile) {
   const state = avatar.states[intent.state]
   const stateMotion = state?.motions?.[0]
@@ -61,8 +67,12 @@ export function Live2DView(props: {
     const fit = () => {
       const loaded = model()
       if (!loaded || container.clientWidth === 0 || container.clientHeight === 0) return
+      // getLocalBounds is scale-independent; model.width/height would compound
+      // the current zoom into the fit base and oscillate between two sizes.
+      const bounds = loaded.getLocalBounds()
+      if (bounds.width === 0 || bounds.height === 0) return
       const base =
-        Math.min(container.clientWidth / loaded.width, container.clientHeight / loaded.height) * FIT_MARGIN
+        Math.min(container.clientWidth / bounds.width, container.clientHeight / bounds.height) * FIT_MARGIN
       const scale = base * zoom()
       loaded.scale.set(scale)
       loaded.anchor.set(0.5, 0.5)
@@ -71,7 +81,9 @@ export function Live2DView(props: {
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
-      setZoom((current) => Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current * Math.exp(-event.deltaY * 0.001))))
+      setZoom((current) =>
+        Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current * Math.exp(-normalizedDeltaY(event) * 0.001))),
+      )
       fit()
     }
     container.addEventListener("wheel", onWheel, { passive: false })

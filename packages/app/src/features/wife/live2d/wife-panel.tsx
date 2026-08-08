@@ -19,8 +19,7 @@ import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
 import type { PresentationIntent } from "./live2d-view"
 
-const WIFE_PANEL_WIDTH_MIN = 260
-const WIFE_PANEL_WIDTH_MAX = 480
+export const WIFE_PANEL_WIDTH_MIN = 260
 
 const Live2DView = lazy(async () => {
   try {
@@ -48,7 +47,7 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel(props: { size: Sizing }) {
+export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
@@ -92,7 +91,7 @@ export function WifePanel(props: { size: Sizing }) {
           edge="start"
           size={layout.wife.width()}
           min={WIFE_PANEL_WIDTH_MIN}
-          max={WIFE_PANEL_WIDTH_MAX}
+          max={props.maxWidth}
           onResize={(width) => {
             props.size.touch()
             layout.wife.resize(width)
