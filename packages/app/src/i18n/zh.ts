@@ -1006,6 +1006,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "显示一个能对你的编程会话作出反应的角色伴侣。关闭后使用不含 Wife 层的经典模式。",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "语言",
   "settings.general.row.language.description": "更改 OpenCode 的显示语言",
   "settings.general.row.shell.title": "终端 Shell",

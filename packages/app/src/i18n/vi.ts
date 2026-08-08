@@ -1046,6 +1046,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Hiển thị một nhân vật đồng hành phản ứng với phiên lập trình của bạn. Tắt để sử dụng Chế độ Cổ điển mà không có lớp Wife.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "Ngôn ngữ",
   "settings.general.row.language.description": "Thay đổi ngôn ngữ hiển thị cho OpenCode",
   "settings.general.row.shell.title": "Shell terminal",

@@ -1041,6 +1041,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "ਆਪਣੇ ਕੋਡਿੰਗ ਸੈਸ਼ਨ 'ਤੇ ਪ੍ਰਤੀਕਿਰਿਆ ਕਰਨ ਵਾਲਾ ਇੱਕ ਪਾਤਰ ਸਾਥੀ ਦਿਖਾਓ। Wife ਪਰਤ ਤੋਂ ਬਿਨਾਂ ਕਲਾਸਿਕ ਮੋਡ ਵਰਤਣ ਲਈ ਇਸਨੂੰ ਬੰਦ ਕਰੋ।",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "بولی",
   "settings.general.row.language.description": "OpenCode لئی ڈسپلے دی بولی بدلو",
   "settings.general.row.shell.title": "شیل",

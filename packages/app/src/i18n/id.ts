@@ -1114,6 +1114,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Tampilkan pendamping karakter yang merespons sesi pengodean Anda. Nonaktifkan untuk menggunakan Mode Klasik tanpa lapisan Wife.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
 
   "settings.general.row.language.title": "Bahasa",
   "settings.general.row.language.description": "Ubah bahasa tampilan untuk OpenCode",

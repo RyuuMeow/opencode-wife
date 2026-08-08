@@ -958,6 +958,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Pokazuje towarzyszkę, która reaguje na Twoją sesję kodowania. Wyłącz, aby korzystać z trybu klasycznego bez warstwy Wife.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "Język",
   "settings.general.row.language.description": "Zmień język wyświetlania dla OpenCode",
   "settings.general.row.shell.title": "Powłoka terminala",

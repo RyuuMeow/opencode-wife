@@ -966,6 +966,8 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife Mode",
   "settings.general.row.wifeMode.description":
     "Show a character companion that reacts to your coding session. Disable to use Classic Mode without the Wife layer.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility",
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out",
 
   "wife.characters.title": "Characters",
   "wife.characters.empty": "No characters registered yet",

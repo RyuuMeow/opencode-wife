@@ -1040,6 +1040,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Visa en karaktärskamrat som reagerar på din kodningssession. Stäng av för att använda klassiskt läge utan Wife-lagret.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "Språk",
   "settings.general.row.language.description": "Ändra visningsspråket för OpenCode",
   "settings.general.row.shell.title": "Terminalskal",

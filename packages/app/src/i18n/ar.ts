@@ -954,6 +954,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "اعرض رفيقًا يتفاعل مع جلسة البرمجة الخاصة بك. عطّله لاستخدام الوضع الكلاسيكي بدون طبقة Wife.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "اللغة",
   "settings.general.row.language.description": "تغيير لغة العرض لـ OpenCode",
   "settings.general.row.shell.title": "Shell المحطة الطرفية",

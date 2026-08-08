@@ -1,4 +1,4 @@
-import { createMemo, createSignal, For, lazy, onCleanup, Show, Suspense } from "solid-js"
+import { createEffect, createMemo, createSignal, For, lazy, onCleanup, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
@@ -16,21 +16,20 @@ import {
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
-import { wifeLogger } from "@opencode-ai/wife-core/log"
 import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
 import { useLayout } from "@/context/layout"
 import { useLocal } from "@/context/local"
 import { usePlatform } from "@/context/platform"
+import { useSettings } from "@/context/settings"
 import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
-import { Avatar, WifeChatArea, type WifeChatMessage } from "../chat/wife-chat-area"
+import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea, type WifeChatMessage } from "../chat/wife-chat-area"
+import { splitIntoSentences } from "../chat/sentences"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
-
-const log = wifeLogger("live2d")
 
 const Live2DView = lazy(async () => {
   try {
@@ -63,6 +62,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   const registry = useWifeRegistry()
   const platform = usePlatform()
   const layout = useLayout()
+  const settings = useSettings()
   const openCharacters = useSettingsDialog("wife-characters")
 
   const usableCharacters = createMemo(() => {
@@ -84,18 +84,39 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     context: { items: [] },
   })
   const [wifeMessages, setWifeMessages] = createSignal<WifeChatMessage[]>([])
-  const [wifeChatExpanded, setWifeChatExpanded] = createSignal(false)
+  const [historyProgress, setHistoryProgress] = createSignal(0)
+  let historyScroll: HTMLDivElement | undefined
   let wifePanStart: ((event: PointerEvent) => void) | undefined
   const local = useLocal()
+  createEffect(() => {
+    if (historyProgress() < 1) return
+    queueMicrotask(() => {
+      const target = historyScroll
+      if (!target) return
+      target.scrollTo({ top: target.scrollHeight })
+    })
+  })
+
   const submitWifeMessage = (text: string) => {
     setWifeMessages((messages) => [...messages, { id: crypto.randomUUID(), role: "user", content: text }])
     // Placeholder reply until the read-only wife session lands (Milestone 2).
-    setTimeout(() => {
-      setWifeMessages((messages) => [
-        ...messages,
-        { id: crypto.randomUUID(), role: "assistant", content: `收到！你說的是：「${text}」` },
-      ])
-    }, 600)
+    // Deliver it sentence by sentence so the bubbles feel conversational.
+    const sentences = splitIntoSentences(`收到！你說的是：「${text}」讓我來想想看。這聽起來很有趣。`)
+    const delays = sentences.map(
+      (_, index) =>
+        900 +
+        sentences
+          .slice(0, index)
+          .reduce((total, sentence) => total + Math.min(3600, Math.max(1400, sentence.length * 90)), 0),
+    )
+    sentences.forEach((sentence, index) => {
+      setTimeout(() => {
+        setWifeMessages((messages) => [
+          ...messages,
+          { id: crypto.randomUUID(), role: "assistant", content: sentence },
+        ])
+      }, delays[index])
+    })
   }
   const wifeInputController = createPromptInputV2Controller({
     store: [wifeInput, setWifeInput],
@@ -222,16 +243,19 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                 </Show>
               </Show>
               <Show when={selectedCharacter()}>
-                <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 flex flex-col justify-end pb-3">
-                  <WifeChatArea
-                    messages={wifeMessages}
-                    avatarImage={() => selectedCharacter()?.avatarImage}
-                    characterName={() => selectedCharacter()?.name}
-                    expanded={wifeChatExpanded()}
-                    onExpandChange={setWifeChatExpanded}
-                    onPanStart={(event) => wifePanStart?.(event)}
-                  />
-                  <div class="pointer-events-auto w-full px-3 pt-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
+                <div class="pointer-events-none absolute inset-0 z-10 flex flex-col">
+                  <div class="relative min-h-0 flex-1">
+                    <WifeChatArea
+                      messages={wifeMessages}
+                      avatarImage={() => selectedCharacter()?.avatarImage}
+                      characterName={() => selectedCharacter()?.name}
+                      heightRatio={() => settings.general.wifeChatHeightRatio()}
+                      historyProgress={historyProgress}
+                      onHistoryProgress={setHistoryProgress}
+                      onPanStart={(event) => wifePanStart?.(event)}
+                    />
+                  </div>
+                  <div class="pointer-events-auto w-full px-3 pt-3 pb-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
                     <PromptInputV2
                       controller={wifeInputController}
                       modelControl={
@@ -270,8 +294,21 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                 </div>
               </Show>
 
-              <Show when={wifeChatExpanded()}>
-                <div class="pointer-events-auto absolute inset-0 z-30 flex flex-col bg-black/50 backdrop-blur-sm">
+              <Show when={selectedCharacter()}>
+                <div
+                  class="absolute inset-0 z-30 flex flex-col bg-v2-background-bg-base transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
+                  classList={{
+                    "pointer-events-auto": historyProgress() > 0,
+                    "pointer-events-none": historyProgress() === 0,
+                  }}
+                  style={{
+                    opacity: historyProgress(),
+                    transform: `translateY(${(1 - historyProgress()) * 8}px)`,
+                  }}
+                  aria-hidden={historyProgress() === 0}
+                  inert={historyProgress() === 0}
+                  data-state={historyProgress() === 0 ? "closed" : historyProgress() === 1 ? "open" : "opening"}
+                >
                   <header class="flex h-10 shrink-0 items-center justify-between px-3">
                     <span class="text-13-regular text-v2-text-text-base">
                       {language.t("wife.panel.chat.historyTitle")}
@@ -279,19 +316,31 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                     <ButtonV2
                       size="small"
                       variant="ghost-muted"
-                      onClick={() => setWifeChatExpanded(false)}
+                      onClick={() => setHistoryProgress(0)}
                       aria-label={language.t("wife.panel.chat.historyClose")}
                     >
                       <Icon name="outline-xmark" />
                     </ButtonV2>
                   </header>
                   <div
+                    ref={historyScroll}
                     class="flex-1 min-h-0 overflow-y-auto px-3 pb-3"
                     onWheel={(event) => {
-                      if (event.currentTarget.scrollTop === 0 && event.deltaY < 0) {
+                      const target = event.currentTarget
+                      const progress = historyProgress()
+                      if (progress < 1) {
+                        event.preventDefault()
                         event.stopPropagation()
-                        setWifeChatExpanded(false)
+                        setHistoryProgress(
+                          Math.max(0, Math.min(1, progress - event.deltaY / HISTORY_WHEEL_DISTANCE)),
+                        )
+                        return
                       }
+                      const atBottom = target.scrollTop + target.clientHeight >= target.scrollHeight - 1
+                      if (!atBottom || event.deltaY <= 0) return
+                      event.preventDefault()
+                      event.stopPropagation()
+                      setHistoryProgress(Math.max(0, 1 - event.deltaY / HISTORY_WHEEL_DISTANCE))
                     }}
                   >
                     <div class="flex flex-col gap-3">

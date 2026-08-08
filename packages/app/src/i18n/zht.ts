@@ -966,6 +966,8 @@ export const dict = {
 
   "settings.general.row.wifeMode.description":
     "顯示一個能對你的程式作業階段作出反應的角色夥伴。關閉後使用不含 Wife 層的經典模式。",
+  "settings.general.row.wifeChatHeightRatio.title": "對話氣泡可見高度",
+  "settings.general.row.wifeChatHeightRatio.description": "對話氣泡可佔用的面板高度比例，超過時較舊的訊息會淡出",
 
   "settings.general.row.language.title": "語言",
   "settings.general.row.language.description": "變更 OpenCode 的顯示語言",

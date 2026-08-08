@@ -1043,6 +1043,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "अपने कोडिंग सत्र पर प्रतिक्रिया देने वाला एक कैरेक्टर साथी दिखाएं। Wife लेयर के बिना क्लासिक मोड का उपयोग करने के लिए इसे बंद करें।",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "भाषा",
   "settings.general.row.language.description": "OpenCode के लिए प्रदर्शन भाषा बदलें",
   "settings.general.row.shell.title": "टर्मिनल शेल",

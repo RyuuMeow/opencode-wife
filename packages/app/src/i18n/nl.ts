@@ -1044,6 +1044,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Toon een karaktermetgezel die reageert op je codeersessie. Schakel uit om de klassieke modus zonder de Wife-laag te gebruiken.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "Taal",
   "settings.general.row.language.description": "Wijzig de weergavetaal voor OpenCode",
   "settings.general.row.shell.title": "Terminalshell",

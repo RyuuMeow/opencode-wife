@@ -36,6 +36,7 @@ export interface Settings {
     mobileTitlebarPosition: "top" | "bottom"
     newLayoutDesigns?: boolean
     wifeMode?: boolean
+    wifeChatHeightRatio?: number
     layoutTransitionEligible?: boolean
     agentVisibilityInitialized?: boolean
     newInterfaceNoticeDismissed?: boolean
@@ -61,6 +62,7 @@ export const terminalDefault = "JetBrainsMono Nerd Font Mono"
 const legacyNewLayoutDesignsDefault = import.meta.env.VITE_OPENCODE_CHANNEL !== "prod"
 export const newLayoutDesignsDefault = true
 export const wifeModeDefault = false
+export const wifeChatHeightRatioDefault = 0.35
 // Existing users can switch layouts until local midnight on this date. Set new Date(YYYY, M-1, D) to show.
 export const oldInterfaceSunset = new Date(2026, 8, 14)
 const newLayoutDesignsUpgradeCutoff = "1.17.19"
@@ -440,6 +442,10 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
         wifeMode: withFallback(() => store.general?.wifeMode, wifeModeDefault),
         setWifeMode(value: boolean) {
           setStore("general", "wifeMode", value)
+        },
+        wifeChatHeightRatio: withFallback(() => store.general?.wifeChatHeightRatio, wifeChatHeightRatioDefault),
+        setWifeChatHeightRatio(value: number) {
+          setStore("general", "wifeChatHeightRatio", value)
         },
         layoutTransitionClassified,
         setOldLayoutEligible(eligible: boolean) {

@@ -1128,6 +1128,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "Показуйте персонажа-компаньйона, який реагує на вашу сесію кодування. Вимкніть, щоб використовувати класичний режим без шару Wife.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
 
   "settings.general.row.language.title": "Мова",
   "settings.general.row.language.description": "Змінити мову інтерфейсу OpenCode",

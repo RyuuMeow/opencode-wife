@@ -702,6 +702,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "코딩 세션에 반응하는 캐릭터 컴패니언을 표시합니다. Wife 레이어 없이 클래식 모드를 사용하려면 비활성화하세요.",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "언어",
   "settings.general.row.language.description": "OpenCode 표시 언어 변경",
   "settings.general.row.appearance.title": "모양",

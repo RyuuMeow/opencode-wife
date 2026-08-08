@@ -506,8 +506,10 @@ export default function Page() {
   )
   const sessionPanelWidth = createMemo(() => {
     if (desktopSessionResizeOpen()) return `${sessionPanelResizedWidth()}px`
+    const gap = settings.general.newLayoutDesigns() ? 8 : 0
     const occupied =
-      (desktopFileTreeOpen() ? layout.fileTree.width() : 0) + (desktopWifeOpen() ? layout.wife.width() : 0)
+      (desktopFileTreeOpen() ? layout.fileTree.width() + gap : 0) +
+      (desktopWifeOpen() ? layout.wife.width() + gap : 0)
     if (occupied === 0) return "100%"
     return `calc(100% - ${occupied}px)`
   })

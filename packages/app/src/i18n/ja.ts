@@ -942,6 +942,8 @@ export const dict = {
   "wife.panel.test.emotion.embarrassed": "Embarrassed",
   "settings.general.row.wifeMode.description":
     "コーディングセッションに反応するキャラクターコンパニオンを表示します。Wife レイヤーなしのクラシックモードにするには無効にします。",
+  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
   "settings.general.row.language.title": "言語",
   "settings.general.row.language.description": "OpenCodeの表示言語を変更します",
   "settings.general.row.shell.title": "ターミナルシェル",
