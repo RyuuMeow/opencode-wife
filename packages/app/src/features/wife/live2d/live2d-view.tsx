@@ -52,7 +52,29 @@ export function Live2DView(props: {
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
   const [zoom, setZoom] = createSignal(1)
+  const [offset, setOffset] = createSignal({ x: 0, y: 0 })
+  const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
+
+  const fit = () => {
+    const loaded = model()
+    if (!loaded || !container || container.clientWidth === 0 || container.clientHeight === 0) return
+    // getLocalBounds is scale-independent; model.width/height would compound
+    // the current zoom into the fit base and oscillate between two sizes.
+    const bounds = loaded.getLocalBounds()
+    if (bounds.width === 0 || bounds.height === 0) return
+    const base =
+      Math.min(container.clientWidth / bounds.width, container.clientHeight / bounds.height) * FIT_MARGIN
+    loaded.scale.set(base * zoom())
+    loaded.anchor.set(0.5, 0.5)
+    loaded.position.set(container.clientWidth / 2 + offset().x, container.clientHeight / 2 + offset().y)
+  }
+
+  const resetView = () => {
+    setZoom(1)
+    setOffset({ x: 0, y: 0 })
+    fit()
+  }
 
   onMount(() => {
     if (!container) return
@@ -63,21 +85,6 @@ export function Live2DView(props: {
       resolution: window.devicePixelRatio || 1,
     })
     container.appendChild(app.view as HTMLCanvasElement)
-
-    const fit = () => {
-      const loaded = model()
-      if (!loaded || container.clientWidth === 0 || container.clientHeight === 0) return
-      // getLocalBounds is scale-independent; model.width/height would compound
-      // the current zoom into the fit base and oscillate between two sizes.
-      const bounds = loaded.getLocalBounds()
-      if (bounds.width === 0 || bounds.height === 0) return
-      const base =
-        Math.min(container.clientWidth / bounds.width, container.clientHeight / bounds.height) * FIT_MARGIN
-      const scale = base * zoom()
-      loaded.scale.set(scale)
-      loaded.anchor.set(0.5, 0.5)
-      loaded.position.set(container.clientWidth / 2, container.clientHeight / 2)
-    }
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -120,5 +127,41 @@ export function Live2DView(props: {
     applyIntent(loaded, intent, props.avatar())
   })
 
-  return <div ref={container} class="relative w-full h-full overflow-hidden" />
+  const startPan = (event: PointerEvent) => {
+    if (event.button !== 2) return
+    event.preventDefault()
+    container?.setPointerCapture(event.pointerId)
+    const current = offset()
+    setPanning({ pointerId: event.pointerId, startX: event.clientX, startY: event.clientY, offsetX: current.x, offsetY: current.y })
+  }
+
+  const movePan = (event: PointerEvent) => {
+    const pan = panning()
+    if (!pan || event.pointerId !== pan.pointerId) return
+    setOffset({ x: pan.offsetX + event.clientX - pan.startX, y: pan.offsetY + event.clientY - pan.startY })
+    fit()
+  }
+
+  const endPan = (event: PointerEvent) => {
+    const pan = panning()
+    if (!pan || event.pointerId !== pan.pointerId) return
+    setPanning(undefined)
+  }
+
+  return (
+    <div
+      ref={container}
+      class="relative w-full h-full overflow-hidden"
+      classList={{
+        "cursor-grab": !!model() && !panning(),
+        "cursor-grabbing": !!panning(),
+      }}
+      onPointerDown={startPan}
+      onPointerMove={movePan}
+      onPointerUp={endPan}
+      onPointerCancel={endPan}
+      onContextMenu={(event) => event.preventDefault()}
+      onDblClick={resetView}
+    />
+  )
 }
