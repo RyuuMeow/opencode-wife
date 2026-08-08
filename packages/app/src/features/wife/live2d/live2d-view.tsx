@@ -76,6 +76,20 @@ export function Live2DView(props: {
     fit()
   }
 
+  const onDblClick = (event: MouseEvent) => {
+    const loaded = model()
+    if (!loaded || !container) {
+      resetView()
+      return
+    }
+    // Keep clicks on the model free for future interactions; only empty
+    // canvas space resets the view.
+    const rect = container.getBoundingClientRect()
+    const bounds = loaded.getBounds()
+    if (bounds.contains(event.clientX - rect.left, event.clientY - rect.top)) return
+    resetView()
+  }
+
   onMount(() => {
     if (!container) return
     const app = new Application({
@@ -161,7 +175,7 @@ export function Live2DView(props: {
       onPointerUp={endPan}
       onPointerCancel={endPan}
       onContextMenu={(event) => event.preventDefault()}
-      onDblClick={resetView}
+      onDblClick={onDblClick}
     />
   )
 }
