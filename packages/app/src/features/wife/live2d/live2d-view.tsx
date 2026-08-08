@@ -65,6 +65,7 @@ export function Live2DView(props: {
   let container: HTMLDivElement | undefined
   let disposed = false
   let dirty = false
+  let started = false
 
   const fit = () => {
     const loaded = model()
@@ -198,10 +199,12 @@ export function Live2DView(props: {
 
   // Keep-alive: the view stays mounted while the panel is closed (only
   // hidden). The render loop starts once the model is fully loaded
-  // (autoStart is off) and then keeps running.
+  // (autoStart is off); Ticker.add does not dedupe, so start() must run
+  // exactly once per app instance or the render callback gets added twice.
   createEffect(() => {
     const next = app()
-    if (!next || !ready()) return
+    if (!next || !ready() || started) return
+    started = true
     next.start()
   })
 
