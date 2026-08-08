@@ -63,6 +63,8 @@ export function Live2DView(props: {
   const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
+  let disposed = false
+  let dirty = false
 
   const fit = () => {
     const loaded = model()
@@ -115,9 +117,29 @@ export function Live2DView(props: {
     resetView()
   }
 
+  const loadModel = () => {
+    if (disposed) return
+    const next = app()
+    if (!next) return
+    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+      .then((loaded) => {
+        if (disposed) {
+          loaded.destroy()
+          return
+        }
+        model()?.destroy()
+        setModel(loaded)
+        next.stage.addChild(loaded)
+        setReady(true)
+        fit()
+      })
+      .catch((cause: unknown) => {
+        if (!disposed) props.onError(cause instanceof Error ? cause.message : String(cause))
+      })
+  }
+
   onMount(() => {
     if (!container) return
-    let disposed = false
     const next = new Application({
       backgroundAlpha: 0,
       antialias: true,
@@ -141,24 +163,6 @@ export function Live2DView(props: {
 
     const observer = new ResizeObserver(resizeNow)
     observer.observe(container)
-
-    const loadModel = () => {
-      void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
-        .then((loaded) => {
-          if (disposed) {
-            loaded.destroy()
-            return
-          }
-          model()?.destroy()
-          setModel(loaded)
-          next.stage.addChild(loaded)
-          setReady(true)
-          fit()
-        })
-        .catch((cause: unknown) => {
-          props.onError(cause instanceof Error ? cause.message : String(cause))
-        })
-    }
 
     // When the WebGL context is lost (which hidden 0-sized canvases can
     // trigger on some drivers), pixi restores its own resources but the
@@ -193,18 +197,33 @@ export function Live2DView(props: {
   })
 
   // Keep-alive: the view stays mounted while the panel is closed (only
-  // hidden), so toggling the panel never reloads the model. The render loop
-  // starts once the model is fully loaded (autoStart is off) and then keeps
-  // running; showing the panel forces a resize+fit so the canvas picks up the
-  // live layout size.
+  // hidden). The render loop starts once the model is fully loaded
+  // (autoStart is off) and then keeps running.
   createEffect(() => {
     const next = app()
     if (!next || !ready()) return
     next.start()
   })
 
+  // After a hide cycle the GPU can silently reclaim the model's textures
+  // (no context event fires), so the canvas may show a partial or blank
+  // model. Reload the model asynchronously on the next show; the panel
+  // chrome stays interactive and the spinner covers the reload.
   createEffect(() => {
-    if (!props.active || !app() || !ready()) return
+    const next = app()
+    if (!next || !ready()) return
+    if (!props.active) {
+      dirty = true
+      return
+    }
+    if (dirty) {
+      dirty = false
+      untrack(() => {
+        setReady(false)
+        requestAnimationFrame(loadModel)
+      })
+      return
+    }
     untrack(resizeNow)
   })
 
@@ -243,6 +262,12 @@ export function Live2DView(props: {
       onPointerCancel={endPan}
       onContextMenu={(event) => event.preventDefault()}
       onDblClick={onDblClick}
-    />
+    >
+      <Show when={!ready()}>
+        <div class="absolute inset-0 flex items-center justify-center bg-v2-background-bg-layer-01">
+          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+        </div>
+      </Show>
+    </div>
   )
 }
