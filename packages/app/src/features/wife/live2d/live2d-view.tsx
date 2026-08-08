@@ -1,8 +1,6 @@
-import { createEffect, createSignal, onCleanup, onMount, Show } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
-import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
-import { wifeLogger } from "@opencode-ai/wife-core/log"
 import type {
   AvatarProfile,
   CharacterEmotion,
@@ -19,7 +17,6 @@ export type PresentationIntent = {
 const FIT_MARGIN = 0.92
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 3
-const log = wifeLogger("live2d")
 
 function normalizedDeltaY(event: WheelEvent) {
   if (event.deltaMode === 1) return event.deltaY * 16
@@ -51,45 +48,26 @@ export function Live2DView(props: {
   modelUrl: string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
-  active: boolean
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
-  const [app, setApp] = createSignal<Application>()
   const [zoom, setZoom] = createSignal(1)
   const [offset, setOffset] = createSignal({ x: 0, y: 0 })
-  const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
 
   const fit = () => {
     const loaded = model()
-    if (!loaded || !container) return
-    log.debug("fit", { width: container.clientWidth, height: container.clientHeight })
-    if (container.clientWidth === 0 || container.clientHeight === 0) return
+    if (!loaded || !container || container.clientWidth === 0 || container.clientHeight === 0) return
     // getLocalBounds is scale-independent; model.width/height would compound
     // the current zoom into the fit base and oscillate between two sizes.
     const bounds = loaded.getLocalBounds()
-    let width = bounds.width
-    let height = bounds.height
-    if (width === 0 || height === 0) {
-      width = loaded.width
-      height = loaded.height
-      if (width === 0 || height === 0) return
-    }
-    const base = Math.min(container.clientWidth / width, container.clientHeight / height) * FIT_MARGIN
+    if (bounds.width === 0 || bounds.height === 0) return
+    const base =
+      Math.min(container.clientWidth / bounds.width, container.clientHeight / bounds.height) * FIT_MARGIN
     loaded.scale.set(base * zoom())
     loaded.anchor.set(0.5, 0.5)
     loaded.position.set(container.clientWidth / 2 + offset().x, container.clientHeight / 2 + offset().y)
-    log.debug("fit applied", { base, zoom: zoom(), scale: base * zoom() })
-  }
-
-  const resizeNow = () => {
-    const next = app()
-    if (!next || !container) return
-    log.debug("resize", { width: container.clientWidth, height: container.clientHeight })
-    next.renderer.resize(container.clientWidth, container.clientHeight)
-    fit()
   }
 
   const resetView = () => {
@@ -114,14 +92,13 @@ export function Live2DView(props: {
 
   onMount(() => {
     if (!container) return
-    const next = new Application({
+    const app = new Application({
       backgroundAlpha: 0,
       antialias: true,
       autoDensity: true,
       resolution: window.devicePixelRatio || 1,
     })
-    setApp(next)
-    container.appendChild(next.view as HTMLCanvasElement)
+    container.appendChild(app.view as HTMLCanvasElement)
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -132,20 +109,20 @@ export function Live2DView(props: {
     }
     container.addEventListener("wheel", onWheel, { passive: false })
 
-    const observer = new ResizeObserver(resizeNow)
+    const resize = () => {
+      app.renderer.resize(container.clientWidth, container.clientHeight)
+      fit()
+    }
+    const observer = new ResizeObserver(resize)
     observer.observe(container)
 
-    log.debug("start", { width: container.clientWidth, height: container.clientHeight, url: props.modelUrl })
     void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
       .then((loaded) => {
         setModel(loaded)
-        next.stage.addChild(loaded)
-        setReady(true)
-        log.debug("model loaded", { bounds: loaded.getLocalBounds() })
+        app.stage.addChild(loaded)
         fit()
       })
       .catch((cause: unknown) => {
-        log.error("model load failed", cause)
         props.onError(cause instanceof Error ? cause.message : String(cause))
       })
 
@@ -153,7 +130,7 @@ export function Live2DView(props: {
       observer.disconnect()
       container.removeEventListener("wheel", onWheel)
       model()?.destroy()
-      next.destroy(true, { children: true })
+      app.destroy(true, { children: true })
     })
   })
 
@@ -162,20 +139,6 @@ export function Live2DView(props: {
     const intent = props.intent()
     if (!loaded) return
     applyIntent(loaded, intent, props.avatar())
-  })
-
-  // Keep-alive: the view stays mounted while the panel is closed; pause the
-  // render loop when hidden and force a resize+fit when shown so the canvas
-  // is sized from live layout instead of relying on observer callbacks.
-  createEffect(() => {
-    const next = app()
-    if (!next) return
-    if (props.active) {
-      next.start()
-      resizeNow()
-    } else {
-      next.stop()
-    }
   })
 
   const startPan = (event: PointerEvent) => {
@@ -213,12 +176,6 @@ export function Live2DView(props: {
       onPointerCancel={endPan}
       onContextMenu={(event) => event.preventDefault()}
       onDblClick={onDblClick}
-    >
-      <Show when={!ready()}>
-        <div class="absolute inset-0 flex items-center justify-center bg-v2-background-bg-layer-01">
-          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
-        </div>
-      </Show>
-    </div>
+    />
   )
 }
