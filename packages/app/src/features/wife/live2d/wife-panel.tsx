@@ -1,6 +1,7 @@
-import { createEffect, createMemo, createSignal, For, lazy, onCleanup, Show, Suspense } from "solid-js"
+import { createEffect, createMemo, createSignal, For, lazy, onCleanup, onMount, Show, Suspense } from "solid-js"
 import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
@@ -22,6 +23,8 @@ import { splitIntoSentences } from "../chat/sentences"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
+// Keep Pixi/Cubism initialization out of the 240ms panel-width transition.
+const LIVE2D_START_DELAY_MS = 260
 
 const Live2DView = lazy(async () => {
   try {
@@ -68,7 +71,14 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     () => usableCharacters().find((character) => character.id === selectedId()) ?? usableCharacters()[0],
   )
   const [loadError, setLoadError] = createSignal<string>()
+  const [runtimeEnabled, setRuntimeEnabled] = createSignal(false)
   const intent: PresentationIntent = { state: "idle", emotion: "neutral" }
+
+  onMount(() => {
+    const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const timer = window.setTimeout(() => setRuntimeEnabled(true), reducedMotion ? 0 : LIVE2D_START_DELAY_MS)
+    onCleanup(() => window.clearTimeout(timer))
+  })
 
   const [wifeInput, setWifeInput] = createStore<PromptInputV2PersistedState>({
     prompt: [{ type: "text", content: "", start: 0, end: 0 }],
@@ -229,9 +239,24 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
             </header>
             <div class="relative flex-1 min-h-0 bg-v2-background-bg-base">
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
-                <Show when={selectedCharacter()} keyed>
+                <Show
+                  when={runtimeEnabled() && selectedCharacter()}
+                  keyed
+                  fallback={
+                    <div class="absolute inset-0 flex items-center justify-center">
+                      <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+                    </div>
+                  }
+                >
                   {(character) => (
-                    <Suspense fallback={<span class="sr-only">{language.t("common.loading")}</span>}>
+                    <Suspense
+                      fallback={
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+                          <span class="sr-only">{language.t("common.loading")}</span>
+                        </div>
+                      }
+                    >
                       <Live2DView
                         modelUrl={url()}
                         avatar={() => character.avatar!}
