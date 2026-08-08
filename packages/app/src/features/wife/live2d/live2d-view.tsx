@@ -55,6 +55,7 @@ export function Live2DView(props: {
   const [app, setApp] = createSignal<Application>()
   const [zoom, setZoom] = createSignal(1)
   const [offset, setOffset] = createSignal({ x: 0, y: 0 })
+  const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
 
@@ -105,6 +106,7 @@ export function Live2DView(props: {
       backgroundAlpha: 0,
       antialias: true,
       autoDensity: true,
+      autoStart: false,
       resolution: window.devicePixelRatio || 1,
     })
     setApp(next)
@@ -126,6 +128,7 @@ export function Live2DView(props: {
       .then((loaded) => {
         setModel(loaded)
         next.stage.addChild(loaded)
+        setReady(true)
         fit()
       })
       .catch((cause: unknown) => {
@@ -148,11 +151,12 @@ export function Live2DView(props: {
   })
 
   // Keep-alive: the view stays mounted while the panel is closed (only
-  // hidden), so toggling the panel never reloads the model. Pause the render
-  // loop when hidden and force a resize+fit when shown.
+  // hidden), so toggling the panel never reloads the model. The render loop
+  // only starts once the model is fully loaded (autoStart is off), so the
+  // first drawn frame is always the complete model.
   createEffect(() => {
     const next = app()
-    if (!next) return
+    if (!next || !ready()) return
     if (props.active) {
       next.start()
       resizeNow()
