@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount, Show, untrack } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
 import type {
@@ -152,17 +152,18 @@ export function Live2DView(props: {
 
   // Keep-alive: the view stays mounted while the panel is closed (only
   // hidden), so toggling the panel never reloads the model. The render loop
-  // only starts once the model is fully loaded (autoStart is off), so the
-  // first drawn frame is always the complete model.
+  // starts once the model is fully loaded (autoStart is off) and then keeps
+  // running; showing the panel forces a resize+fit so the canvas picks up the
+  // live layout size.
   createEffect(() => {
     const next = app()
     if (!next || !ready()) return
-    if (props.active) {
-      next.start()
-      resizeNow()
-    } else {
-      next.stop()
-    }
+    next.start()
+  })
+
+  createEffect(() => {
+    if (!props.active || !app() || !ready()) return
+    untrack(resizeNow)
   })
 
   const startPan = (event: PointerEvent) => {
