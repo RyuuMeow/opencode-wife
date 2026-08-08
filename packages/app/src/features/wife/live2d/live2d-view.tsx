@@ -49,9 +49,11 @@ export function Live2DView(props: {
   modelUrl: string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
+  active: boolean
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
+  const [app, setApp] = createSignal<Application>()
   const [zoom, setZoom] = createSignal(1)
   const [offset, setOffset] = createSignal({ x: 0, y: 0 })
   const [ready, setReady] = createSignal(false)
@@ -64,9 +66,14 @@ export function Live2DView(props: {
     // getLocalBounds is scale-independent; model.width/height would compound
     // the current zoom into the fit base and oscillate between two sizes.
     const bounds = loaded.getLocalBounds()
-    if (bounds.width === 0 || bounds.height === 0) return
-    const base =
-      Math.min(container.clientWidth / bounds.width, container.clientHeight / bounds.height) * FIT_MARGIN
+    let width = bounds.width
+    let height = bounds.height
+    if (width === 0 || height === 0) {
+      width = loaded.width
+      height = loaded.height
+      if (width === 0 || height === 0) return
+    }
+    const base = Math.min(container.clientWidth / width, container.clientHeight / height) * FIT_MARGIN
     loaded.scale.set(base * zoom())
     loaded.anchor.set(0.5, 0.5)
     loaded.position.set(container.clientWidth / 2 + offset().x, container.clientHeight / 2 + offset().y)
@@ -95,7 +102,6 @@ export function Live2DView(props: {
   onMount(() => {
     if (!container) return
     let disposed = false
-    let app: Application | undefined
     let observer: ResizeObserver | undefined
     let frame = 0
 
@@ -108,25 +114,21 @@ export function Live2DView(props: {
     }
 
     // Defer the heavy runtime start until after the first paint so the panel
-    // chrome and the loading placeholder show immediately when reopened.
+    // chrome and the loading placeholder show immediately on first open.
     const start = () => {
       if (disposed || !container) return
-      app = new Application({
+      const next = new Application({
         backgroundAlpha: 0,
         antialias: true,
         autoDensity: true,
         resolution: window.devicePixelRatio || 1,
       })
-      const canvas = app.view as HTMLCanvasElement
-      canvas.style.opacity = "0"
-      if (!window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-        canvas.style.transition = "opacity 120ms ease-in-out"
-      }
-      container.appendChild(canvas)
+      setApp(next)
+      container.appendChild(next.view as HTMLCanvasElement)
       container.addEventListener("wheel", onWheel, { passive: false })
 
       const resize = () => {
-        app?.renderer.resize(container.clientWidth, container.clientHeight)
+        next.renderer.resize(container.clientWidth, container.clientHeight)
         fit()
       }
       observer = new ResizeObserver(resize)
@@ -139,8 +141,7 @@ export function Live2DView(props: {
             return
           }
           setModel(loaded)
-          app?.stage.addChild(loaded)
-          canvas.style.opacity = "1"
+          next.stage.addChild(loaded)
           setReady(true)
           fit()
         })
@@ -159,7 +160,7 @@ export function Live2DView(props: {
       observer?.disconnect()
       container.removeEventListener("wheel", onWheel)
       model()?.destroy()
-      app?.destroy(true, { children: true })
+      app()?.destroy(true, { children: true })
     })
   })
 
@@ -168,6 +169,15 @@ export function Live2DView(props: {
     const intent = props.intent()
     if (!loaded) return
     applyIntent(loaded, intent, props.avatar())
+  })
+
+  // Keep-alive: the view stays mounted while the panel is closed; pause the
+  // render loop when hidden and resume when shown.
+  createEffect(() => {
+    const next = app()
+    if (!next) return
+    if (props.active) next.start()
+    else next.stop()
   })
 
   const startPan = (event: PointerEvent) => {
@@ -207,7 +217,7 @@ export function Live2DView(props: {
       onDblClick={onDblClick}
     >
       <Show when={!ready()}>
-        <div class="absolute inset-0 flex items-center justify-center">
+        <div class="absolute inset-0 flex items-center justify-center bg-v2-background-bg-layer-01">
           <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
         </div>
       </Show>

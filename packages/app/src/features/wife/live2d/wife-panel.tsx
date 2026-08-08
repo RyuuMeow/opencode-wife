@@ -48,7 +48,7 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel(props: { size: Sizing; maxWidth: number }) {
+export function WifePanel(props: { size: Sizing; maxWidth: number; active: boolean }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
@@ -150,6 +150,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                         modelUrl={url()}
                         avatar={() => character.avatar!}
                         intent={() => intent}
+                        active={props.active}
                         onError={(message) => setLoadError(message)}
                       />
                     </Suspense>
