@@ -468,12 +468,6 @@ export default function Page() {
   )
   const desktopSidePanelOpen = createMemo(() => desktopSessionResizeOpen() || desktopFileTreeOpen())
   const desktopWifeOpen = createMemo(() => isDesktop() && view().wifePanel.opened())
-  const wifePanelMax = createMemo(() => {
-    const available = sessionPanelAvailable()
-    if (available === undefined) return 1200
-    const reserved = SESSION_PANEL_WIDTH_MIN + (desktopFileTreeOpen() ? layout.fileTree.width() : 0)
-    return Math.max(WIFE_PANEL_WIDTH_MIN, available - reserved)
-  })
   let panelRow: HTMLDivElement | undefined
   const [panelRowWidth, setPanelRowWidth] = createSignal<number>()
   createResizeObserver(
@@ -489,6 +483,12 @@ export default function Page() {
     const width = panelRowWidth()
     if (width === undefined) return undefined
     return width - (settings.general.newLayoutDesigns() ? 8 : 0)
+  })
+  const wifePanelMax = createMemo(() => {
+    const available = sessionPanelAvailable()
+    if (available === undefined) return 1200
+    const reserved = SESSION_PANEL_WIDTH_MIN + (desktopFileTreeOpen() ? layout.fileTree.width() : 0)
+    return Math.max(WIFE_PANEL_WIDTH_MIN, available - reserved)
   })
   const sessionPanelMax = createMemo(() => {
     const available = sessionPanelAvailable()
