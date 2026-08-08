@@ -48,9 +48,11 @@ export function Live2DView(props: {
   modelUrl: string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
+  active: boolean
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
+  const [app, setApp] = createSignal<Application>()
   const [zoom, setZoom] = createSignal(1)
   const [offset, setOffset] = createSignal({ x: 0, y: 0 })
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
@@ -68,6 +70,13 @@ export function Live2DView(props: {
     loaded.scale.set(base * zoom())
     loaded.anchor.set(0.5, 0.5)
     loaded.position.set(container.clientWidth / 2 + offset().x, container.clientHeight / 2 + offset().y)
+  }
+
+  const resizeNow = () => {
+    const next = app()
+    if (!next || !container) return
+    next.renderer.resize(container.clientWidth, container.clientHeight)
+    fit()
   }
 
   const resetView = () => {
@@ -92,13 +101,14 @@ export function Live2DView(props: {
 
   onMount(() => {
     if (!container) return
-    const app = new Application({
+    const next = new Application({
       backgroundAlpha: 0,
       antialias: true,
       autoDensity: true,
       resolution: window.devicePixelRatio || 1,
     })
-    container.appendChild(app.view as HTMLCanvasElement)
+    setApp(next)
+    container.appendChild(next.view as HTMLCanvasElement)
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -109,17 +119,13 @@ export function Live2DView(props: {
     }
     container.addEventListener("wheel", onWheel, { passive: false })
 
-    const resize = () => {
-      app.renderer.resize(container.clientWidth, container.clientHeight)
-      fit()
-    }
-    const observer = new ResizeObserver(resize)
+    const observer = new ResizeObserver(resizeNow)
     observer.observe(container)
 
     void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
       .then((loaded) => {
         setModel(loaded)
-        app.stage.addChild(loaded)
+        next.stage.addChild(loaded)
         fit()
       })
       .catch((cause: unknown) => {
@@ -130,7 +136,7 @@ export function Live2DView(props: {
       observer.disconnect()
       container.removeEventListener("wheel", onWheel)
       model()?.destroy()
-      app.destroy(true, { children: true })
+      app()?.destroy(true, { children: true })
     })
   })
 
@@ -139,6 +145,20 @@ export function Live2DView(props: {
     const intent = props.intent()
     if (!loaded) return
     applyIntent(loaded, intent, props.avatar())
+  })
+
+  // Keep-alive: the view stays mounted while the panel is closed (only
+  // hidden), so toggling the panel never reloads the model. Pause the render
+  // loop when hidden and force a resize+fit when shown.
+  createEffect(() => {
+    const next = app()
+    if (!next) return
+    if (props.active) {
+      next.start()
+      resizeNow()
+    } else {
+      next.stop()
+    }
   })
 
   const startPan = (event: PointerEvent) => {
