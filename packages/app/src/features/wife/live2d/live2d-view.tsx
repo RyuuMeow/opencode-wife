@@ -1,8 +1,6 @@
-import { createEffect, createSignal, onCleanup, onMount, Show, untrack } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
-import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
-import { wifeLogger } from "@opencode-ai/wife-core/log"
 import type {
   AvatarProfile,
   CharacterEmotion,
@@ -19,7 +17,6 @@ export type PresentationIntent = {
 const FIT_MARGIN = 0.92
 const MIN_ZOOM = 0.2
 const MAX_ZOOM = 3
-const log = wifeLogger("live2d")
 
 function normalizedDeltaY(event: WheelEvent) {
   if (event.deltaMode === 1) return event.deltaY * 16
@@ -51,7 +48,6 @@ export function Live2DView(props: {
   modelUrl: string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
-  active: boolean
   initialView?: { zoom: number; offsetX: number; offsetY: number }
   onViewChange: (view: { zoom: number; offsetX: number; offsetY: number }) => void
   onError: (message: string) => void
@@ -60,12 +56,8 @@ export function Live2DView(props: {
   const [app, setApp] = createSignal<Application>()
   const [zoom, setZoom] = createSignal(props.initialView?.zoom ?? 1)
   const [offset, setOffset] = createSignal({ x: props.initialView?.offsetX ?? 0, y: props.initialView?.offsetY ?? 0 })
-  const [ready, setReady] = createSignal(false)
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
-  let disposed = false
-  let dirty = false
-  let started = false
 
   const fit = () => {
     const loaded = model()
@@ -84,9 +76,8 @@ export function Live2DView(props: {
   const resizeNow = () => {
     const next = app()
     if (!next || !container) return
-    // Never resize to 0x0 while the panel is hidden; 0-sized canvas churn can
-    // trigger WebGL context loss on some drivers. The hidden canvas keeps its
-    // last real size (invisible anyway) and is sized on the next show.
+    // Never resize to 0x0; 0-sized canvas churn can trigger WebGL context
+    // loss on some drivers.
     if (container.clientWidth === 0 || container.clientHeight === 0) return
     next.renderer.resize(container.clientWidth, container.clientHeight)
     fit()
@@ -118,39 +109,16 @@ export function Live2DView(props: {
     resetView()
   }
 
-  const loadModel = () => {
-    if (disposed) return
-    const next = app()
-    if (!next) return
-    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
-      .then((loaded) => {
-        if (disposed) {
-          loaded.destroy()
-          return
-        }
-        model()?.destroy()
-        setModel(loaded)
-        next.stage.addChild(loaded)
-        setReady(true)
-        fit()
-      })
-      .catch((cause: unknown) => {
-        if (!disposed) props.onError(cause instanceof Error ? cause.message : String(cause))
-      })
-  }
-
   onMount(() => {
     if (!container) return
     const next = new Application({
       backgroundAlpha: 0,
       antialias: true,
       autoDensity: true,
-      autoStart: false,
       resolution: window.devicePixelRatio || 1,
     })
     setApp(next)
-    const canvas = next.view as HTMLCanvasElement
-    container.appendChild(canvas)
+    container.appendChild(next.view as HTMLCanvasElement)
 
     const onWheel = (event: WheelEvent) => {
       event.preventDefault()
@@ -165,28 +133,21 @@ export function Live2DView(props: {
     const observer = new ResizeObserver(resizeNow)
     observer.observe(container)
 
-    // When the WebGL context is lost (which hidden 0-sized canvases can
-    // trigger on some drivers), pixi restores its own resources but the
-    // Cubism internal model's GL objects are stale; reload the model against
-    // the restored context.
-    const onContextLost = () => log.warn("webgl context lost")
-    const onContextRestored = () => {
-      log.warn("webgl context restored, reloading model")
-      loadModel()
-    }
-    canvas.addEventListener("webglcontextlost", onContextLost)
-    canvas.addEventListener("webglcontextrestored", onContextRestored)
-
-    loadModel()
+    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+      .then((loaded) => {
+        setModel(loaded)
+        next.stage.addChild(loaded)
+        fit()
+      })
+      .catch((cause: unknown) => {
+        props.onError(cause instanceof Error ? cause.message : String(cause))
+      })
 
     onCleanup(() => {
-      disposed = true
       observer.disconnect()
       container.removeEventListener("wheel", onWheel)
-      canvas.removeEventListener("webglcontextlost", onContextLost)
-      canvas.removeEventListener("webglcontextrestored", onContextRestored)
       model()?.destroy()
-      app()?.destroy(true, { children: true })
+      next.destroy(true, { children: true })
     })
   })
 
@@ -195,39 +156,6 @@ export function Live2DView(props: {
     const intent = props.intent()
     if (!loaded) return
     applyIntent(loaded, intent, props.avatar())
-  })
-
-  // Keep-alive: the view stays mounted while the panel is closed (only
-  // hidden). The render loop starts once the model is fully loaded
-  // (autoStart is off); Ticker.add does not dedupe, so start() must run
-  // exactly once per app instance or the render callback gets added twice.
-  createEffect(() => {
-    const next = app()
-    if (!next || !ready() || started) return
-    started = true
-    next.start()
-  })
-
-  // After a hide cycle the GPU can silently reclaim the model's textures
-  // (no context event fires), so the canvas may show a partial or blank
-  // model. Reload the model asynchronously on the next show; the panel
-  // chrome stays interactive and the spinner covers the reload.
-  createEffect(() => {
-    const next = app()
-    if (!next || !ready()) return
-    if (!props.active) {
-      dirty = true
-      return
-    }
-    if (dirty) {
-      dirty = false
-      untrack(() => {
-        setReady(false)
-        requestAnimationFrame(loadModel)
-      })
-      return
-    }
-    untrack(resizeNow)
   })
 
   const startPan = (event: PointerEvent) => {
@@ -265,12 +193,6 @@ export function Live2DView(props: {
       onPointerCancel={endPan}
       onContextMenu={(event) => event.preventDefault()}
       onDblClick={onDblClick}
-    >
-      <Show when={!ready()}>
-        <div class="absolute inset-0 flex items-center justify-center bg-v2-background-bg-layer-01">
-          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
-        </div>
-      </Show>
-    </div>
+    />
   )
 }

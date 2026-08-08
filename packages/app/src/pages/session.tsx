@@ -2307,8 +2307,8 @@ export default function Page() {
           </Show>
         </div>
 
-        <Show when={isDesktop() && settings.general.wifeMode()}>
-          <WifePanel size={size} maxWidth={wifePanelMax()} active={view().wifePanel.opened()} />
+        <Show when={isDesktop() && settings.general.wifeMode() && view().wifePanel.opened()}>
+          <WifePanel size={size} maxWidth={wifePanelMax()} />
         </Show>
 
         <Show when={!newSessionDesign() && desktopSidePanelOpen()}>

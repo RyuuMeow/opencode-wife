@@ -47,7 +47,7 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel(props: { size: Sizing; maxWidth: number; active: boolean }) {
+export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
@@ -97,7 +97,6 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
       id="wife-panel"
       aria-label={language.t("session.panel.wife")}
       class="relative shrink-0 h-full min-w-0 flex flex-col overflow-hidden bg-v2-background-bg-base rounded-[10px] shadow-[var(--v2-elevation-raised)]"
-      classList={{ hidden: !props.active }}
       style={{ width: `${layout.wife.width()}px` }}
     >
       <div onPointerDown={() => props.size.start()}>
@@ -158,7 +157,6 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; active: boole
                         modelUrl={url()}
                         avatar={() => character.avatar!}
                         intent={() => intent}
-                        active={props.active}
                         initialView={initialView()}
                         onViewChange={saveView}
                         onError={(message) => setLoadError(message)}
