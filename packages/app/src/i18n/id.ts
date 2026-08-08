@@ -1061,6 +1061,7 @@ export const dict = {
   "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
   // TODO: translate via translate:app
   "wife.panel.empty.openSettings": "Open settings",
+  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
   // TODO: translate via translate:app
   "wife.panel.selectCharacter": "Select character",
   // TODO: translate via translate:app

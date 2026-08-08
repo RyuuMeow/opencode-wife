@@ -1016,6 +1016,7 @@ export const dict = {
   "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
   "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
   "wife.panel.empty.openSettings": "Open settings",
+  "wife.panel.chat.placeholder": "Talk to your companion…",
   "wife.panel.selectCharacter": "Select character",
   "wife.panel.test.none": "None",
   "wife.panel.test.state.idle": "Idle",

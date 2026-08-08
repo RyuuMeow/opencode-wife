@@ -3,6 +3,8 @@ import { createStore } from "solid-js/store"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
+import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
+import { Icon } from "@opencode-ai/ui/v2/icon"
 import {
   characterEmotions,
   characterGestures,
@@ -11,15 +13,22 @@ import {
   type CharacterGesture,
   type CharacterState,
 } from "@opencode-ai/wife-core"
+import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
+import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
+import { wifeLogger } from "@opencode-ai/wife-core/log"
+import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
 import { useLayout } from "@/context/layout"
+import { useLocal } from "@/context/local"
 import { usePlatform } from "@/context/platform"
 import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
+
+const log = wifeLogger("live2d")
 
 const Live2DView = lazy(async () => {
   try {
@@ -66,6 +75,32 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   )
   const [loadError, setLoadError] = createSignal<string>()
   const [intent, setIntent] = createStore<PresentationIntent>({ state: "idle", emotion: "neutral" })
+
+  const [wifeInput, setWifeInput] = createStore<PromptInputV2PersistedState>({
+    prompt: [{ type: "text", content: "", start: 0, end: 0 }],
+    cursor: 0,
+    context: { items: [] },
+  })
+  const local = useLocal()
+  const wifeInputController = createPromptInputV2Controller({
+    store: [wifeInput, setWifeInput],
+    commands: () => [],
+    context: () => [],
+    searchContextFiles: () => [],
+    view: {
+      placeholder: () => language.t("wife.panel.chat.placeholder"),
+      variant: {
+        options: () => local.model.variant.list().map((value) => ({ id: value, label: value })),
+        current: () => local.model.variant.current() ?? "default",
+        onSelect: (value) => local.model.variant.set(value === "default" ? undefined : value),
+      },
+      submit: {
+        stopping: () => false,
+        onSubmit: () => log.info("submit", wifeInputController.value()),
+        onStop: () => {},
+      },
+    },
+  })
 
   const initialView = createMemo(() => {
     const character = selectedCharacter()
@@ -164,6 +199,46 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                     </Suspense>
                   )}
                 </Show>
+              </Show>
+              <Show when={selectedCharacter()}>
+                <div class="pointer-events-none absolute inset-x-0 bottom-0 z-10 pt-3 pb-3">
+                  <div class="pointer-events-auto w-full px-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
+                    <PromptInputV2
+                      controller={wifeInputController}
+                      modelControl={
+                        <ModelSelectorPopoverV2
+                          model={local.model}
+                          trigger={(triggerProps) => (
+                            <ButtonV2
+                              {...triggerProps}
+                              variant="ghost-muted"
+                              size="normal"
+                              style={{ height: "28px" }}
+                              class="min-w-0 max-w-[220px] justify-start ![font-weight:440] group"
+                              data-action="prompt-model"
+                              data-control-type="popover"
+                            >
+                              <Show when={local.model.current()}>
+                                {(current) => (
+                                  <ProviderIcon
+                                    id={current().provider.id}
+                                    class="size-4 shrink-0 opacity-60"
+                                  />
+                                )}
+                              </Show>
+                              <span class="truncate leading-4">
+                                {local.model.current()?.id ?? language.t("dialog.model.select.title")}
+                              </span>
+                              <span class="-ms-0.5 -me-1 flex shrink-0">
+                                <Icon name="chevron-down" />
+                              </span>
+                            </ButtonV2>
+                          )}
+                        />
+                      }
+                    />
+                  </div>
+                </div>
               </Show>
             </div>
             <footer class="flex items-center gap-2 h-11 shrink-0 px-3 border-t border-v2-border-border-base">
