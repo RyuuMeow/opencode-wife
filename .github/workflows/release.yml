@@ -17,7 +17,7 @@ jobs:
       version: ${{ steps.check.outputs.version }}
       is-tag: ${{ steps.check.outputs.is-tag }}
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
 
       - name: Check tag matches package version
         id: check
@@ -51,7 +51,7 @@ jobs:
     env:
       OPENCODE_CHANNEL: prod
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
 
       - name: Build sidecar and copy resources
@@ -90,7 +90,7 @@ jobs:
           cat SHA256SUMS.txt
 
       - name: Upload installer artifacts
-        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd6aab78f5f9d4e6c9c # v4.6.0
+        uses: actions/upload-artifact@v4
         with:
           name: opencode-wife-windows-x64
           path: |

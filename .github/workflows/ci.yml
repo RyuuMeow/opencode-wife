@@ -22,7 +22,7 @@ jobs:
       run:
         working-directory: packages/wife-core
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
       - name: Typecheck
         run: bun run typecheck
@@ -39,7 +39,7 @@ jobs:
       # GitHub sets CI=true, which would skip the i18n parity describe block
       CI: "false"
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
       - name: Typecheck
         run: bun run typecheck
@@ -57,7 +57,7 @@ jobs:
     env:
       OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER: "true"
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
       - name: Typecheck
         run: bun run typecheck
@@ -74,7 +74,7 @@ jobs:
       run:
         working-directory: packages/opencode
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
       - name: Typecheck
         run: bun run typecheck
@@ -85,7 +85,7 @@ jobs:
     name: lint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-bun
       - name: Lint Wife-scoped paths
         # Repo-wide lint has pre-existing upstream warnings; scope to paths owned by this fork
