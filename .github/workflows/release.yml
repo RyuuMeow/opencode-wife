@@ -54,7 +54,7 @@ jobs:
       - uses: actions/checkout@v4
       # Restored bun caches collide with fresh downloads on Windows (ENOTEMPTY
       # while applying patches), so this job installs without the cache step.
-      - uses: oven-sh/setup-bun@2.2.0
+      - uses: oven-sh/setup-bun@v2
         with:
           bun-version-file: package.json
       - name: Install dependencies
