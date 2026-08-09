@@ -55,7 +55,6 @@ export function WifeChatArea(props: {
     const bubbles = messageList
     if (!root || !list || !bubbles || root.clientHeight === 0) return
     if (messages.length === 0) {
-      initialized = true
       setMeasured(true)
       return
     }
@@ -110,6 +109,7 @@ export function WifeChatArea(props: {
     const added = Math.max(0, total - messageCount)
     const nextIds = new Set(messages.map((message) => message.id))
     const entering = messages.filter((message) => !messageIds.has(message.id)).map((message) => message.id)
+    if (!initialized && total > 0) setMeasured(false)
     if (messageCount > 0 && entering.length > 0) {
       setEnteringIds((ids) => [...ids.filter((id) => nextIds.has(id)), ...entering])
       entering.forEach((id) => {

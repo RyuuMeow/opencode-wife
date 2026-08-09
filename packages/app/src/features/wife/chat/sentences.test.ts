@@ -30,4 +30,11 @@ describe("splitIntoSentences", () => {
   test("keeps a long run without boundaries as one segment", () => {
     expect(splitIntoSentences("這是一段很長但沒有句點的文字")).toEqual(["這是一段很長但沒有句點的文字"])
   })
+
+  test("does not split punctuation or newlines inside code", () => {
+    expect(splitIntoSentences("檢查 `states.thinking?` 再繼續。下一句。"))
+      .toEqual(["檢查 `states.thinking?` 再繼續。", "下一句。"])
+    expect(splitIntoSentences("先看：\n```ts\nstates.thinking?\n.motions?\n```\n再判斷。"))
+      .toEqual(["先看：", "```ts\nstates.thinking?\n.motions?\n```", "再判斷。"])
+  })
 })

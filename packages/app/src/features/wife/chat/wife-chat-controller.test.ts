@@ -7,9 +7,12 @@ import {
   normalizeWifeReplyText,
   projectWifeHistory,
   requiresWifeSessionRebuild,
+  runWifePromptWithFallback,
   wifeBubbleReadingDelay,
   wifeBubbleRevealDelays,
   wifeChatError,
+  wifeFormatUnsupported,
+  wifeModelCapabilityKey,
   wifePromptFormat,
   WIFE_READ_ONLY_PERMISSION,
   WIFE_REPLY_SCHEMA,
@@ -49,6 +52,12 @@ describe("normalizeWifeReply", () => {
       messages: ["短句。", "這兩句要連在一起。分開反而不自然。"],
       choices: ["繼續", "換個方向"],
     })
+    expect(
+      normalizeWifeReply({
+        messages: ["`suggestStateFallback` 會檢查 `states.thinking?`", ".motions?", ".length`。"],
+        choices: ["看程式碼", "繼續說明"],
+      })?.messages,
+    ).toEqual(["`suggestStateFallback` 會檢查 `states.thinking?`\n.motions?\n.length`。"])
   })
 
   test("rejects malformed structured output", () => {
@@ -75,9 +84,9 @@ describe("normalizeWifeReply", () => {
       messages: ["先說結論。", "這兩句要一起看。拆開會失去語氣。"],
       choices: ["繼續說", "換個方向"],
     })
-    expect(normalizeWifeReplyText("你想從哪裡開始？\n- 看專案架構\n- 規劃功能\n- Review 程式碼")).toEqual({
-      messages: ["你想從哪裡開始？"],
-      choices: ["看專案架構", "規劃功能", "Review 程式碼"],
+    expect(normalizeWifeReplyText("重點如下：\n- 看專案架構\n- 規劃功能\n- Review 程式碼")).toEqual({
+      messages: ["重點如下：", "- 看專案架構", "- 規劃功能", "- Review 程式碼"],
+      choices: [],
     })
     expect(normalizeWifeReplyText("你好呀！今天想聊什麼？")).toEqual({
       messages: ["你好呀！", "今天想聊什麼？"],
@@ -162,14 +171,64 @@ describe("wife session identity", () => {
 })
 
 describe("wife prompt compatibility", () => {
-  test("uses text JSON fallback when thinking rejects forced tool choice", () => {
-    expect(wifePromptFormat({ id: "deepseek-v4-flash-free", provider: { id: "opencode" } })).toBeUndefined()
-    expect(wifePromptFormat({ id: "deepseek-v4-flash", provider: { id: "opencode-go" } })).toBeUndefined()
-    expect(wifePromptFormat({ id: "gpt-5", provider: { id: "openai" } })).toEqual({
+  test("uses schema until the model is marked text-only", () => {
+    expect(wifePromptFormat(false)).toEqual({
       type: "json_schema",
       schema: WIFE_REPLY_SCHEMA,
     })
+    expect(wifePromptFormat(true)).toBeUndefined()
+    expect(wifeModelCapabilityKey({ providerID: "opencode", modelID: "deepseek-v4-flash", variant: "high" })).toBe(
+      '["opencode","deepseek-v4-flash"]',
+    )
     expect(WIFE_REPLY_SCHEMA.properties.choices.minItems).toBe(2)
+  })
+
+  test("only marks explicit tool choice incompatibility", () => {
+    expect(
+      wifeFormatUnsupported({
+        data: { message: "Thinking mode does not support this tool_choice" },
+      }),
+    ).toBe(true)
+    expect(wifeFormatUnsupported(new Error("tool_choice is unsupported by this model"))).toBe(true)
+    expect(wifeFormatUnsupported(new Error("Upstream request failed"))).toBe(false)
+    expect(wifeFormatUnsupported(new Error("Thinking request timed out"))).toBe(false)
+  })
+
+  test("marks and retries an incompatible model once in text mode", async () => {
+    const formats: Array<ReturnType<typeof wifePromptFormat>> = []
+    const state = { marked: false }
+    const reply = await runWifePromptWithFallback({
+      textOnly: false,
+      prompt: async (format) => {
+        formats.push(format)
+        if (format) throw new Error("Thinking mode does not support this tool_choice")
+        return { messages: ["好了。"], choices: ["繼續", "先等等"] }
+      },
+      markTextOnly: () => {
+        state.marked = true
+      },
+    })
+    expect(state.marked).toBe(true)
+    expect(formats).toEqual([{ type: "json_schema", schema: WIFE_REPLY_SCHEMA }, undefined])
+    expect(reply).toEqual({ messages: ["好了。"], choices: ["繼續", "先等等"] })
+  })
+
+  test("does not mark or retry unrelated provider errors", async () => {
+    const state = { attempts: 0, marked: false }
+    const error = new Error("Upstream request failed")
+    expect(
+      runWifePromptWithFallback({
+        textOnly: false,
+        prompt: async () => {
+          state.attempts += 1
+          throw error
+        },
+        markTextOnly: () => {
+          state.marked = true
+        },
+      }),
+    ).rejects.toBe(error)
+    expect(state).toEqual({ attempts: 1, marked: false })
   })
 
   test("extracts readable SDK and provider errors", () => {
