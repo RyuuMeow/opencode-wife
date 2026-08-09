@@ -71,7 +71,7 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 ## Suggested implementation order
 
 1. Register and preview one character. (done)
-2. Polish the wife panel (resizable width, wheel zoom), then add the Wife Assistant Chat (read-only assistant + `/wife-context`).
+2. Finish the Wife Assistant Chat with `/wife-context` and chat-driven presentation intent (persistent read-only chat is delivered).
 3. Bind characters to projects.
 4. Drive deterministic states from OpenCode events (observation loop).
 5. Add lightweight persona requests for spoken text, gestures and dialogue choices.
@@ -79,4 +79,4 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 7. Add multi-session arbitration and runtime hardening.
 8. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
 
-Current progress: Phase A (Live2D runtime) delivered; next is panel polish + Milestone 2 (Wife Assistant Chat), see 12-handoff.md.
+Current progress: Phase A and the core persistent read-only Wife Assistant Chat are delivered; next is `/wife-context` + chat-driven presentation intent, see 12-handoff.md.

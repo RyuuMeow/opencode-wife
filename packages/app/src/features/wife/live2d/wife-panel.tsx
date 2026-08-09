@@ -18,8 +18,8 @@ import { usePlatform } from "@/context/platform"
 import { useSettings } from "@/context/settings"
 import type { Sizing } from "@/pages/session/helpers"
 import { useWifeRegistry } from "../registry/wife-registry"
-import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea, type WifeChatMessage } from "../chat/wife-chat-area"
-import { splitIntoSentences } from "../chat/sentences"
+import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea } from "../chat/wife-chat-area"
+import type { WifeChatController } from "../chat/wife-chat-controller"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
@@ -52,7 +52,7 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel(props: { size: Sizing; maxWidth: number }) {
+export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeChatController }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
@@ -85,13 +85,9 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
     cursor: 0,
     context: { items: [] },
   })
-  const [wifeMessages, setWifeMessages] = createSignal<WifeChatMessage[]>([])
-  const [wifeChoices, setWifeChoices] = createSignal<string[]>([])
   const [historyProgress, setHistoryProgress] = createSignal(0)
   let historyScroll: HTMLDivElement | undefined
   let wifePanStart: ((event: PointerEvent) => void) | undefined
-  let replyVersion = 0
-  const replyTimers = new Set<ReturnType<typeof setTimeout>>()
   const local = useLocal()
   createEffect(() => {
     if (historyProgress() < 1) return
@@ -103,37 +99,11 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
   })
 
   const submitWifeMessage = (text: string) => {
-    const version = ++replyVersion
-    setWifeChoices([])
-    setWifeMessages((messages) => [...messages, { id: crypto.randomUUID(), role: "user", content: text }])
-    // Placeholder reply until the read-only wife session lands (Milestone 2).
-    // Deliver it sentence by sentence so the bubbles feel conversational.
-    const sentences = splitIntoSentences(`收到！你說的是：「${text}」讓我來想想看。這聽起來很有趣。`)
-    const delays = sentences.map(
-      (_, index) =>
-        900 +
-        sentences
-          .slice(0, index)
-          .reduce((total, sentence) => total + Math.min(3600, Math.max(1400, sentence.length * 90)), 0),
+    return props.chat.submit(
+      text,
+      selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant"),
     )
-    sentences.forEach((sentence, index) => {
-      const timer = setTimeout(() => {
-        replyTimers.delete(timer)
-        if (version !== replyVersion) return
-        setWifeMessages((messages) => [
-          ...messages,
-          { id: crypto.randomUUID(), role: "assistant", content: sentence },
-        ])
-        if (index !== sentences.length - 1) return
-        setWifeChoices(["再多說一點", "換個方向看看", "先到這裡"])
-      }, delays[index])
-      replyTimers.add(timer)
-    })
   }
-  onCleanup(() => {
-    replyVersion += 1
-    replyTimers.forEach(clearTimeout)
-  })
   const wifeInputController = createPromptInputV2Controller({
     store: [wifeInput, setWifeInput],
     commands: () => [],
@@ -147,14 +117,15 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
         onSelect: (value) => local.model.variant.set(value === "default" ? undefined : value),
       },
       submit: {
-        stopping: () => false,
+        stopping: props.chat.working,
+        working: props.chat.working,
         onSubmit: () => {
           const text = wifeInputController.value()
           if (!text.trim()) return
-          submitWifeMessage(text)
+          if (!submitWifeMessage(text)) return
           wifeInputController.onInput("", [{ type: "text", content: "", start: 0, end: 0 }], 0)
         },
-        onStop: () => {},
+        onStop: props.chat.stop,
       },
     },
   })
@@ -274,14 +245,18 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                 <div class="pointer-events-none absolute inset-0 z-10 flex flex-col">
                   <div class="relative min-h-0 flex-1">
                     <WifeChatArea
-                      messages={wifeMessages}
-                      choices={wifeChoices}
+                      messages={props.chat.messages}
+                      choices={props.chat.choices}
                       avatarImage={() => selectedCharacter()?.avatarImage}
                       characterName={() => selectedCharacter()?.name}
                       heightRatio={() => settings.general.wifeChatHeightRatio()}
                       historyProgress={historyProgress}
                       onHistoryProgress={setHistoryProgress}
                       onChoice={submitWifeMessage}
+                      loading={props.chat.loading}
+                      error={props.chat.error}
+                      loadingLabel={() => language.t("common.loading")}
+                      errorLabel={() => language.t("common.requestFailed")}
                       onPanStart={(event) => wifePanStart?.(event)}
                     />
                   </div>
@@ -374,7 +349,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number }) {
                     }}
                   >
                     <div class="flex flex-col gap-3">
-                      <For each={wifeMessages()}>
+                      <For each={props.chat.messages()}>
                         {(message) => (
                           <div class="flex flex-col">
                             <Show when={message.role === "assistant"}>

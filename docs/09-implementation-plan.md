@@ -133,12 +133,14 @@ Loop B (assistant):    user ⇄ wife session (read-only) → reply → intent
 
 A second, restricted conversation surface inside the wife panel. The assistant watches nothing yet (that is Milestone 4); it answers project questions with read-only tools.
 
+> Status: core assistant chat delivered on `live2d-runtime`. Each main session owns a persistent, archived Wife session with a verified deny-all/read-glob-grep permission profile. The Live2D overlay uses structured short messages and choices, restores history, survives panel collapse, and isolates stop/error state. `/wife-context` and chat-driven presentation intent remain pending.
+
 Deliverables:
 
 - wife session management: legacy API session (`POST /session` + prompt) with a `permission` deny ruleset — read-only profile denies `bash`/`edit`/`write`/`apply_patch`/`task`/`skill`, keeps `read`/`glob`/`grep`; shares the active provider/model configuration; no permission prompts
-- session-level conversation memory (keyed by session id, pruned; resets on session switch)
+- session-level conversation memory (one persistent Wife session per main session; switching restores the matching history)
 - context management: server-side auto-compaction (existing feature — no custom truncation)
-- chat UI: wife panel gains tabs (Live2D view | chat), reuses `PromptInputV2` (controller mode) with a custom wife submit handler, lightweight message bubbles (reuse `Markdown`), choices rendered as buttons from `LLM.generateObject` structured output (visual-novel style; clicking sends the chosen text)
+- chat UI: the Live2D canvas hosts the conversation overlay, reuses `PromptInputV2` (controller mode) with a custom wife submit handler, lightweight message bubbles (reuse `Markdown`), and choices rendered as buttons from session structured output (visual-novel style; clicking sends the chosen text)
 - speech bubble overlay on the Live2D canvas for chat replies
 - `/wife-context` slash command: prepends a wife conversation summary into the agent input box (editable before sending)
 - presentation coordinator v1: chat-driven intent (typing → listening, reply → speaking + bubble); in-flight replies continue when the panel is collapsed

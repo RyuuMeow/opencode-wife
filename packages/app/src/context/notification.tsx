@@ -11,6 +11,7 @@ import { base64Encode } from "@opencode-ai/core/util/encode"
 import { decode64 } from "@/utils/base64"
 import { EventSessionError } from "@opencode-ai/sdk/v2"
 import { Persist, persisted } from "@/utils/persist"
+import { isWifeAssistantMetadata } from "@/features/wife/chat/wife-chat-metadata"
 import { playSoundById } from "@/utils/sound"
 import { useGlobal } from "./global"
 import { ServerConnection, useServer } from "./server"
@@ -341,6 +342,7 @@ function createServerNotificationState(input: {
       if (meta.disposed) return
       if (!session) return
       if (session.parentID) return
+      if (isWifeAssistantMetadata(session.metadata)) return
 
       if (settings.sounds.agentEnabled()) {
         void playSoundById(settings.sounds.agent())
@@ -372,6 +374,7 @@ function createServerNotificationState(input: {
     void lookup(directory, sessionID).then((session) => {
       if (meta.disposed) return
       if (session?.parentID) return
+      if (isWifeAssistantMetadata(session?.metadata)) return
 
       if (settings.sounds.errorsEnabled()) {
         void playSoundById(settings.sounds.errors())

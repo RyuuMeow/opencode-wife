@@ -2,6 +2,7 @@ import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } fro
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
 
 export type WifeChatMessage = {
   id: string
@@ -25,6 +26,10 @@ export function WifeChatArea(props: {
   historyProgress: () => number
   onHistoryProgress: (next: number) => void
   onChoice: (choice: string) => void
+  loading: () => boolean
+  error: () => boolean
+  loadingLabel: () => string
+  errorLabel: () => string
   /** Forwards right-drags to the Live2D view so the model can be panned through this area. */
   onPanStart?: (event: PointerEvent) => void
 }) {
@@ -103,6 +108,8 @@ export function WifeChatArea(props: {
   createEffect(() => {
     props.messages()
     props.choices()
+    props.loading()
+    props.error()
     props.heightRatio()
     leavingIds()
     visibleCount()
@@ -116,6 +123,8 @@ export function WifeChatArea(props: {
   createResizeObserver(() => {
     props.messages()
     props.choices()
+    props.loading()
+    props.error()
     return content
   }, evaluate)
   onCleanup(() => animationTimers.forEach(clearTimeout))
@@ -143,7 +152,7 @@ export function WifeChatArea(props: {
   }
 
   return (
-    <Show when={props.messages().length > 0}>
+    <Show when={props.messages().length > 0 || props.loading() || props.error()}>
       <div
         ref={root}
         class="pointer-events-auto absolute inset-x-0 bottom-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
@@ -158,6 +167,7 @@ export function WifeChatArea(props: {
           props.onPanStart?.(event)
         }}
         onContextMenu={(event) => event.preventDefault()}
+        aria-busy={props.loading()}
       >
         <div ref={content} class="absolute inset-x-0 bottom-0 flex flex-col px-3">
           <div class="flex flex-col gap-3">
@@ -196,6 +206,29 @@ export function WifeChatArea(props: {
               )}
             </For>
           </div>
+          <Show when={props.loading() || props.error()}>
+            <div class="mt-3 flex flex-col items-start" aria-live="polite">
+              <div class="flex items-center gap-2">
+                <Avatar image={props.avatarImage()} />
+                <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
+              </div>
+              <div
+                class={`${BUBBLE_BASE} mt-1 flex min-h-9 max-w-[85%] items-center bg-v2-background-bg-layer-02`}
+                style={BUBBLE_STYLE}
+                role={props.error() ? "alert" : "status"}
+              >
+                <Show
+                  when={!props.error()}
+                  fallback={<span class="text-13-regular text-v2-state-fg-danger">{props.errorLabel()}</span>}
+                >
+                  <span class="flex items-center gap-2 text-13-regular text-v2-text-text-muted">
+                    <LoaderV2 class="size-3.5 shrink-0 text-v2-icon-icon-muted" />
+                    <span>{props.loadingLabel()}</span>
+                  </span>
+                </Show>
+              </div>
+            </div>
+          </Show>
           <div
             class="grid transition-[grid-template-rows,margin,opacity] duration-150 ease-out motion-reduce:transition-none"
             classList={{
