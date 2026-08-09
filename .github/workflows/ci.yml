@@ -1,0 +1,92 @@
+name: ci
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  wife-core:
+    name: wife-core
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/wife-core
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Tests
+        run: bun test
+
+  app:
+    name: app
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/app
+    env:
+      # GitHub sets CI=true, which would skip the i18n parity describe block
+      CI: "false"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Unit tests (including i18n parity)
+        run: bun run test:unit
+      - name: Build
+        run: bun run build
+
+  desktop:
+    name: desktop
+    runs-on: windows-latest
+    defaults:
+      run:
+        working-directory: packages/desktop
+    env:
+      OPENCODE_EXPERIMENTAL_DISABLE_FILEWATCHER: "true"
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Tests
+        # draft-store.test.ts needs node:sqlite, which bun does not implement on Windows
+        run: bun test --ignore "**/draft-store.test.ts"
+      - name: Build
+        run: bun run build
+
+  opencode:
+    name: opencode
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: packages/opencode
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+      - name: Typecheck
+        run: bun run typecheck
+      - name: Wife session permission integration test
+        run: bun test test/wife-session-permission.test.ts
+
+  lint:
+    name: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+      - name: Lint Wife-scoped paths
+        # Repo-wide lint has pre-existing upstream warnings; scope to paths owned by this fork
+        run: bunx oxlint packages/wife-core packages/app/src/features/wife packages/app/src/components/settings-v2 packages/desktop/src/main packages/desktop/src/preload

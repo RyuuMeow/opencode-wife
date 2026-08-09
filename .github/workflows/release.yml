@@ -1,0 +1,123 @@
+name: release
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - "v*"
+
+permissions:
+  contents: write
+
+jobs:
+  validate:
+    name: Validate tag and versions
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.check.outputs.version }}
+      is-tag: ${{ steps.check.outputs.is-tag }}
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+
+      - name: Check tag matches package version
+        id: check
+        shell: bash
+        run: |
+          VERSION=$(node -p "require('./packages/desktop/package.json').version")
+          if [[ "${GITHUB_REF_TYPE}" == "tag" ]]; then
+            TAG="${GITHUB_REF_NAME}"
+            if [[ "${TAG}" != "v${VERSION}" ]]; then
+              echo "::error::Tag ${TAG} does not match packages/desktop version ${VERSION}"
+              exit 1
+            fi
+            echo "is-tag=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "is-tag=false" >> "$GITHUB_OUTPUT"
+          fi
+          echo "version=${VERSION}" >> "$GITHUB_OUTPUT"
+
+      - name: Check supported OpenCode base version
+        shell: bash
+        run: |
+          if ! grep -q 'OPENCODE_BASE_VERSION = "1.18.14"' packages/desktop/src/main/shared-agent-data.ts; then
+            echo "::error::OPENCODE_BASE_VERSION changed; update this workflow and the release notes"
+            exit 1
+          fi
+
+  build:
+    name: Build Windows x64 installer
+    needs: validate
+    runs-on: windows-latest
+    env:
+      OPENCODE_CHANNEL: prod
+    steps:
+      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
+      - uses: ./.github/actions/setup-bun
+
+      - name: Build sidecar and copy resources
+        working-directory: packages/desktop
+        run: bun ./scripts/prebuild.ts
+
+      - name: Build desktop
+        working-directory: packages/desktop
+        run: bun run build
+
+      - name: Package Windows installer
+        working-directory: packages/desktop
+        run: bun run package:win
+
+      - name: Verify no proprietary or updater content
+        shell: bash
+        working-directory: packages/desktop
+        run: |
+          if grep -rilE "electron-updater|anomalyco/opencode" out || [ -n "$(ls out | grep -iE 'updater')" ]; then
+            echo "::error::Updater or upstream publish references found in the built app"
+            exit 1
+          fi
+          if [ -d "dist/win-unpacked/resources" ]; then
+            node -e "
+              const asar = require('@electron/asar');
+              const files = asar.listPackage('dist/win-unpacked/resources/app.asar');
+              const bad = files.filter((f) => /live2dcubismcore|cubism/i.test(f));
+              if (bad.length) { console.error('Unexpected bundled files:', bad); process.exit(1) }
+            "
+          fi
+
+      - name: Generate SHA-256 checksums
+        shell: bash
+        working-directory: packages/desktop
+        run: |
+          cd dist
+          sha256sum *.exe > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+
+      - name: Upload installer artifacts
+        uses: actions/upload-artifact@65c4c4a1ddee5b72f698fdd6aab78f5f9d4e6c9c # v4.6.0
+        with:
+          name: opencode-wife-windows-x64
+          path: |
+            packages/desktop/dist/*.exe
+            packages/desktop/dist/SHA256SUMS.txt
+          if-no-files-found: error
+
+      - name: Create draft prerelease
+        if: needs.validate.outputs.is-tag == 'true'
+        shell: bash
+        working-directory: packages/desktop
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cd dist
+          NOTES=$(printf '%s\n' \
+            "## OpenCode Wife ${{ needs.validate.outputs.version }}" \
+            "" \
+            "- Windows x64 NSIS installer (unsigned; Windows SmartScreen will warn — verify the SHA-256 checksum before running)." \
+            "- Side-by-side install with OpenCode is supported, but only one app may run at a time (shared Agent state)." \
+            "- Compatible OpenCode base version: 1.18.14." \
+            "- Live2D Cubism Core is not bundled; install it from Settings → Wife → Live2D runtime." \
+            "- Automatic updates are disabled in this alpha.")
+          gh release create "$GITHUB_REF_NAME" \
+            --draft --prerelease \
+            --title "OpenCode Wife ${{ needs.validate.outputs.version }}" \
+            --notes "$NOTES" \
+            *.exe SHA256SUMS.txt
