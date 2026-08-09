@@ -916,6 +916,8 @@ export const dict = {
   "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
   // TODO: translate via translate:app
   "wife.panel.selectCharacter": "Select character",
+  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
+  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
   // TODO: translate via translate:app
   "wife.panel.test.none": "None",
   // TODO: translate via translate:app

@@ -48,11 +48,10 @@ export function Live2DView(props: {
   modelUrl: string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
+  interactionEnabled: () => boolean
   initialView?: { zoom: number; offsetX: number; offsetY: number }
   onViewChange: (view: { zoom: number; offsetX: number; offsetY: number }) => void
   onError: (message: string) => void
-  /** Exposes the right-drag pan handler so overlays above the canvas can forward right-drags. */
-  onPanReady?: (start: (event: PointerEvent) => void) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
   const [app, setApp] = createSignal<Application>()
@@ -123,6 +122,7 @@ export function Live2DView(props: {
     container.appendChild(next.view as HTMLCanvasElement)
 
     const onWheel = (event: WheelEvent) => {
+      if (!props.interactionEnabled()) return
       event.preventDefault()
       setZoom((current) =>
         Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, current * Math.exp(-normalizedDeltaY(event) * 0.001))),
@@ -161,7 +161,7 @@ export function Live2DView(props: {
   })
 
   const startPan = (event: PointerEvent) => {
-    if (event.button !== 2) return
+    if (!props.interactionEnabled() || event.button !== 0) return
     event.preventDefault()
     container?.setPointerCapture(event.pointerId)
     const current = offset()
@@ -182,8 +182,9 @@ export function Live2DView(props: {
     setPanning(undefined)
   }
 
-  onMount(() => {
-    props.onPanReady?.(startPan)
+  createEffect(() => {
+    if (props.interactionEnabled()) return
+    setPanning(undefined)
   })
 
   return (
@@ -191,14 +192,17 @@ export function Live2DView(props: {
       ref={container}
       class="relative w-full h-full overflow-hidden"
       classList={{
+        "cursor-grab": props.interactionEnabled() && !panning(),
         "cursor-grabbing": !!panning(),
       }}
       onPointerDown={startPan}
       onPointerMove={movePan}
       onPointerUp={endPan}
       onPointerCancel={endPan}
-      onContextMenu={(event) => event.preventDefault()}
-      onDblClick={onDblClick}
+      onDblClick={(event) => {
+        if (!props.interactionEnabled()) return
+        onDblClick(event)
+      }}
     />
   )
 }

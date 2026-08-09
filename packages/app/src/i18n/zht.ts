@@ -936,6 +936,8 @@ export const dict = {
   "wife.panel.test.state.thinking": "思考",
   "wife.panel.test.emotion.focused": "專注",
   "wife.panel.selectCharacter": "選擇角色",
+  "wife.panel.modelInteraction.enter": "調整 Live2D 模型",
+  "wife.panel.modelInteraction.exit": "返回對話",
   "wife.panel.test.state.working": "工作中",
   "wife.panel.test.emotion.annoyed": "不耐煩",
   "wife.panel.test.gesture.wave": "揮手",

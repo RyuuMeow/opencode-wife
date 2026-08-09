@@ -1024,6 +1024,8 @@ export const dict = {
   "wife.panel.chat.roleAssistant": "Companion",
   "wife.panel.chat.roleUser": "You",
   "wife.panel.selectCharacter": "Select character",
+  "wife.panel.modelInteraction.enter": "Adjust Live2D model",
+  "wife.panel.modelInteraction.exit": "Return to chat",
   "wife.panel.test.none": "None",
   "wife.panel.test.state.idle": "Idle",
   "wife.panel.test.state.listening": "Listening",

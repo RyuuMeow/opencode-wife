@@ -31,8 +31,7 @@ export function WifeChatArea(props: {
   error: () => string | undefined
   loadingLabel: () => string
   errorLabel: () => string
-  /** Forwards right-drags to the Live2D view so the model can be panned through this area. */
-  onPanStart?: (event: PointerEvent) => void
+  interactive: () => boolean
 }) {
   const [leavingIds, setLeavingIds] = createSignal<string[]>([])
   const [exitedIds, setExitedIds] = createSignal<string[]>([])
@@ -59,7 +58,6 @@ export function WifeChatArea(props: {
       return
     }
     if (leavingIds().length > 0) return
-    const threshold = root.clientHeight
     const count = visibleCount()
     const total = messages.length
     if (count > total) {
@@ -69,7 +67,8 @@ export function WifeChatArea(props: {
     const nextCount = wifeBubbleFitCount({
       messageHeights: Array.from(bubbles.children).map((item) => item.getBoundingClientRect().height),
       reservedHeight: Math.max(0, list.getBoundingClientRect().height - bubbles.getBoundingClientRect().height),
-      threshold,
+      containerHeight: root.clientHeight,
+      heightRatio: props.heightRatio(),
       gap: 12,
     })
     if (!initialized) {
@@ -180,18 +179,13 @@ export function WifeChatArea(props: {
     <Show when={props.messages().length > 0 || props.loading() || props.error()}>
       <div
         ref={root}
-        class="pointer-events-auto absolute inset-x-0 bottom-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
-        style={{
-          height: `${props.heightRatio() * 100}%`,
-          opacity: 1 - props.historyProgress(),
+        class="absolute inset-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
+        classList={{
+          "pointer-events-auto": props.interactive(),
+          "pointer-events-none": !props.interactive(),
         }}
+        style={{ opacity: 1 - props.historyProgress() }}
         onWheel={openHistory}
-        onPointerDown={(event) => {
-          if (event.button !== 2) return
-          event.stopPropagation()
-          props.onPanStart?.(event)
-        }}
-        onContextMenu={(event) => event.preventDefault()}
         aria-busy={props.loading()}
       >
         <div

@@ -7,7 +7,8 @@ describe("wifeBubbleFitCount", () => {
       wifeBubbleFitCount({
         messageHeights: [40, 50, 60, 70],
         reservedHeight: 30,
-        threshold: 180,
+        containerHeight: 360,
+        heightRatio: 0.5,
         gap: 12,
       }),
     ).toBe(2)
@@ -18,7 +19,20 @@ describe("wifeBubbleFitCount", () => {
       wifeBubbleFitCount({
         messageHeights: [80, 200],
         reservedHeight: 40,
-        threshold: 120,
+        containerHeight: 240,
+        heightRatio: 0.5,
+        gap: 12,
+      }),
+    ).toBe(1)
+  })
+
+  test("uses the ratio as an eviction budget while retaining one oversized bubble", () => {
+    expect(
+      wifeBubbleFitCount({
+        messageHeights: [80, 220],
+        reservedHeight: 0,
+        containerHeight: 400,
+        heightRatio: 0.35,
         gap: 12,
       }),
     ).toBe(1)

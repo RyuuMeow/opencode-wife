@@ -6,6 +6,7 @@ import { ResizeHandle } from "@opencode-ai/ui/resize-handle"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
 import { Icon } from "@opencode-ai/ui/v2/icon"
+import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
@@ -109,10 +110,34 @@ export function WifePanel(props: {
     context: { items: [] },
   })
   const [historyProgress, setHistoryProgress] = createSignal(0)
+  const [modelInteraction, setModelInteraction] = createSignal(false)
   let historyScroll: HTMLDivElement | undefined
-  let wifePanStart: ((event: PointerEvent) => void) | undefined
   const updatePreference = (patch: Partial<WifePanelPreference>) => {
     setPreferences("sessions", props.sessionID, (value) => ({ ...value, ...patch }))
+  }
+
+  onMount(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Escape" || !modelInteraction()) return
+      setModelInteraction(false)
+    }
+    window.addEventListener("keydown", onKeyDown)
+    onCleanup(() => window.removeEventListener("keydown", onKeyDown))
+  })
+
+  let interactionSessionID = props.sessionID
+  createEffect(() => {
+    const sessionID = props.sessionID
+    if (sessionID === interactionSessionID) return
+    interactionSessionID = sessionID
+    setModelInteraction(false)
+    setHistoryProgress(0)
+  })
+
+  const toggleModelInteraction = () => {
+    const next = !modelInteraction()
+    if (next) setHistoryProgress(0)
+    setModelInteraction(next)
   }
 
   createEffect(() => {
@@ -291,7 +316,7 @@ export function WifePanel(props: {
       >
         {(url) => (
           <>
-            <header class="flex items-center h-10 shrink-0 px-3 border-b border-v2-border-border-base">
+            <header class="flex items-center justify-between gap-2 h-10 shrink-0 px-3 border-b border-v2-border-border-base">
               <div class="w-40 min-w-0 shrink-0">
                 <SelectV2
                   appearance="inline"
@@ -304,6 +329,27 @@ export function WifePanel(props: {
                   aria-label={language.t("wife.panel.selectCharacter")}
                 />
               </div>
+              <TooltipV2
+                placement="bottom"
+                value={language.t(
+                  modelInteraction() ? "wife.panel.modelInteraction.exit" : "wife.panel.modelInteraction.enter",
+                )}
+              >
+                <ButtonV2
+                  type="button"
+                  size="normal"
+                  variant={modelInteraction() ? "neutral" : "ghost-muted"}
+                  class="!size-7 !p-0 shrink-0"
+                  aria-label={language.t(
+                    modelInteraction() ? "wife.panel.modelInteraction.exit" : "wife.panel.modelInteraction.enter",
+                  )}
+                  aria-pressed={modelInteraction()}
+                  disabled={!runtimeEnabled() || !!loadError()}
+                  onClick={toggleModelInteraction}
+                >
+                  <Icon name="mouse" />
+                </ButtonV2>
+              </TooltipV2>
             </header>
             <div class="relative flex-1 min-h-0 bg-v2-background-bg-base">
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
@@ -329,17 +375,25 @@ export function WifePanel(props: {
                         modelUrl={url()}
                         avatar={() => character.avatar!}
                         intent={() => intent}
+                        interactionEnabled={modelInteraction}
                         initialView={initialView()}
                         onViewChange={saveView}
                         onError={(message) => setLoadError(message)}
-                        onPanReady={(start) => (wifePanStart = start)}
                       />
                     </Suspense>
                   )}
                 </Show>
               </Show>
               <Show when={selectedCharacter()}>
-                <div class="pointer-events-none absolute inset-0 z-10 flex flex-col">
+                <div
+                  class="pointer-events-none absolute inset-0 z-10 flex flex-col transition-opacity duration-150 ease-out motion-reduce:transition-none"
+                  classList={{
+                    "opacity-0": modelInteraction(),
+                    "opacity-100": !modelInteraction(),
+                  }}
+                  aria-hidden={modelInteraction()}
+                  inert={modelInteraction()}
+                >
                   <div class="relative min-h-0 flex-1">
                     <WifeChatArea
                       messages={props.chat.messages}
@@ -354,10 +408,16 @@ export function WifePanel(props: {
                       error={props.chat.error}
                       loadingLabel={() => language.t("common.loading")}
                       errorLabel={() => language.t("common.requestFailed")}
-                      onPanStart={(event) => wifePanStart?.(event)}
+                      interactive={() => !modelInteraction()}
                     />
                   </div>
-                  <div class="pointer-events-auto w-full px-3 pt-4 pb-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]">
+                  <div
+                    class="w-full px-3 pt-4 pb-3 md:max-w-200 md:mx-auto 2xl:max-w-[1000px]"
+                    classList={{
+                      "pointer-events-auto": !modelInteraction(),
+                      "pointer-events-none": modelInteraction(),
+                    }}
+                  >
                     <PromptInputV2
                       controller={wifeInputController}
                       modelControl={

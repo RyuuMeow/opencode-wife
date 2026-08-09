@@ -33,6 +33,10 @@ const icons = {
     viewBox: "0 0 24 24",
     body: `<path d="M8 15C12.8747 15 15 12.949 15 8C15 12.949 17.1104 15 22 15C17.1104 15 15 17.1104 15 22C15 17.1104 12.8747 15 8 15Z" stroke="currentColor" stroke-linejoin="round"/><path d="M2 6.5C5.13376 6.5 6.5 5.18153 6.5 2C6.5 5.18153 7.85669 6.5 11 6.5C7.85669 6.5 6.5 7.85669 6.5 11C6.5 7.85669 5.13376 6.5 2 6.5Z" stroke="currentColor" stroke-linejoin="round"/>`,
   },
+  mouse: {
+    viewBox: "0 0 16 16",
+    body: `<rect x="4" y="1.5" width="8" height="13" rx="4" stroke="currentColor"/><path d="M8 1.5V6" stroke="currentColor"/>`,
+  },
   status: {
     viewBox: "0 0 20 20",
     body: `<path d="M2 10V18H18V10M2 10V2H18V10M2 10H18M5 6H9M5 14H9" stroke="currentColor"/>`,
