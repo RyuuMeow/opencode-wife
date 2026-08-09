@@ -1,16 +1,58 @@
-import { Component } from "solid-js"
+import { Component, Show, createMemo } from "solid-js"
+import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import { Icon } from "@opencode-ai/ui/v2/icon"
+import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
 import { Switch } from "@opencode-ai/ui/v2/switch-v2"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
+import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { SettingsListV2 } from "./parts/list"
 import { SettingsRowV2 } from "./parts/row"
 import { useLanguage } from "@/context/language"
+import { useLocal, type ModelSelection } from "@/context/local"
 import { useSettings } from "@/context/settings"
+import { wifeChoiceModelAvailable } from "@/features/wife/chat/wife-choice-generator"
 
 const heightRatioOptions = [0.25, 0.35, 0.5, 0.65, 0.8]
 
 export const SettingsWifeV2: Component = () => {
   const language = useLanguage()
   const settings = useSettings()
+  const local = useLocal()
+  const selectedModel = createMemo(() => {
+    const value = settings.general.wifeChoiceModel()
+    return local.model.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID)
+  })
+  const selectedVariant = createMemo(() => {
+    const value = settings.general.wifeChoiceModel().variant
+    if (!value || !Object.keys(selectedModel()?.variants ?? {}).includes(value)) return undefined
+    return value
+  })
+  const choiceModelAvailable = createMemo(() =>
+    wifeChoiceModelAvailable(local.model.list(), settings.general.wifeChoiceModel()),
+  )
+  const choiceModel: ModelSelection = {
+    ...local.model,
+    current: selectedModel,
+    set(value) {
+      if (!value) return
+      local.model.setVisibility(value, true)
+      settings.general.setWifeChoiceModel({ ...value, variant: undefined })
+    },
+    variant: {
+      ...local.model.variant,
+      configured: () => undefined,
+      selected: selectedVariant,
+      current: selectedVariant,
+      list: () => Object.keys(selectedModel()?.variants ?? {}),
+      set: (variant) => settings.general.setWifeChoiceModel({ ...settings.general.wifeChoiceModel(), variant }),
+      cycle() {
+        const items = this.list()
+        if (items.length === 0) return
+        const index = items.indexOf(this.current() ?? "")
+        this.set(items[(index + 1) % items.length])
+      },
+    },
+  }
 
   return (
     <>
@@ -20,6 +62,7 @@ export const SettingsWifeV2: Component = () => {
 
       <div class="settings-v2-tab-body">
         <div class="settings-v2-section">
+          <h3 class="settings-v2-section-title">{language.t("settings.wife.section.chat")}</h3>
           <SettingsListV2>
             <SettingsRowV2
               title={language.t("settings.general.row.wifeMode.title")}
@@ -45,6 +88,74 @@ export const SettingsWifeV2: Component = () => {
                 label={(ratio) => `${Math.round(ratio * 100)}%`}
                 onSelect={(ratio) => ratio && settings.general.setWifeChatHeightRatio(ratio)}
                 aria-label={language.t("settings.general.row.wifeChatHeightRatio.title")}
+              />
+            </SettingsRowV2>
+          </SettingsListV2>
+        </div>
+
+        <div class="settings-v2-section">
+          <h3 class="settings-v2-section-title">{language.t("settings.wife.section.choices")}</h3>
+          <SettingsListV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.choices.enabled.title")}
+              description={language.t("settings.wife.choices.enabled.description")}
+            >
+              <Switch
+                checked={settings.general.wifeChoiceGenerationEnabled()}
+                onChange={(enabled) => settings.general.setWifeChoiceGenerationEnabled(enabled)}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.choices.model.title")}
+              description={
+                <Show
+                  when={!settings.general.wifeChoiceGenerationEnabled() || choiceModelAvailable()}
+                  fallback={
+                    <span class="text-icon-warning-base">{language.t("settings.wife.choices.model.unavailable")}</span>
+                  }
+                >
+                  {language.t("settings.wife.choices.model.description")}
+                </Show>
+              }
+            >
+              <ModelSelectorPopoverV2
+                model={choiceModel}
+                trigger={(triggerProps) => (
+                  <ButtonV2
+                    {...triggerProps}
+                    disabled={!settings.general.wifeChoiceGenerationEnabled()}
+                    variant="ghost-muted"
+                    size="normal"
+                    class="min-w-0 max-w-[220px] justify-start ![font-weight:440]"
+                    aria-label={language.t("settings.wife.choices.model.title")}
+                  >
+                    <Show when={selectedModel()}>
+                      {(model) => <ProviderIcon id={model().provider.id} class="size-4 shrink-0 opacity-60" />}
+                    </Show>
+                    <span class="truncate">{selectedModel()?.id ?? settings.general.wifeChoiceModel().modelID}</span>
+                    <span class="-ms-0.5 -me-1 flex shrink-0">
+                      <Icon name="chevron-down" />
+                    </span>
+                  </ButtonV2>
+                )}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.choices.variant.title")}
+              description={language.t("settings.wife.choices.variant.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                disabled={!settings.general.wifeChoiceGenerationEnabled() || !selectedModel()}
+                options={["default", ...choiceModel.variant.list()]}
+                current={choiceModel.variant.current() ?? "default"}
+                placement="bottom-end"
+                gutter={6}
+                label={(variant) => variant}
+                onSelect={(variant) =>
+                  choiceModel.variant.set(variant === "default" ? undefined : (variant ?? undefined))
+                }
+                aria-label={language.t("settings.wife.choices.variant.title")}
               />
             </SettingsRowV2>
           </SettingsListV2>

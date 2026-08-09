@@ -299,11 +299,19 @@ type WifeHandoffSession = {
   archived: true
   temporary: true
 }
+
+type WifeChoiceSession = {
+  ownerSessionId: string
+  kind: "choice"
+  permission: "deny-all"
+  archived: true
+  temporary: true
+}
 ```
 
 Each main Agent session owns one persistent archived assistant session. A normal Wife turn receives a non-persisted, at-most-12,000-character snapshot of the current owner session: title/status, visible user/assistant text, bounded tool status/title/error, and patch filenames. Reasoning, synthetic/ignored text, tool input/output, attachments, and other sessions are excluded.
 
-`/send` uses a separate archived handoff session with no tools, writes only an editable plain-text task into the scoped main composer, and is deleted after completion. `/clear` permanently deletes only the assistant session and pointer; persona, model/variant, character choice, model compatibility, and Live2D view state are separate persisted settings.
+Reply choices are generated after the main response by a separately configured global model in a temporary archived, deny-all session. The latest successful 2–3 choices are cached against the source assistant message ID for recovery; stale cache entries and orphaned temporary sessions are removed. `/send` uses a separate archived handoff session with no tools, writes only an editable plain-text task into the scoped main composer, and is deleted after completion. `/clear` permanently deletes the assistant session, pointer, and choice cache; persona, model/variant, character choice, model compatibility, and Live2D view state are separate persisted settings.
 
 ## Persistence guidance
 

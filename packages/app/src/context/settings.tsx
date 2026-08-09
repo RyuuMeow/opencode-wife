@@ -37,6 +37,8 @@ export interface Settings {
     newLayoutDesigns?: boolean
     wifeMode?: boolean
     wifeChatHeightRatio?: number
+    wifeChoiceGenerationEnabled?: boolean
+    wifeChoiceModel?: WifeChoiceModel
     layoutTransitionEligible?: boolean
     agentVisibilityInitialized?: boolean
     newInterfaceNoticeDismissed?: boolean
@@ -63,6 +65,18 @@ const legacyNewLayoutDesignsDefault = import.meta.env.VITE_OPENCODE_CHANNEL !== 
 export const newLayoutDesignsDefault = true
 export const wifeModeDefault = false
 export const wifeChatHeightRatioDefault = 0.35
+export const wifeChoiceGenerationEnabledDefault = true
+export const wifeChoiceModelDefault = {
+  providerID: "opencode",
+  modelID: "deepseek-v4-flash",
+  variant: "low",
+} satisfies WifeChoiceModel
+
+export type WifeChoiceModel = {
+  providerID: string
+  modelID: string
+  variant?: string
+}
 // Existing users can switch layouts until local midnight on this date. Set new Date(YYYY, M-1, D) to show.
 export const oldInterfaceSunset = new Date(2026, 8, 14)
 const newLayoutDesignsUpgradeCutoff = "1.17.19"
@@ -446,6 +460,17 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
         wifeChatHeightRatio: withFallback(() => store.general?.wifeChatHeightRatio, wifeChatHeightRatioDefault),
         setWifeChatHeightRatio(value: number) {
           setStore("general", "wifeChatHeightRatio", value)
+        },
+        wifeChoiceGenerationEnabled: withFallback(
+          () => store.general?.wifeChoiceGenerationEnabled,
+          wifeChoiceGenerationEnabledDefault,
+        ),
+        setWifeChoiceGenerationEnabled(value: boolean) {
+          setStore("general", "wifeChoiceGenerationEnabled", value)
+        },
+        wifeChoiceModel: withFallback(() => store.general?.wifeChoiceModel, wifeChoiceModelDefault),
+        setWifeChoiceModel(value: WifeChoiceModel) {
+          setStore("general", "wifeChoiceModel", value)
         },
         layoutTransitionClassified,
         setOldLayoutEligible(eligible: boolean) {

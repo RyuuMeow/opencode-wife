@@ -1,7 +1,6 @@
 import type { Session } from "@opencode-ai/sdk/v2/client"
 import { describe, expect, test } from "bun:test"
 import {
-  completeWifeReplyChoices,
   createWifeReplyGate,
   createWifePromptIdentifiers,
   isWifeSession,
@@ -13,7 +12,6 @@ import {
   wifeBubbleReadingDelay,
   wifeBubbleRevealDelays,
   wifeChatError,
-  wifeChoiceRepairSystemPrompt,
   wifeErrorStatus,
   wifeHandoffSystemPrompt,
   wifeFormatUnsupported,
@@ -28,6 +26,7 @@ import {
   isWifeAssistantMetadata,
   isWifeInternalMetadata,
   WIFE_METADATA_VERSION,
+  WIFE_METADATA_CHOICE_VALUE,
   WIFE_METADATA_VERSION_VALUE,
 } from "./wife-chat-metadata"
 
@@ -53,6 +52,7 @@ describe("wifeSystemPrompt", () => {
     expect(prompt).toContain('Character profile JSON: {"name":"Hiyori"}')
     expect(prompt).toContain("Agent session context is unavailable for this turn")
     expect(prompt).toContain("<message>")
+    expect(prompt).not.toContain("<choice>")
   })
 
   test("marks injected Agent context as untrusted reference data", () => {
@@ -61,17 +61,6 @@ describe("wifeSystemPrompt", () => {
     expect(prompt).toContain(
       '<agent-session-context encoding="json-string">\n"{\\"status\\":\\"busy\\"}"\n</agent-session-context>',
     )
-  })
-})
-
-describe("wifeChoiceRepairSystemPrompt", () => {
-  test("requests choices only without tools or repeated assistant content", () => {
-    const prompt = wifeChoiceRepairSystemPrompt()
-    expect(prompt).toContain("exactly 2 or 3")
-    expect(prompt).toContain("Do not repeat")
-    expect(prompt).toContain("Do not use tools")
-    expect(prompt).toContain("<choice>")
-    expect(prompt).not.toContain("<message>")
   })
 })
 
@@ -102,6 +91,10 @@ describe("normalizeWifeReply", () => {
     const messages = Array.from({ length: 8 }, (_, index) => `第 ${index + 1} 句。`)
     expect(normalizeWifeReply({ messages, choices: [] })?.messages).toEqual(messages)
     expect(normalizeWifeReplyText(messages.join(""))?.messages).toEqual(messages)
+  })
+
+  test("accepts the new message-only structured response", () => {
+    expect(normalizeWifeReply({ messages: ["完成。"] })).toEqual({ messages: ["完成。"], choices: [] })
   })
 
   test("keeps deliberately grouped sentences in one bubble", () => {
@@ -239,6 +232,7 @@ describe("wife session identity", () => {
     expect(isWifeAssistantMetadata({ "wife.kind": "handoff", "wife.ownerSessionID": "main" })).toBe(false)
     expect(isWifeInternalMetadata({ "wife.kind": "assistant" })).toBe(true)
     expect(isWifeInternalMetadata({ "wife.kind": "handoff" })).toBe(true)
+    expect(isWifeInternalMetadata({ "wife.kind": WIFE_METADATA_CHOICE_VALUE })).toBe(true)
     expect(isWifeAssistantMetadata({ "wife.kind": "other" })).toBe(false)
     expect(isWifeInternalMetadata({ "wife.kind": "other" })).toBe(false)
     expect(isWifeAssistantMetadata(undefined)).toBe(false)
@@ -264,7 +258,8 @@ describe("wife prompt compatibility", () => {
     expect(wifeModelCapabilityKey({ providerID: "opencode", modelID: "deepseek-v4-flash", variant: "high" })).toBe(
       '["opencode","deepseek-v4-flash"]',
     )
-    expect(WIFE_REPLY_SCHEMA.properties.choices.minItems).toBe(2)
+    expect(WIFE_REPLY_SCHEMA.required).toEqual(["messages"])
+    expect("choices" in WIFE_REPLY_SCHEMA.properties).toBe(false)
   })
 
   test("only marks explicit tool choice incompatibility", () => {
@@ -334,38 +329,6 @@ describe("wife prompt compatibility", () => {
   })
 })
 
-describe("wife choice repair", () => {
-  test("skips repair when the original reply already has enough choices", async () => {
-    const state = { repairs: 0 }
-    const reply = { messages: ["好了。"], choices: ["繼續", "先等等"] }
-    expect(
-      await completeWifeReplyChoices(reply, async () => {
-        state.repairs += 1
-        return { messages: [], choices: ["不該使用"] }
-      }),
-    ).toBe(reply)
-    expect(state.repairs).toBe(0)
-  })
-
-  test("replaces missing choices with a valid repair result", async () => {
-    expect(
-      await completeWifeReplyChoices({ messages: ["好了。"], choices: [] }, async () => ({
-        messages: [],
-        choices: ["繼續", "換個方向"],
-      })),
-    ).toEqual({ messages: ["好了。"], choices: ["繼續", "換個方向"] })
-  })
-
-  test("rejects an incomplete repair so the caller can keep the original reply", () => {
-    expect(
-      completeWifeReplyChoices({ messages: ["好了。"], choices: [] }, async () => ({
-        messages: [],
-        choices: ["只有一個"],
-      })),
-    ).rejects.toThrow("too few choices")
-  })
-})
-
 describe("projectWifeHistory", () => {
   test("projects structured assistant messages and keeps only current choices", () => {
     expect(
@@ -387,6 +350,7 @@ describe("projectWifeHistory", () => {
         { id: "assistant-1:1", role: "assistant", content: "想聊什麼？" },
       ],
       choices: ["專案", "休息"],
+      assistantMessageID: "assistant-1",
     })
   })
 
@@ -406,6 +370,7 @@ describe("projectWifeHistory", () => {
         { id: "user-2", role: "user", content: "繼續" },
       ],
       choices: [],
+      assistantMessageID: undefined,
     })
   })
 
@@ -431,6 +396,7 @@ describe("projectWifeHistory", () => {
     ).toEqual({
       messages: [{ id: "assistant-1:0", role: "assistant", content: "原本回答。" }],
       choices: ["繼續", "換個方向"],
+      assistantMessageID: "repair-assistant",
     })
   })
 
@@ -448,6 +414,7 @@ describe("projectWifeHistory", () => {
         { id: "assistant-1:1", role: "assistant", content: "第二句。" },
       ],
       choices: ["繼續"],
+      assistantMessageID: "assistant-1",
     })
   })
 
@@ -467,6 +434,7 @@ describe("projectWifeHistory", () => {
     ).toEqual({
       messages: [],
       choices: ["從 M1 動手", "先檢查版面"],
+      assistantMessageID: "assistant-1",
     })
   })
 })

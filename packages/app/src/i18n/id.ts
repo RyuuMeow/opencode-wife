@@ -1009,6 +1009,15 @@ export const dict = {
   // TODO: translate via translate:app
   "wife.characters.unconfigured": "Not configured",
   "wife.characters.newDefault": "New character",
+  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
+  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
+  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
+  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
+  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
+  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
+  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
+  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
+  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
   "wife.characters.settings.changeModel": "Change model",
   // TODO: translate via translate:app
   "wife.characters.settings.model": "Live2D model",

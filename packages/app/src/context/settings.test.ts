@@ -11,6 +11,8 @@ import {
   shouldDisplayTabsToast,
   shouldEnableNewLayout,
   wifeModeDefault,
+  wifeChoiceGenerationEnabledDefault,
+  wifeChoiceModelDefault,
 } from "./settings"
 
 describe("agent visibility", () => {
@@ -99,5 +101,14 @@ describe("layout transition", () => {
 describe("wife mode", () => {
   test("defaults to Classic Mode without the Wife layer", () => {
     expect(wifeModeDefault).toBe(false)
+  })
+
+  test("enables the low-cost choice generator by default", () => {
+    expect(wifeChoiceGenerationEnabledDefault).toBe(true)
+    expect(wifeChoiceModelDefault).toEqual({
+      providerID: "opencode",
+      modelID: "deepseek-v4-flash",
+      variant: "low",
+    })
   })
 })

@@ -48,9 +48,9 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 ## Milestone 2 — Wife Assistant Chat (core delivered)
 
 - `features/wife/chat/wife-chat-controller.ts`: one persistent archived Wife session per main session, recovered through a workspace-local pointer plus owner metadata; every use verifies the deny-all/read-glob-grep permission profile before prompting
-- session prompts initially use JSON-schema output (`messages` 1+, `choices` 2–3); an explicit provider `tool_choice` incompatibility marks that provider/model as text-only in workspace persistence, immediately retries through the tagged text contract with stable message/part IDs, and reuses text mode on later requests
+- session prompts initially use JSON-schema output (`messages` 1+ only); an explicit provider `tool_choice` incompatibility marks that provider/model as text-only in workspace persistence, immediately retries through the tagged text contract with stable message/part IDs, and reuses text mode on later requests. Historical responses containing choices remain readable.
 - assistant replies use as many short bubbles as needed to complete the thought; `<keep>...</keep>` explicitly preserves multi-sentence rhythm, inline code, quoted text, property chains, and explanations that would become fragments when split, while a final fragment guard rejoins messages beginning with punctuation
-- thinking uses a centered three-dot status animation with reduced-motion fallback; replies always request 2–3 model-authored follow-up choices, and choices are accepted only from JSON schema or explicit `<choice>` tags rather than inferred from Markdown lists
+- thinking uses a centered three-dot status animation with reduced-motion fallback. A configurable independent model generates 2–3 follow-up choices asynchronously in temporary archived `wife.kind=choice` sessions with deny-all permissions; only explicit `<choice>` tags are accepted, one strict retry is allowed, and Markdown lists are never inferred.
 - Wife prompts prefer natural plain conversation and discourage headings, lists, tables, and emphasis unless the user explicitly requests structured technical content or code
 - the chat overlay fills the Live2D area while the configured height ratio remains only the old-bubble eviction budget, so one long newest bubble can extend above that budget without being clipped at the percentage boundary
 - Live2D pan/zoom is isolated behind a transient header mouse toggle: chat mode blocks model manipulation, adjustment mode fades and disables chat UI, enables left-drag/wheel control, and `Escape` returns to chat
@@ -66,6 +66,7 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 - `/send` uses a separate archived `wife.kind=handoff` session with deny-all permissions, summarizes the Side Chat plus latest Agent snapshot, deletes the temporary session, and writes only to the matching main composer after Replace / Append / Cancel when needed; it never auto-submits
 - `/clear` confirms through a V2 dialog, aborts active work, permanently deletes the assistant session and pointer, and preserves character/model/persona/compatibility/Live2D preferences
 - notification isolation recognizes all Wife internal sessions, while chat recovery continues to recognize only `wife.kind=assistant`
+- choice generation defaults globally to `opencode/deepseek-v4-flash` with `low` reasoning, never falls back to the Wife model when unavailable, does not delay bubble reveal, and persists only the latest choices keyed by their source assistant message ID
 
 Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文件` (VTS pack; 2 motions 待机动画/打瞌睡, 22 expressions). Synthetic `wife-demo\luna` fixture files do NOT render (placeholder moc3).
 
