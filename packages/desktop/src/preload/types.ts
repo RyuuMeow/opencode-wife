@@ -41,6 +41,13 @@ export type FatalRendererError = {
   platform: string
   os?: string
 }
+export type ProfileImportResult = {
+  source: string
+  version: number
+  imported: string[]
+  skipped: string[]
+  completedAt: string
+}
 
 export type ElectronAPI = {
   killSidecar: () => Promise<void>
@@ -58,6 +65,7 @@ export type ElectronAPI = {
   setDisplayBackend: (backend: LinuxDisplayBackend | null) => Promise<void>
   checkAppExists: (appName: string) => Promise<boolean>
   resolveAppPath: (appName: string) => Promise<string | null>
+  importOpenCodePreferences: () => Promise<ProfileImportResult>
   storeGet: (name: string, key: string) => Promise<string | null>
   storeSet: (name: string, key: string, value: string) => Promise<void>
   storeDelete: (name: string, key: string) => Promise<void>

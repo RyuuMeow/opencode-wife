@@ -209,6 +209,7 @@ const createPlatform = (windowState: DesktopWindowState): Platform => {
     },
 
     pickWifeModelFolder: (characterId) => window.api.pickWifeModelFolder(characterId),
+    importOpenCodePreferences: () => window.api.importOpenCodePreferences(),
 
     openExternal(url: string) {
       window.api.openExternal(url)

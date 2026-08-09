@@ -25,6 +25,7 @@ import { createUpdaterSubscriptions } from "./updater-subscriptions"
 import { createDesktopDraftStore } from "./draft-store"
 import { nativeT } from "./native-translations"
 import { pickWifeModelFolder } from "./wife"
+import type { ProfileImportResult } from "./profile-import"
 
 const pickerFilters = (ext?: string[]) => {
   if (!ext || ext.length === 0) return undefined
@@ -53,6 +54,7 @@ type Deps = {
   exportDebugLogs: () => Promise<string>
   recordFatalRendererError: (error: FatalRendererError) => Promise<void> | void
   setNativeTranslations: (bundle: DesktopNativeBundle) => void
+  importOpenCodePreferences: () => Promise<ProfileImportResult>
 }
 
 export function registerIpcHandlers(deps: Deps) {
@@ -81,6 +83,7 @@ export function registerIpcHandlers(deps: Deps) {
   )
   ipcMain.handle("check-app-exists", (_event: IpcMainInvokeEvent, appName: string) => deps.checkAppExists(appName))
   ipcMain.handle("resolve-app-path", (_event: IpcMainInvokeEvent, appName: string) => deps.resolveAppPath(appName))
+  ipcMain.handle("import-opencode-preferences", () => deps.importOpenCodePreferences())
   ipcMain.handle("updater-subscribe", (event) => {
     const id = event.sender.id
     updaterSubscriptions.set(

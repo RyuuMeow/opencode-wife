@@ -1,4 +1,4 @@
-import { Component, Show, createMemo } from "solid-js"
+import { Component, Show, createMemo, createSignal } from "solid-js"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { Icon } from "@opencode-ai/ui/v2/icon"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
@@ -18,6 +18,7 @@ import {
   type WifeChatTextSize,
 } from "@/context/settings"
 import { wifeChoiceModelAvailable } from "@/features/wife/chat/wife-choice-generator"
+import { usePlatform } from "@/context/platform"
 
 const heightRatioOptions = [0.25, 0.35, 0.5, 0.65, 0.8]
 const textSizeOptions = ["small", "standard", "large"] satisfies WifeChatTextSize[]
@@ -30,6 +31,8 @@ export const SettingsWifeV2: Component = () => {
   const language = useLanguage()
   const settings = useSettings()
   const models = useModels()
+  const platform = usePlatform()
+  const [importing, setImporting] = createSignal(false)
   const selectedModel = createMemo(() => {
     const value = settings.general.wifeChoiceModel()
     return models.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID)
@@ -245,6 +248,34 @@ export const SettingsWifeV2: Component = () => {
             </SettingsRowV2>
           </SettingsListV2>
         </div>
+
+        <Show when={platform.importOpenCodePreferences}>
+          {(runImport) => (
+            <div class="settings-v2-section">
+              <h3 class="settings-v2-section-title">{language.t("settings.wife.section.data")}</h3>
+              <SettingsListV2>
+                <SettingsRowV2
+                  title={language.t("settings.wife.import.title")}
+                  description={language.t("settings.wife.import.description")}
+                >
+                  <ButtonV2
+                    variant="neutral"
+                    size="normal"
+                    disabled={importing()}
+                    onClick={() => {
+                      setImporting(true)
+                      void runImport()()
+                        .then(() => platform.restart())
+                        .finally(() => setImporting(false))
+                    }}
+                  >
+                    {language.t(importing() ? "settings.wife.import.working" : "settings.wife.import.action")}
+                  </ButtonV2>
+                </SettingsRowV2>
+              </SettingsListV2>
+            </div>
+          )}
+        </Show>
       </div>
     </>
   )

@@ -52,6 +52,7 @@ import { startBackgroundCli } from "./background-cli"
 import { setNativeTranslations } from "./native-translations"
 import { desktopPaths } from "./desktop-paths"
 import { prepareSharedAgentData } from "./shared-agent-data"
+import { importOpenCodePreferences } from "./profile-import"
 
 const TEST_ONBOARDING = process.env.OPENCODE_TEST_ONBOARDING === "1"
 const SIDECAR_VERSION = process.env.OPENCODE_SIDECAR_V2 === "1" ? "v2" : "v1"
@@ -256,6 +257,13 @@ const main = Effect.gen(function* () {
 
   yield* Effect.promise(() => app.whenReady())
 
+  if (!TEST_ONBOARDING) {
+    yield* Effect.promise(() => importOpenCodePreferences({ source: paths.agentStateHome, target: paths.wifeUserData })).pipe(
+      Effect.tap((result) => Effect.sync(() => logger.log("OpenCode preferences imported", result))),
+      Effect.catch((error) => Effect.sync(() => logger.warn("failed to import OpenCode preferences", error))),
+    )
+  }
+
   if (!TEST_ONBOARDING) migrate()
   yield* Effect.promise(() => cleanupStoreFiles(app.getPath("userData"))).pipe(
     Effect.tap((result) =>
@@ -313,6 +321,8 @@ const main = Effect.gen(function* () {
     setNativeTranslations: (bundle) => {
       if (setNativeTranslations(bundle)) createMenu(menuDeps)
     },
+    importOpenCodePreferences: () =>
+      importOpenCodePreferences({ source: paths.agentStateHome, target: paths.wifeUserData, force: true }),
   })
   registerWslIpcHandlers(wslServers)
   void updater.start()

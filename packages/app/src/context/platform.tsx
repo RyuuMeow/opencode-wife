@@ -135,6 +135,9 @@ type PlatformBase = {
 
   /** Record a fatal renderer error in platform logs (desktop only) */
   recordFatalRendererError?(error: FatalRendererErrorLog): Promise<void>
+
+  /** Re-import safe UI preferences from the original OpenCode desktop profile. */
+  importOpenCodePreferences?(): Promise<{ imported: string[]; skipped: string[] }>
 }
 
 export type Platform = PlatformBase &
