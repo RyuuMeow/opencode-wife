@@ -91,7 +91,19 @@ const require = __cjs_mod__.createRequire(import.meta.url);
     },
   },
   renderer: {
-    plugins: [appPlugin, sentry],
+    plugins: [
+      appPlugin,
+      sentry,
+      {
+        name: "opencode:strip-vendor-core",
+        apply: "build",
+        closeBundle() {
+          // publicDir copies app/public verbatim; the proprietary Cubism core must never ship.
+          // Users install it through the runtime setup wizard instead.
+          return fs.rm("./out/renderer/vendor/live2dcubismcore.min.js", { force: true })
+        },
+      },
+    ],
     publicDir: "../../../app/public",
     root: "src/renderer",
     build: {

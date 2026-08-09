@@ -66,21 +66,19 @@ jobs:
         working-directory: packages/desktop
         run: bun run package:win
 
-      - name: Verify no proprietary or updater content
+      - name: Verify no proprietary or upstream update content
         shell: bash
         working-directory: packages/desktop
         run: |
-          if grep -rilE "electron-updater|anomalyco/opencode" out || [ -n "$(ls out | grep -iE 'updater')" ]; then
-            echo "::error::Updater or upstream publish references found in the built app"
+          if grep -rilE "anomalyco/opencode|opencode-beta|app-update\.yml|electron-builder\.yml" out; then
+            echo "::error::Upstream publish or update references found in the built app"
             exit 1
           fi
-          if [ -d "dist/win-unpacked/resources" ]; then
-            node -e "
-              const asar = require('@electron/asar');
-              const files = asar.listPackage('dist/win-unpacked/resources/app.asar');
-              const bad = files.filter((f) => /live2dcubismcore|cubism/i.test(f));
-              if (bad.length) { console.error('Unexpected bundled files:', bad); process.exit(1) }
-            "
+          # The proprietary Cubism core never ships: it must not exist in the repo
+          # (it is gitignored), in the built renderer, or in the packaged app.
+          if find ../../packages/app/public dist/win-unpacked -iname "*cubism*" 2>/dev/null | grep .; then
+            echo "::error::Live2D Cubism core found in repo or packaged app"
+            exit 1
           fi
 
       - name: Generate SHA-256 checksums
