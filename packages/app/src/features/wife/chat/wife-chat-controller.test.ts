@@ -133,6 +133,15 @@ describe("normalizeWifeReply", () => {
       messages: ["先說結論。", "這兩句要一起看。拆開會失去語氣。"],
       choices: ["繼續說", "換個方向"],
     })
+    expect(
+      normalizeWifeReplyText(
+        "<message> </message>\n<choice>從 M1 動手</choice>\n<choice>先檢查 availableGeometry</choice>\n<choice>確認無競爭</choice>\n<message> </message>",
+      ),
+    ).toEqual({
+      messages: [],
+      choices: ["從 M1 動手", "先檢查 availableGeometry", "確認無競爭"],
+    })
+    expect(normalizeWifeReplyText("<message> </message>\n<choice> </choice>")).toBeUndefined()
     expect(normalizeWifeReplyText("重點如下：\n- 看專案架構\n- 規劃功能\n- Review 程式碼")).toEqual({
       messages: ["重點如下：", "- 看專案架構", "- 規劃功能", "- Review 程式碼"],
       choices: [],
@@ -369,6 +378,25 @@ describe("projectWifeHistory", () => {
         { id: "assistant-1:1", role: "assistant", content: "第二句。" },
       ],
       choices: ["繼續"],
+    })
+  })
+
+  test("restores choice-only tagged fallback without empty assistant bubbles", () => {
+    expect(
+      projectWifeHistory([
+        {
+          info: { id: "assistant-1", role: "assistant" },
+          parts: [
+            {
+              type: "text",
+              text: "<message> </message>\n<choice>從 M1 動手</choice>\n<choice>先檢查版面</choice>\n<message> </message>",
+            },
+          ],
+        },
+      ]),
+    ).toEqual({
+      messages: [],
+      choices: ["從 M1 動手", "先檢查版面"],
     })
   })
 })

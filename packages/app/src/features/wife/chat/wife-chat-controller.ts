@@ -144,6 +144,7 @@ export function normalizeWifeReplyText(value: string): WifeReply | undefined {
   }
   const tagged = normalizeTaggedWifeReply(text)
   if (tagged) return tagged
+  if (hasWifeReplyTags(text)) return undefined
 
   const messages = mergeWifeFragments(normalizeWifeMessage(text))
   if (messages.length === 0) return undefined
@@ -487,6 +488,11 @@ export function createWifeChatController(input: {
   }
 
   const reveal = (ownerSessionID: string, generation: number, reply: WifeReply) => {
+    if (reply.messages.length === 0) {
+      setStore("conversations", ownerSessionID, "choices", reply.choices)
+      setStore("conversations", ownerSessionID, "status", "idle")
+      return
+    }
     const delays = wifeBubbleRevealDelays(reply.messages)
     const scheduled = new Set<ReturnType<typeof setTimeout>>()
     timers.set(ownerSessionID, scheduled)
@@ -922,8 +928,13 @@ function normalizeTaggedWifeReply(value: string): WifeReply | undefined {
         .filter(Boolean),
     ),
   ]
-  if (messages.length === 0 || choices.length < 2 || choices.length > 3) return undefined
+  if (choices.length > 3) return undefined
+  if (messages.length === 0 && choices.length === 0) return undefined
   return { messages, choices }
+}
+
+function hasWifeReplyTags(value: string) {
+  return /<\/?(?:message|choice)\b/i.test(value)
 }
 
 export function wifeSystemPrompt(
