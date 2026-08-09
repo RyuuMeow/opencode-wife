@@ -411,7 +411,6 @@ export function WifePanel(props: {
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
                 <Show
                   when={runtimeEnabled() && selectedCharacter()}
-                  keyed
                   fallback={
                     <div class="absolute inset-0 flex items-center justify-center">
                       <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
@@ -428,11 +427,11 @@ export function WifePanel(props: {
                       }
                     >
                       <Live2DView
-                        modelUrl={url()}
-                        avatar={() => character.avatar!}
+                        modelUrl={url}
+                        avatar={() => character().avatar!}
                         intent={() => intent}
                         interactionEnabled={modelInteraction}
-                        initialView={initialView()}
+                        initialView={initialView}
                         onViewChange={saveView}
                         onError={(message) => setLoadError(message)}
                       />

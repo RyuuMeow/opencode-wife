@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount } from "solid-js"
+import { createEffect, createSignal, onCleanup, onMount, untrack } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
 import type {
@@ -45,20 +45,25 @@ function applyIntent(model: Live2DModel, intent: PresentationIntent, avatar: Ava
 }
 
 export function Live2DView(props: {
-  modelUrl: string
+  modelUrl: () => string
   avatar: () => AvatarProfile
   intent: () => PresentationIntent
   interactionEnabled: () => boolean
-  initialView?: { zoom: number; offsetX: number; offsetY: number }
+  initialView?: () => { zoom: number; offsetX: number; offsetY: number } | undefined
   onViewChange: (view: { zoom: number; offsetX: number; offsetY: number }) => void
   onError: (message: string) => void
 }) {
   const [model, setModel] = createSignal<Live2DModel>()
   const [app, setApp] = createSignal<Application>()
-  const [zoom, setZoom] = createSignal(props.initialView?.zoom ?? 1)
-  const [offset, setOffset] = createSignal({ x: props.initialView?.offsetX ?? 0, y: props.initialView?.offsetY ?? 0 })
+  const [zoom, setZoom] = createSignal(props.initialView?.()?.zoom ?? 1)
+  const [offset, setOffset] = createSignal({
+    x: props.initialView?.()?.offsetX ?? 0,
+    y: props.initialView?.()?.offsetY ?? 0,
+  })
   const [panning, setPanning] = createSignal<{ pointerId: number; startX: number; startY: number; offsetX: number; offsetY: number }>()
   let container: HTMLDivElement | undefined
+  let loadGeneration = 0
+  let disposed = false
 
   const fit = () => {
     const loaded = model()
@@ -135,22 +140,45 @@ export function Live2DView(props: {
     const observer = new ResizeObserver(resizeNow)
     observer.observe(container)
 
-    void Live2DModel.from(props.modelUrl, { ticker: Ticker.shared })
+    onCleanup(() => {
+      disposed = true
+      loadGeneration += 1
+      observer.disconnect()
+      container.removeEventListener("wheel", onWheel)
+      next.destroy(true, { children: true })
+    })
+  })
+
+  createEffect(() => {
+    const next = app()
+    const modelUrl = props.modelUrl()
+    if (!next) return
+
+    const generation = ++loadGeneration
+    const previous = untrack(model)
+    const initialView = untrack(() => props.initialView?.())
+    setZoom(initialView?.zoom ?? 1)
+    setOffset({ x: initialView?.offsetX ?? 0, y: initialView?.offsetY ?? 0 })
+    if (previous) {
+      setModel(undefined)
+      next.stage.removeChild(previous)
+      previous.destroy()
+    }
+
+    void Live2DModel.from(modelUrl, { ticker: Ticker.shared })
       .then((loaded) => {
+        if (disposed || generation !== loadGeneration) {
+          loaded.destroy()
+          return
+        }
         setModel(loaded)
         next.stage.addChild(loaded)
         fit()
       })
       .catch((cause: unknown) => {
+        if (disposed || generation !== loadGeneration) return
         props.onError(cause instanceof Error ? cause.message : String(cause))
       })
-
-    onCleanup(() => {
-      observer.disconnect()
-      container.removeEventListener("wheel", onWheel)
-      model()?.destroy()
-      next.destroy(true, { children: true })
-    })
   })
 
   createEffect(() => {
