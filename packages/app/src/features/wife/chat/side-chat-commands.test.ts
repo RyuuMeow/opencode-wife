@@ -56,6 +56,7 @@ describe("Wife handoff transcript", () => {
     const result = projectWifeHandoffTranscript(
       Array.from({ length: 20 }, (_, index) => ({
         id: `${index}`,
+        turnID: `${index}`,
         role: "user" as const,
         content: `${index}:${"x".repeat(2_400)}`,
       })),

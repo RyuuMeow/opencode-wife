@@ -307,11 +307,22 @@ type WifeChoiceSession = {
   archived: true
   temporary: true
 }
+
+type WifeChatDisplaySettings = {
+  heightRatio: 0.25 | 0.35 | 0.5 | 0.65 | 0.8
+  textSize: "small" | "standard" | "large"
+  pace: "fast" | "natural" | "relaxed"
+  contrast: "soft" | "standard" | "strong"
+  motion: "full" | "subtle" | "off"
+  header: "every" | "turn" | "hidden"
+}
 ```
 
 Each main Agent session owns one persistent archived assistant session. A normal Wife turn receives a non-persisted, at-most-12,000-character snapshot of the current owner session: title/status, visible user/assistant text, bounded tool status/title/error, and patch filenames. Reasoning, synthetic/ignored text, tool input/output, attachments, and other sessions are excluded.
 
 Reply choices are generated after the main response by a separately configured global model in a temporary archived, deny-all session. The latest successful 2–3 choices are cached against the source assistant message ID for recovery; stale cache entries and orphaned temporary sessions are removed. `/send` uses a separate archived handoff session with no tools, writes only an editable plain-text task into the scoped main composer, and is deleted after completion. `/clear` permanently deletes the assistant session, pointer, and choice cache; persona, model/variant, character choice, model compatibility, and Live2D view state are separate persisted settings.
+
+Bubble display settings are global optional fields in `settings.v3` with defaults of 35%, standard (15px), natural, standard contrast, full motion, and a character header on every assistant bubble. Live and history views share the same presenter. Text size, contrast, header mode, and height changes remeasure immediately; pace is captured when a reply reveal is scheduled. System reduced-motion overrides the saved motion preference.
 
 ## Persistence guidance
 

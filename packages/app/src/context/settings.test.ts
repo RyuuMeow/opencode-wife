@@ -11,6 +11,11 @@ import {
   shouldDisplayTabsToast,
   shouldEnableNewLayout,
   wifeModeDefault,
+  wifeChatContrastDefault,
+  wifeChatHeaderDefault,
+  wifeChatMotionDefault,
+  wifeChatPaceDefault,
+  wifeChatTextSizeDefault,
   wifeChoiceGenerationEnabledDefault,
   wifeChoiceModelDefault,
 } from "./settings"
@@ -110,5 +115,13 @@ describe("wife mode", () => {
       modelID: "deepseek-v4-flash",
       variant: "low",
     })
+  })
+
+  test("uses readable natural bubble display defaults", () => {
+    expect(wifeChatTextSizeDefault).toBe("standard")
+    expect(wifeChatPaceDefault).toBe("natural")
+    expect(wifeChatContrastDefault).toBe("standard")
+    expect(wifeChatMotionDefault).toBe("full")
+    expect(wifeChatHeaderDefault).toBe("every")
   })
 })

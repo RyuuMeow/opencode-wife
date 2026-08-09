@@ -28,6 +28,7 @@ describe("wife choice generator", () => {
       assistantMessages: ["我們可以先做設定。"],
       transcript: Array.from({ length: 12 }, (_, index) => ({
         id: String(index),
+        turnID: String(index),
         role: index % 2 ? ("assistant" as const) : ("user" as const),
         content: `訊息 ${index} ${"長".repeat(900)}`,
       })),

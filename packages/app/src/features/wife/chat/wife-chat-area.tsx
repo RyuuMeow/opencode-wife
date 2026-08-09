@@ -1,28 +1,35 @@
-import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
+import { batch, createEffect, createSignal, For, onCleanup, Show } from "solid-js"
 import { createStore } from "solid-js/store"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
-import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
+import type { WifeChatContrast, WifeChatHeader, WifeChatMotion, WifeChatTextSize } from "@/context/settings"
 import { wifeBubbleExpelled, wifeBubbleFitCount } from "./wife-chat-layout"
+import {
+  WifeChatAvatar,
+  WifeChatBubble,
+  WIFE_CHAT_BUBBLE_BASE,
+} from "./wife-chat-bubble"
+import {
+  wifeChatBubbleStyle,
+  wifeChatEntryDuration,
+  wifeChatExitDuration,
+  wifeChatGeometryKey,
+  wifeChatHeaderVisible,
+  type WifeChatMessage,
+} from "./wife-chat-display"
 import "./wife-chat-area.css"
 
-export type WifeChatMessage = {
-  id: string
-  role: "user" | "assistant"
-  content: string
-}
+export type { WifeChatMessage } from "./wife-chat-display"
 
-const EXIT_DURATION_MS = 280
 export const HISTORY_WHEEL_DISTANCE = 240
 const INITIAL_VISIBLE_COUNT = 10
-const BUBBLE_BASE = "rounded-xl px-3 py-2 text-v2-text-text-base backdrop-blur-sm"
-const BUBBLE_STYLE = { "--font-size-base": "15px" } as JSX.CSSProperties
 
 type LeavingMessage = {
   message: WifeChatMessage
   top: number
   left: number
   width: number
+  showHeader: boolean
   phase: "staged" | "leaving"
 }
 
@@ -33,6 +40,10 @@ export function WifeChatArea(props: {
   characterName: () => string | undefined
   /** Ratio of the Live2D area used for bubbles and history-scroll detection. */
   heightRatio: () => number
+  textSize: () => WifeChatTextSize
+  contrast: () => WifeChatContrast
+  motion: () => WifeChatMotion
+  header: () => WifeChatHeader
   historyProgress: () => number
   onHistoryProgress: (next: number) => void
   onChoice: (choice: string) => void
@@ -51,7 +62,7 @@ export function WifeChatArea(props: {
   let messageList: HTMLDivElement | undefined
   let messageCount = 0
   let messageIds = new Set<string>()
-  let heightRatio = props.heightRatio()
+  let geometry = wifeChatGeometryKey(props.heightRatio(), props.textSize(), props.header())
   let initialized = false
   let measureFrame: number | undefined
   const animationTimers = new Set<ReturnType<typeof setTimeout>>()
@@ -111,6 +122,7 @@ export function WifeChatArea(props: {
           top: rect.top - rootRect.top,
           left: rect.left - rootRect.left,
           width: rect.width,
+          showHeader: node.dataset.showHeader === "true",
           phase: "staged" as const,
         },
       ]
@@ -122,7 +134,9 @@ export function WifeChatArea(props: {
       setVisibleCount(nextCount)
     })
     const ids = staged.map((item) => item.message.id)
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches
+    const duration = wifeChatExitDuration(props.motion(), reduced)
+    if (duration === 0) {
       queueMicrotask(() => finishLeaving(ids))
       return
     }
@@ -135,7 +149,7 @@ export function WifeChatArea(props: {
       const timer = setTimeout(() => {
         animationTimers.delete(timer)
         finishLeaving(ids)
-      }, EXIT_DURATION_MS + 100)
+      }, duration + 100)
       animationTimers.add(timer)
     })
     animationFrames.add(frame)
@@ -148,25 +162,34 @@ export function WifeChatArea(props: {
     const messages = props.messages()
     const total = messages.length
     const ratio = props.heightRatio()
+    const nextGeometry = wifeChatGeometryKey(ratio, props.textSize(), props.header())
     const added = Math.max(0, total - messageCount)
     const nextIds = new Set(messages.map((message) => message.id))
     const entering = messages.filter((message) => !messageIds.has(message.id)).map((message) => message.id)
     if (!initialized && total > 0) setMeasured(false)
     if (messageCount > 0 && entering.length > 0) {
-      setEnteringIds((ids) => [...ids.filter((id) => nextIds.has(id)), ...entering])
-      entering.forEach((id) => {
-        const timer = setTimeout(() => {
-          animationTimers.delete(timer)
-          setEnteringIds((ids) => ids.filter((candidate) => candidate !== id))
-        }, EXIT_DURATION_MS)
-        animationTimers.add(timer)
-      })
+      const duration = wifeChatEntryDuration(
+        props.motion(),
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches,
+      )
+      if (duration > 0) {
+        setEnteringIds((ids) => [...ids.filter((id) => nextIds.has(id)), ...entering])
+        entering.forEach((id) => {
+          const timer = setTimeout(() => {
+            animationTimers.delete(timer)
+            setEnteringIds((ids) => ids.filter((candidate) => candidate !== id))
+          }, duration)
+          animationTimers.add(timer)
+        })
+      }
     }
-    if (ratio !== heightRatio) setVisibleCount(total)
-    if (ratio === heightRatio && added > 0) setVisibleCount((count) => Math.min(total, count + added))
+    if (nextGeometry !== geometry) setVisibleCount(total)
+    if (nextGeometry === geometry && added > 0) {
+      setVisibleCount((count) => Math.min(total, count + added))
+    }
     messageCount = total
     messageIds = nextIds
-    heightRatio = ratio
+    geometry = nextGeometry
   })
 
   createEffect(() => {
@@ -175,6 +198,10 @@ export function WifeChatArea(props: {
     props.loading()
     props.error()
     props.heightRatio()
+    props.textSize()
+    props.contrast()
+    props.motion()
+    props.header()
     visibleCount()
     queueMicrotask(evaluate)
   })
@@ -214,7 +241,7 @@ export function WifeChatArea(props: {
     <Show when={props.messages().length > 0 || props.loading() || props.error()}>
       <div
         ref={root}
-        class="absolute inset-0 select-text overflow-hidden transition-opacity duration-150 ease-out motion-reduce:transition-none"
+        class="wife-chat-live absolute inset-0 select-text overflow-hidden"
         classList={{
           "pointer-events-auto": props.interactive(),
           "pointer-events-none": !props.interactive(),
@@ -222,36 +249,48 @@ export function WifeChatArea(props: {
         style={{ opacity: 1 - props.historyProgress() }}
         onWheel={openHistory}
         aria-busy={props.loading()}
+        data-wife-chat-motion={props.motion()}
       >
         <div
           ref={content}
-          class="absolute inset-x-0 bottom-0 flex flex-col px-3 transition-opacity duration-150 ease-out motion-reduce:transition-none"
+          class="wife-chat-content absolute inset-x-0 bottom-0 flex flex-col px-3"
           style={{ opacity: measured() ? 1 : 0 }}
         >
           <div ref={messageList} class="flex flex-col gap-3">
             <For each={visible()}>
-              {(message) => (
+              {(message, index) => (
                 <div
                   data-wife-chat-message="active"
                   data-message-id={message.id}
+                  data-show-header={wifeChatHeaderVisible(visible(), index(), props.header())}
                   classList={{
-                    "animate-in fade-in slide-in-from-bottom-2 duration-300": enteringIds().includes(message.id),
+                    "wife-chat-message-entering": enteringIds().includes(message.id),
                   }}
                 >
-                  <ChatMessage message={message} avatarImage={props.avatarImage()} characterName={props.characterName()} />
+                  <WifeChatBubble
+                    message={message}
+                    avatarImage={props.avatarImage()}
+                    characterName={props.characterName()}
+                    showHeader={wifeChatHeaderVisible(visible(), index(), props.header())}
+                    textSize={props.textSize()}
+                    contrast={props.contrast()}
+                  />
                 </div>
               )}
             </For>
           </div>
           <Show when={props.loading() || props.error()}>
             <div class="mt-3 flex flex-col items-start" aria-live="polite">
-              <div class="flex items-center gap-2">
-                <Avatar image={props.avatarImage()} />
-                <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
-              </div>
+              <Show when={props.header() !== "hidden"}>
+                <div class="flex items-center gap-2">
+                  <WifeChatAvatar image={props.avatarImage()} />
+                  <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
+                </div>
+              </Show>
               <div
-                class={`${BUBBLE_BASE} mt-1 flex min-h-9 max-w-[85%] items-center bg-v2-background-bg-layer-02`}
-                style={BUBBLE_STYLE}
+                class={`${WIFE_CHAT_BUBBLE_BASE} flex min-h-9 max-w-[85%] items-center`}
+                classList={{ "mt-1": props.header() !== "hidden", "backdrop-blur-sm": props.contrast() !== "strong" }}
+                style={wifeChatBubbleStyle("assistant", props.textSize(), props.contrast())}
                 role={props.error() ? "alert" : "status"}
               >
                 <Show
@@ -271,7 +310,7 @@ export function WifeChatArea(props: {
             </div>
           </Show>
           <div
-            class="grid transition-[grid-template-rows,margin,opacity] duration-150 ease-out motion-reduce:transition-none"
+            class="wife-chat-choices grid"
             classList={{
               "mt-3 grid-rows-[1fr] opacity-100": props.choices().length > 0,
               "pointer-events-none mt-0 grid-rows-[0fr] opacity-0": props.choices().length === 0,
@@ -310,46 +349,19 @@ export function WifeChatArea(props: {
                   finishLeaving([item.message.id])
                 }}
               >
-                <ChatMessage
+                <WifeChatBubble
                   message={item.message}
                   avatarImage={props.avatarImage()}
                   characterName={props.characterName()}
+                  showHeader={item.showHeader}
+                  textSize={props.textSize()}
+                  contrast={props.contrast()}
                 />
               </div>
             )}
           </For>
         </div>
       </div>
-    </Show>
-  )
-}
-
-function ChatMessage(props: { message: WifeChatMessage; avatarImage: string | undefined; characterName: string | undefined }) {
-  return props.message.role === "assistant" ? (
-    <div class="flex flex-col items-start">
-      <div class="flex items-center gap-2">
-        <Avatar image={props.avatarImage} />
-        <span class="text-12-regular text-v2-text-text-muted">{props.characterName}</span>
-      </div>
-      <div class={`${BUBBLE_BASE} mt-1 max-w-[85%] bg-v2-background-bg-layer-02`} style={BUBBLE_STYLE}>
-        <Markdown text={props.message.content} />
-      </div>
-    </div>
-  ) : (
-    <div class="flex flex-col items-end">
-      <div class={`${BUBBLE_BASE} max-w-[85%] bg-v2-background-bg-layer-01`} style={BUBBLE_STYLE}>
-        <Markdown text={props.message.content} />
-      </div>
-    </div>
-  )
-}
-
-export function Avatar(props: { image: string | undefined }) {
-  return (
-    <Show when={props.image} fallback={<div class="size-7 rounded-full bg-v2-background-bg-layer-02" />}>
-      {(image) => (
-        <img src={image()} alt="" class="size-7 rounded-full bg-v2-background-bg-layer-01 object-cover" />
-      )}
     </Show>
   )
 }

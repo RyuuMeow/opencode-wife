@@ -386,6 +386,7 @@ export default function Page() {
     enabled: settings.general.wifeMode,
     choiceGenerationEnabled: settings.general.wifeChoiceGenerationEnabled,
     choiceModel: settings.general.wifeChoiceModel,
+    pace: settings.general.wifeChatPace,
     sessionTitle: () => (params.id ? sync().session.get(params.id)?.title : undefined),
     sessionWorking: () => sync().data.session_working(params.id ?? ""),
   })

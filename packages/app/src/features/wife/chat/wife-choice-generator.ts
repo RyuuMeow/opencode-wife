@@ -1,5 +1,5 @@
 import type { CharacterBehaviorDefaults } from "@opencode-ai/wife-core"
-import type { WifeChatMessage } from "./wife-chat-area"
+import type { WifeChatMessage } from "./wife-chat-display"
 
 type ChoiceModel = { providerID: string; modelID: string; variant?: string }
 type AvailableChoiceModel = { provider: { id: string }; id: string; variants?: Record<string, unknown> }

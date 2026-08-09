@@ -10,7 +10,6 @@ import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
 import { useDialog } from "@opencode-ai/ui/context/dialog"
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
-import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
@@ -23,7 +22,9 @@ import { useSettings } from "@/context/settings"
 import type { Sizing } from "@/pages/session/helpers"
 import { Persist, persisted } from "@/utils/persist"
 import { useWifeRegistry } from "../registry/wife-registry"
-import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea } from "../chat/wife-chat-area"
+import { HISTORY_WHEEL_DISTANCE, WifeChatArea } from "../chat/wife-chat-area"
+import { WifeChatBubble } from "../chat/wife-chat-bubble"
+import { wifeChatHeaderVisible } from "../chat/wife-chat-display"
 import type { WifeChatController } from "../chat/wife-chat-controller"
 import { DialogClearWifeChat } from "../chat/wife-command-dialogs"
 import { parseSideChatCommand } from "../chat/side-chat-commands"
@@ -456,6 +457,10 @@ export function WifePanel(props: {
                       avatarImage={() => selectedCharacter()?.avatarImage}
                       characterName={() => selectedCharacter()?.name}
                       heightRatio={() => settings.general.wifeChatHeightRatio()}
+                      textSize={settings.general.wifeChatTextSize}
+                      contrast={settings.general.wifeChatContrast}
+                      motion={settings.general.wifeChatMotion}
+                      header={settings.general.wifeChatHeader}
                       historyProgress={historyProgress}
                       onHistoryProgress={setHistoryProgress}
                       onChoice={submitWifeMessage}
@@ -519,7 +524,7 @@ export function WifePanel(props: {
 
               <Show when={selectedCharacter()}>
                 <div
-                  class="absolute inset-0 z-30 flex flex-col bg-v2-background-bg-base transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
+                  class="wife-chat-history absolute inset-0 z-30 flex flex-col bg-v2-background-bg-base"
                   classList={{
                     "pointer-events-auto": historyProgress() > 0,
                     "pointer-events-none": historyProgress() === 0,
@@ -531,6 +536,7 @@ export function WifePanel(props: {
                   aria-hidden={historyProgress() === 0}
                   inert={historyProgress() === 0}
                   data-state={historyProgress() === 0 ? "closed" : historyProgress() === 1 ? "open" : "opening"}
+                  data-wife-chat-motion={settings.general.wifeChatMotion()}
                 >
                   <header class="flex h-10 shrink-0 items-center justify-between px-3">
                     <span class="text-13-regular text-v2-text-text-base">
@@ -568,28 +574,21 @@ export function WifePanel(props: {
                   >
                     <div class="flex flex-col gap-3">
                       <For each={props.chat.messages()}>
-                        {(message) => (
-                          <div class="flex flex-col">
-                            <Show when={message.role === "assistant"}>
-                              <div class="flex items-center gap-2">
-                                <Avatar image={selectedCharacter()?.avatarImage} />
-                                <span class="text-11-regular text-v2-text-text-muted">
-                                  {selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant")}
-                                </span>
-                              </div>
-                            </Show>
-                            <div class="mt-1 flex">
-                              <div
-                                class={`max-w-[85%] rounded-xl px-3 py-2 backdrop-blur-sm ${
-                                  message.role === "user"
-                                    ? "ms-auto bg-v2-background-bg-layer-01"
-                                    : "bg-v2-background-bg-layer-02"
-                                }`}
-                              >
-                                <Markdown text={message.content} />
-                              </div>
-                            </div>
-                          </div>
+                        {(message, index) => (
+                          <WifeChatBubble
+                            message={message}
+                            avatarImage={selectedCharacter()?.avatarImage}
+                            characterName={
+                              selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant")
+                            }
+                            showHeader={wifeChatHeaderVisible(
+                              props.chat.messages(),
+                              index(),
+                              settings.general.wifeChatHeader(),
+                            )}
+                            textSize={settings.general.wifeChatTextSize()}
+                            contrast={settings.general.wifeChatContrast()}
+                          />
                         )}
                       </For>
                     </div>

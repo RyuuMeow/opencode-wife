@@ -37,6 +37,11 @@ export interface Settings {
     newLayoutDesigns?: boolean
     wifeMode?: boolean
     wifeChatHeightRatio?: number
+    wifeChatTextSize?: WifeChatTextSize
+    wifeChatPace?: WifeChatPace
+    wifeChatContrast?: WifeChatContrast
+    wifeChatMotion?: WifeChatMotion
+    wifeChatHeader?: WifeChatHeader
     wifeChoiceGenerationEnabled?: boolean
     wifeChoiceModel?: WifeChoiceModel
     layoutTransitionEligible?: boolean
@@ -65,6 +70,11 @@ const legacyNewLayoutDesignsDefault = import.meta.env.VITE_OPENCODE_CHANNEL !== 
 export const newLayoutDesignsDefault = true
 export const wifeModeDefault = false
 export const wifeChatHeightRatioDefault = 0.35
+export const wifeChatTextSizeDefault = "standard" satisfies WifeChatTextSize
+export const wifeChatPaceDefault = "natural" satisfies WifeChatPace
+export const wifeChatContrastDefault = "standard" satisfies WifeChatContrast
+export const wifeChatMotionDefault = "full" satisfies WifeChatMotion
+export const wifeChatHeaderDefault = "every" satisfies WifeChatHeader
 export const wifeChoiceGenerationEnabledDefault = true
 export const wifeChoiceModelDefault = {
   providerID: "opencode",
@@ -77,6 +87,11 @@ export type WifeChoiceModel = {
   modelID: string
   variant?: string
 }
+export type WifeChatTextSize = "small" | "standard" | "large"
+export type WifeChatPace = "fast" | "natural" | "relaxed"
+export type WifeChatContrast = "soft" | "standard" | "strong"
+export type WifeChatMotion = "full" | "subtle" | "off"
+export type WifeChatHeader = "every" | "turn" | "hidden"
 // Existing users can switch layouts until local midnight on this date. Set new Date(YYYY, M-1, D) to show.
 export const oldInterfaceSunset = new Date(2026, 8, 14)
 const newLayoutDesignsUpgradeCutoff = "1.17.19"
@@ -460,6 +475,26 @@ export const { use: useSettings, provider: SettingsProvider } = createSimpleCont
         wifeChatHeightRatio: withFallback(() => store.general?.wifeChatHeightRatio, wifeChatHeightRatioDefault),
         setWifeChatHeightRatio(value: number) {
           setStore("general", "wifeChatHeightRatio", value)
+        },
+        wifeChatTextSize: withFallback(() => store.general?.wifeChatTextSize, wifeChatTextSizeDefault),
+        setWifeChatTextSize(value: WifeChatTextSize) {
+          setStore("general", "wifeChatTextSize", value)
+        },
+        wifeChatPace: withFallback(() => store.general?.wifeChatPace, wifeChatPaceDefault),
+        setWifeChatPace(value: WifeChatPace) {
+          setStore("general", "wifeChatPace", value)
+        },
+        wifeChatContrast: withFallback(() => store.general?.wifeChatContrast, wifeChatContrastDefault),
+        setWifeChatContrast(value: WifeChatContrast) {
+          setStore("general", "wifeChatContrast", value)
+        },
+        wifeChatMotion: withFallback(() => store.general?.wifeChatMotion, wifeChatMotionDefault),
+        setWifeChatMotion(value: WifeChatMotion) {
+          setStore("general", "wifeChatMotion", value)
+        },
+        wifeChatHeader: withFallback(() => store.general?.wifeChatHeader, wifeChatHeaderDefault),
+        setWifeChatHeader(value: WifeChatHeader) {
+          setStore("general", "wifeChatHeader", value)
         },
         wifeChoiceGenerationEnabled: withFallback(
           () => store.general?.wifeChoiceGenerationEnabled,

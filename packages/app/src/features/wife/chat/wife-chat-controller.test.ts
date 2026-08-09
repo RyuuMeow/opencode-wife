@@ -177,6 +177,20 @@ describe("wife bubble pacing", () => {
       650 + wifeBubbleReadingDelay(messages[0]) + wifeBubbleReadingDelay(messages[1]),
     ])
   })
+
+  test("scales the initial and reading delays for fast and relaxed pacing", () => {
+    const messages = ["好。", "再說一點。"]
+    expect(wifeBubbleRevealDelays(messages, "fast")).toEqual([
+      400,
+      400 + wifeBubbleReadingDelay(messages[0], "fast"),
+    ])
+    expect(wifeBubbleRevealDelays(messages, "relaxed")).toEqual([
+      900,
+      900 + wifeBubbleReadingDelay(messages[0], "relaxed"),
+    ])
+    expect(wifeBubbleReadingDelay(messages[0], "fast")).toBe(Math.round(850 * 0.65))
+    expect(wifeBubbleReadingDelay(messages[0], "relaxed")).toBe(Math.round(850 * 1.35))
+  })
 })
 
 describe("wife session identity", () => {
@@ -345,9 +359,9 @@ describe("projectWifeHistory", () => {
       ]),
     ).toEqual({
       messages: [
-        { id: "user-1", role: "user", content: "你好" },
-        { id: "assistant-1:0", role: "assistant", content: "嗨。" },
-        { id: "assistant-1:1", role: "assistant", content: "想聊什麼？" },
+        { id: "user-1", turnID: "user-1", role: "user", content: "你好" },
+        { id: "assistant-1:0", turnID: "assistant-1", role: "assistant", content: "嗨。" },
+        { id: "assistant-1:1", turnID: "assistant-1", role: "assistant", content: "想聊什麼？" },
       ],
       choices: ["專案", "休息"],
       assistantMessageID: "assistant-1",
@@ -365,9 +379,9 @@ describe("projectWifeHistory", () => {
       ]),
     ).toEqual({
       messages: [
-        { id: "assistant-1:0", role: "assistant", content: "第一句。" },
-        { id: "assistant-1:1", role: "assistant", content: "第二句。" },
-        { id: "user-2", role: "user", content: "繼續" },
+        { id: "assistant-1:0", turnID: "assistant-1", role: "assistant", content: "第一句。" },
+        { id: "assistant-1:1", turnID: "assistant-1", role: "assistant", content: "第二句。" },
+        { id: "user-2", turnID: "user-2", role: "user", content: "繼續" },
       ],
       choices: [],
       assistantMessageID: undefined,
@@ -394,7 +408,9 @@ describe("projectWifeHistory", () => {
         },
       ]),
     ).toEqual({
-      messages: [{ id: "assistant-1:0", role: "assistant", content: "原本回答。" }],
+      messages: [
+        { id: "assistant-1:0", turnID: "assistant-1", role: "assistant", content: "原本回答。" },
+      ],
       choices: ["繼續", "換個方向"],
       assistantMessageID: "repair-assistant",
     })
@@ -410,8 +426,8 @@ describe("projectWifeHistory", () => {
       ]),
     ).toEqual({
       messages: [
-        { id: "assistant-1:0", role: "assistant", content: "第一句。" },
-        { id: "assistant-1:1", role: "assistant", content: "第二句。" },
+        { id: "assistant-1:0", turnID: "assistant-1", role: "assistant", content: "第一句。" },
+        { id: "assistant-1:1", turnID: "assistant-1", role: "assistant", content: "第二句。" },
       ],
       choices: ["繼續"],
       assistantMessageID: "assistant-1",

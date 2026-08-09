@@ -1,5 +1,5 @@
 import type { Prompt } from "@/context/prompt"
-import type { WifeChatMessage } from "./wife-chat-area"
+import type { WifeChatMessage } from "./wife-chat-display"
 
 export type SideChatCommand = "send" | "clear"
 export type WifeHandoffDraftMode = "replace" | "append"

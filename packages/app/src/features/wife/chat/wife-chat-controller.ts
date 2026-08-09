@@ -5,12 +5,13 @@ import { createStore } from "solid-js/store"
 import { useLocal } from "@/context/local"
 import { useSDK } from "@/context/sdk"
 import { useServerSDK } from "@/context/server-sdk"
+import type { WifeChatPace } from "@/context/settings"
 import { Identifier } from "@/utils/id"
 import { Persist, persisted } from "@/utils/persist"
 import { splitIntoSentences } from "./sentences"
 import { AGENT_CONTEXT_MESSAGE_LIMIT, projectAgentSessionContext } from "./agent-session-context"
 import { projectWifeHandoffTranscript } from "./side-chat-commands"
-import type { WifeChatMessage } from "./wife-chat-area"
+import type { WifeChatMessage } from "./wife-chat-display"
 import {
   generateWifeChoicesWithRetry,
   projectWifeChoiceContext,
@@ -206,7 +207,7 @@ export async function runWifePromptWithFallback(input: {
   return input.prompt(undefined)
 }
 
-export function wifeBubbleReadingDelay(message: string) {
+export function wifeBubbleReadingDelay(message: string, pace: WifeChatPace = "natural") {
   const cjk = message.match(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu)?.length ?? 0
   const words = message
     .replace(/[\p{Script=Han}\p{Script=Hiragana}\p{Script=Katakana}\p{Script=Hangul}]/gu, " ")
@@ -214,13 +215,16 @@ export function wifeBubbleReadingDelay(message: string) {
     .split(/\s+/)
     .filter(Boolean).length
   const pauses = message.match(/[，,、；;：:。.!！？?…]/g)?.length ?? 0
-  return Math.min(5_000, Math.max(850, cjk * 85 + words * 220 + pauses * 140))
+  const natural = Math.min(5_000, Math.max(850, cjk * 85 + words * 220 + pauses * 140))
+  const multiplier = pace === "fast" ? 0.65 : pace === "relaxed" ? 1.35 : 1
+  return Math.round(natural * multiplier)
 }
 
-export function wifeBubbleRevealDelays(messages: string[]) {
+export function wifeBubbleRevealDelays(messages: string[], pace: WifeChatPace = "natural") {
+  const initial = pace === "fast" ? 400 : pace === "relaxed" ? 900 : 650
   return messages.reduce<number[]>((delays, _, index) => {
-    if (index === 0) return [650]
-    return [...delays, delays[index - 1] + wifeBubbleReadingDelay(messages[index - 1])]
+    if (index === 0) return [initial]
+    return [...delays, delays[index - 1] + wifeBubbleReadingDelay(messages[index - 1], pace)]
   }, [])
 }
 
@@ -244,7 +248,7 @@ export function projectWifeHistory(items: SessionMessage[]) {
     if (item.info.role === "user") {
       const content = textContent(item.parts)
       if (!content) return
-      result.push({ id: item.info.id, role: "user", content })
+      result.push({ id: item.info.id, turnID: item.info.id, role: "user", content })
       state.choices = []
       state.assistantMessageID = undefined
       return
@@ -253,7 +257,7 @@ export function projectWifeHistory(items: SessionMessage[]) {
     const reply = normalizeWifeReply(item.info.structured) ?? normalizeWifeReplyText(textContent(item.parts))
     const messages = reply?.messages ?? splitIntoSentences(textContent(item.parts))
     messages.forEach((content, index) =>
-      result.push({ id: `${item.info.id}:${index}`, role: "assistant", content }),
+      result.push({ id: `${item.info.id}:${index}`, turnID: item.info.id, role: "assistant", content }),
     )
     state.choices = reply?.choices ?? []
     state.assistantMessageID = item.info.id
@@ -267,6 +271,7 @@ export function createWifeChatController(input: {
   enabled: Accessor<boolean>
   choiceGenerationEnabled: Accessor<boolean>
   choiceModel: Accessor<WifeChatModelSelection>
+  pace: Accessor<WifeChatPace>
   sessionTitle: Accessor<string | undefined>
   sessionWorking: Accessor<boolean>
 }) {
@@ -511,13 +516,19 @@ export function createWifeChatController(input: {
     })
   }
 
-  const reveal = (ownerSessionID: string, generation: number, reply: WifeReply) => {
+  const reveal = (
+    ownerSessionID: string,
+    generation: number,
+    reply: WifeReply,
+    assistantMessageID: string,
+    pace: WifeChatPace,
+  ) => {
     if (reply.messages.length === 0) {
       setStore("conversations", ownerSessionID, "choices", reply.choices)
       setStore("conversations", ownerSessionID, "status", "idle")
       return
     }
-    const delays = wifeBubbleRevealDelays(reply.messages)
+    const delays = wifeBubbleRevealDelays(reply.messages, pace)
     const scheduled = new Set<ReturnType<typeof setTimeout>>()
     timers.set(ownerSessionID, scheduled)
     reply.messages.forEach((content, index) => {
@@ -527,7 +538,7 @@ export function createWifeChatController(input: {
           if (index === 0) setStore("conversations", ownerSessionID, "status", "revealing")
           setStore("conversations", ownerSessionID, "messages", (messages) => [
             ...messages,
-            { id: crypto.randomUUID(), role: "assistant" as const, content },
+            { id: crypto.randomUUID(), turnID: assistantMessageID, role: "assistant" as const, content },
           ])
           if (index === reply.messages.length - 1) {
             timers.delete(ownerSessionID)
@@ -601,7 +612,13 @@ export function createWifeChatController(input: {
       return
     }
     if (!result.response) return
-    reveal(ownerSessionID, generation, { ...result.response.reply, choices: [] })
+    reveal(
+      ownerSessionID,
+      generation,
+      { ...result.response.reply, choices: [] },
+      result.response.assistantMessageID,
+      input.pace(),
+    )
     void generateChoices({
       ownerSessionID,
       generation,
@@ -626,11 +643,12 @@ export function createWifeChatController(input: {
     cancelChoices(ownerSessionID)
     clearTimers(ownerSessionID)
     const generation = nextGeneration(ownerSessionID)
+    const userMessageID = crypto.randomUUID()
     setStore("conversations", ownerSessionID, {
       ...(store.conversations[ownerSessionID] ?? EMPTY_CONVERSATION),
       messages: [
         ...(store.conversations[ownerSessionID]?.messages ?? []),
-        { id: crypto.randomUUID(), role: "user", content: text.trim() },
+        { id: userMessageID, turnID: userMessageID, role: "user", content: text.trim() },
       ],
       choices: [],
       status: "responding",

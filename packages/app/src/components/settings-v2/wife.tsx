@@ -9,10 +9,22 @@ import { SettingsListV2 } from "./parts/list"
 import { SettingsRowV2 } from "./parts/row"
 import { useLanguage } from "@/context/language"
 import { useModels } from "@/context/models"
-import { useSettings } from "@/context/settings"
+import {
+  useSettings,
+  type WifeChatContrast,
+  type WifeChatHeader,
+  type WifeChatMotion,
+  type WifeChatPace,
+  type WifeChatTextSize,
+} from "@/context/settings"
 import { wifeChoiceModelAvailable } from "@/features/wife/chat/wife-choice-generator"
 
 const heightRatioOptions = [0.25, 0.35, 0.5, 0.65, 0.8]
+const textSizeOptions = ["small", "standard", "large"] satisfies WifeChatTextSize[]
+const paceOptions = ["fast", "natural", "relaxed"] satisfies WifeChatPace[]
+const contrastOptions = ["soft", "standard", "strong"] satisfies WifeChatContrast[]
+const motionOptions = ["full", "subtle", "off"] satisfies WifeChatMotion[]
+const headerOptions = ["every", "turn", "hidden"] satisfies WifeChatHeader[]
 
 export const SettingsWifeV2: Component = () => {
   const language = useLanguage()
@@ -63,6 +75,12 @@ export const SettingsWifeV2: Component = () => {
                 />
               </div>
             </SettingsRowV2>
+          </SettingsListV2>
+        </div>
+
+        <div class="settings-v2-section">
+          <h3 class="settings-v2-section-title">{language.t("settings.wife.section.bubbles")}</h3>
+          <SettingsListV2>
             <SettingsRowV2
               title={language.t("settings.general.row.wifeChatHeightRatio.title")}
               description={language.t("settings.general.row.wifeChatHeightRatio.description")}
@@ -76,6 +94,81 @@ export const SettingsWifeV2: Component = () => {
                 label={(ratio) => `${Math.round(ratio * 100)}%`}
                 onSelect={(ratio) => ratio && settings.general.setWifeChatHeightRatio(ratio)}
                 aria-label={language.t("settings.general.row.wifeChatHeightRatio.title")}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.bubbles.textSize.title")}
+              description={language.t("settings.wife.bubbles.textSize.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                options={textSizeOptions}
+                current={settings.general.wifeChatTextSize()}
+                placement="bottom-end"
+                gutter={6}
+                label={(value) => language.t(`settings.wife.bubbles.textSize.${value}`)}
+                onSelect={(value) => value && settings.general.setWifeChatTextSize(value)}
+                aria-label={language.t("settings.wife.bubbles.textSize.title")}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.bubbles.pace.title")}
+              description={language.t("settings.wife.bubbles.pace.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                options={paceOptions}
+                current={settings.general.wifeChatPace()}
+                placement="bottom-end"
+                gutter={6}
+                label={(value) => language.t(`settings.wife.bubbles.pace.${value}`)}
+                onSelect={(value) => value && settings.general.setWifeChatPace(value)}
+                aria-label={language.t("settings.wife.bubbles.pace.title")}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.bubbles.contrast.title")}
+              description={language.t("settings.wife.bubbles.contrast.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                options={contrastOptions}
+                current={settings.general.wifeChatContrast()}
+                placement="bottom-end"
+                gutter={6}
+                label={(value) => language.t(`settings.wife.bubbles.contrast.${value}`)}
+                onSelect={(value) => value && settings.general.setWifeChatContrast(value)}
+                aria-label={language.t("settings.wife.bubbles.contrast.title")}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.bubbles.motion.title")}
+              description={language.t("settings.wife.bubbles.motion.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                options={motionOptions}
+                current={settings.general.wifeChatMotion()}
+                placement="bottom-end"
+                gutter={6}
+                label={(value) => language.t(`settings.wife.bubbles.motion.${value}`)}
+                onSelect={(value) => value && settings.general.setWifeChatMotion(value)}
+                aria-label={language.t("settings.wife.bubbles.motion.title")}
+              />
+            </SettingsRowV2>
+            <SettingsRowV2
+              title={language.t("settings.wife.bubbles.header.title")}
+              description={language.t("settings.wife.bubbles.header.description")}
+            >
+              <SelectV2
+                appearance="inline"
+                options={headerOptions}
+                current={settings.general.wifeChatHeader()}
+                placement="bottom-end"
+                gutter={6}
+                label={(value) => language.t(`settings.wife.bubbles.header.${value}`)}
+                onSelect={(value) => value && settings.general.setWifeChatHeader(value)}
+                aria-label={language.t("settings.wife.bubbles.header.title")}
               />
             </SettingsRowV2>
           </SettingsListV2>

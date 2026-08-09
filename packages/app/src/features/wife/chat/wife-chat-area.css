@@ -12,6 +12,40 @@
   }
 }
 
+@keyframes wife-thinking-dot-subtle {
+  0%,
+  60%,
+  100% {
+    opacity: 0.45;
+  }
+
+  30% {
+    opacity: 1;
+  }
+}
+
+@keyframes wife-chat-message-enter-full {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes wife-chat-message-enter-subtle {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
 .wife-thinking-dot {
   animation: wife-thinking-dot 900ms ease-in-out infinite;
 }
@@ -22,6 +56,23 @@
 
 .wife-thinking-dot:nth-child(3) {
   animation-delay: 300ms;
+}
+
+[data-wife-chat-motion="full"] .wife-chat-message-entering {
+  animation: wife-chat-message-enter-full 300ms ease-out;
+}
+
+[data-wife-chat-motion="subtle"] .wife-chat-message-entering {
+  animation: wife-chat-message-enter-subtle 150ms ease-out;
+}
+
+[data-wife-chat-motion="subtle"] .wife-thinking-dot {
+  animation-name: wife-thinking-dot-subtle;
+}
+
+[data-wife-chat-motion="off"] .wife-thinking-dot {
+  animation: none;
+  opacity: 0.7;
 }
 
 .wife-chat-message-leaving {
@@ -38,6 +89,46 @@
   transform: translateY(-3px);
 }
 
+[data-wife-chat-motion="subtle"] .wife-chat-message-leaving {
+  transition: opacity 150ms ease-out;
+}
+
+[data-wife-chat-motion="subtle"] .wife-chat-message-leaving-active {
+  transform: translateY(0);
+}
+
+[data-wife-chat-motion="off"] .wife-chat-message-leaving {
+  transition: none;
+}
+
+.wife-chat-choices {
+  transition:
+    grid-template-rows 150ms ease-out,
+    margin 150ms ease-out,
+    opacity 150ms ease-out;
+}
+
+[data-wife-chat-motion="full"] .wife-chat-content,
+[data-wife-chat-motion="subtle"] .wife-chat-content,
+.wife-chat-live[data-wife-chat-motion="full"],
+.wife-chat-live[data-wife-chat-motion="subtle"] {
+  transition: opacity 150ms ease-out;
+}
+
+[data-wife-chat-motion="off"] .wife-chat-choices {
+  transition: none;
+}
+
+.wife-chat-history[data-wife-chat-motion="full"] {
+  transition:
+    opacity 150ms ease-out,
+    transform 150ms ease-out;
+}
+
+.wife-chat-history[data-wife-chat-motion="subtle"] {
+  transition: opacity 150ms ease-out;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wife-thinking-dot {
     animation: none;
@@ -46,5 +137,16 @@
 
   .wife-chat-message-leaving {
     transition: none;
+  }
+
+  .wife-chat-message-entering {
+    animation: none !important;
+  }
+
+  .wife-chat-choices,
+  .wife-chat-content,
+  .wife-chat-live,
+  .wife-chat-history {
+    transition: none !important;
   }
 }
