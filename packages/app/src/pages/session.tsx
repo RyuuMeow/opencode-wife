@@ -378,6 +378,8 @@ export default function Page() {
   const wifeChat = createWifeChatController({
     sessionID: () => params.id,
     enabled: settings.general.wifeMode,
+    sessionTitle: () => (params.id ? sync().session.get(params.id)?.title : undefined),
+    sessionWorking: () => sync().data.session_working(params.id ?? ""),
   })
   const reviewMode = () => view().review.mode() ?? "git"
   const reviewFile = () => view().review.file()
