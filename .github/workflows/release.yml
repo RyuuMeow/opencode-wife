@@ -52,7 +52,13 @@ jobs:
       OPENCODE_CHANNEL: prod
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-bun
+      # Restored bun caches collide with fresh downloads on Windows (ENOTEMPTY
+      # while applying patches), so this job installs without the cache step.
+      - uses: oven-sh/setup-bun@2.2.0
+        with:
+          bun-version-file: package.json
+      - name: Install dependencies
+        run: bun install --linker hoisted
 
       - name: Build sidecar and copy resources
         working-directory: packages/desktop
