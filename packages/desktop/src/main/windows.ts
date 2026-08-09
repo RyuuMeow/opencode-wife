@@ -17,6 +17,7 @@ import { createWindowRegistry } from "./window-registry"
 import { safeWindowURL } from "./window-state"
 import { resolveExternalURL, resolveLocalFilePath } from "./external-url"
 import { wifeProtocol } from "./wife"
+import { live2dRuntimeProtocol } from "./live2d-runtime"
 
 const root = dirname(fileURLToPath(import.meta.url))
 const rendererRoot = join(root, "../renderer")
@@ -50,6 +51,15 @@ protocol.registerSchemesAsPrivileged([
       standard: true,
       supportFetchAPI: true,
       stream: true,
+      corsEnabled: true,
+    },
+  },
+  {
+    scheme: live2dRuntimeProtocol,
+    privileges: {
+      secure: true,
+      standard: true,
+      supportFetchAPI: true,
       corsEnabled: true,
     },
   },

@@ -66,6 +66,69 @@ type WifePanelPreference = {
   variant?: string
 }
 
+let live2dRuntimeLoad: Promise<void> | undefined
+
+const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core", string> = {
+  "core-not-found": "wife.runtime.error.coreNotFound",
+  "invalid-size": "wife.runtime.error.invalidSize",
+  "invalid-core": "wife.runtime.error.invalidCore",
+}
+
+function loadLive2DRuntime() {
+  if (Reflect.has(globalThis, "Live2DCubismCore")) return Promise.resolve()
+  if (live2dRuntimeLoad) return live2dRuntimeLoad
+  live2dRuntimeLoad = new Promise<void>((resolve, reject) => {
+    const script = document.createElement("script")
+    script.src = "wife-runtime://core/live2dcubismcore.min.js"
+    script.onload = () => resolve()
+    script.onerror = () => reject(new Error("Failed to load Live2D Cubism Core"))
+    document.head.append(script)
+  }).catch((error) => {
+    live2dRuntimeLoad = undefined
+    throw error
+  })
+  return live2dRuntimeLoad
+}
+
+function RuntimeSetup(props: {
+  state: () => "missing" | "installing" | "error"
+  error: () => string | undefined
+  onInstall: () => void
+}) {
+  const language = useLanguage()
+  const platform = usePlatform()
+  return (
+    <div class="flex h-full flex-col items-center justify-center gap-3 px-6 text-center">
+      <div class="space-y-1">
+        <div class="text-13-medium text-v2-text-text-base">{language.t("wife.runtime.title")}</div>
+        <div class="max-w-80 text-12-regular text-v2-text-text-muted">{language.t("wife.runtime.description")}</div>
+        <Show when={props.error()}>
+          <div class="text-12-regular text-icon-critical-base">{props.error()}</div>
+        </Show>
+      </div>
+      <div class="flex flex-wrap items-center justify-center gap-2">
+        <ButtonV2
+          size="small"
+          variant="outline"
+          onClick={() => platform.openExternal("https://www.live2d.com/en/sdk/download/web/")}
+        >
+          {language.t("wife.runtime.download")}
+        </ButtonV2>
+        <ButtonV2 size="small" variant="neutral" disabled={props.state() === "installing"} onClick={props.onInstall}>
+          {language.t(props.state() === "installing" ? "wife.runtime.installing" : "wife.runtime.install")}
+        </ButtonV2>
+      </div>
+      <button
+        type="button"
+        class="text-11-regular text-v2-text-text-muted underline underline-offset-2 hover:text-v2-text-text-base focus-visible:outline focus-visible:outline-2 focus-visible:outline-v2-border-focus"
+        onClick={() => platform.openExternal("https://www.live2d.com/en/sdk/license/")}
+      >
+        {language.t("wife.runtime.license")}
+      </button>
+    </div>
+  )
+}
+
 export function WifePanel(props: {
   sessionID: string
   size: Sizing
@@ -101,14 +164,62 @@ export function WifePanel(props: {
       usableCharacters()[0],
   )
   const [loadError, setLoadError] = createSignal<string>()
-  const [runtimeEnabled, setRuntimeEnabled] = createSignal(false)
+  const [runtimeState, setRuntimeState] = createSignal<"checking" | "missing" | "installing" | "ready" | "error">(
+    "checking",
+  )
+  const [runtimeError, setRuntimeError] = createSignal<string>()
   const intent: PresentationIntent = { state: "idle", emotion: "neutral" }
 
   onMount(() => {
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    const timer = window.setTimeout(() => setRuntimeEnabled(true), reducedMotion ? 0 : LIVE2D_START_DELAY_MS)
+    const timer = window.setTimeout(() => {
+      const status = platform.getLive2DRuntimeStatus
+      if (!status) {
+        setRuntimeState("missing")
+        return
+      }
+      void status()
+        .then((value) => {
+          if (!value.installed) {
+            setRuntimeState("missing")
+            return
+          }
+          void loadLive2DRuntime().then(() => setRuntimeState("ready"))
+        })
+        .catch((error) => {
+          setRuntimeError(error instanceof Error ? error.message : String(error))
+          setRuntimeState("error")
+        })
+    }, reducedMotion ? 0 : LIVE2D_START_DELAY_MS)
     onCleanup(() => window.clearTimeout(timer))
   })
+
+  const installRuntime = () => {
+    const install = platform.installLive2DRuntime
+    if (!install) {
+      setRuntimeState("missing")
+      return
+    }
+    setRuntimeError(undefined)
+    setRuntimeState("installing")
+    void install()
+      .then((result) => {
+        if (!result.ok) {
+          if (result.code === "canceled") {
+            setRuntimeState("missing")
+            return
+          }
+          setRuntimeError(language.t(RUNTIME_ERROR_KEYS[result.code]))
+          setRuntimeState("error")
+          return
+        }
+        void loadLive2DRuntime().then(() => setRuntimeState("ready"))
+      })
+      .catch((error) => {
+        setRuntimeError(error instanceof Error ? error.message : String(error))
+        setRuntimeState("error")
+      })
+  }
 
   const [wifeInput, setWifeInput] = createStore<PromptInputV2PersistedState>({
     prompt: [{ type: "text", content: "", start: 0, end: 0 }],
@@ -400,7 +511,7 @@ export function WifePanel(props: {
                     modelInteraction() ? "wife.panel.modelInteraction.exit" : "wife.panel.modelInteraction.enter",
                   )}
                   aria-pressed={modelInteraction()}
-                  disabled={!runtimeEnabled() || !!loadError()}
+                  disabled={runtimeState() !== "ready" || !!loadError()}
                   onClick={toggleModelInteraction}
                 >
                   <Icon name="mouse" />
@@ -410,11 +521,33 @@ export function WifePanel(props: {
             <div class="relative flex-1 min-h-0 bg-v2-background-bg-base">
               <Show when={!loadError()} fallback={<EmptyState title={language.t("wife.panel.empty.loadFailed")} />}>
                 <Show
-                  when={runtimeEnabled() && selectedCharacter()}
+                  when={runtimeState() === "ready" && selectedCharacter()}
                   fallback={
-                    <div class="absolute inset-0 flex items-center justify-center">
-                      <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
-                    </div>
+                    <Show
+                      when={runtimeState() !== "checking"}
+                      fallback={
+                        <div class="absolute inset-0 flex items-center justify-center">
+                          <LoaderV2 class="size-4 text-v2-icon-icon-muted" />
+                        </div>
+                      }
+                    >
+                      <Show
+                        when={platform.platform === "desktop"}
+                        fallback={<EmptyState title={language.t("wife.panel.empty.web")} />}
+                      >
+                        <RuntimeSetup
+                          state={() =>
+                            runtimeState() === "installing"
+                              ? "installing"
+                              : runtimeState() === "error"
+                                ? "error"
+                                : "missing"
+                          }
+                          error={runtimeError}
+                          onInstall={installRuntime}
+                        />
+                      </Show>
+                    </Show>
                   }
                 >
                   {(character) => (

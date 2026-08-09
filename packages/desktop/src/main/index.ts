@@ -53,6 +53,7 @@ import { setNativeTranslations } from "./native-translations"
 import { desktopPaths } from "./desktop-paths"
 import { prepareSharedAgentData } from "./shared-agent-data"
 import { importOpenCodePreferences } from "./profile-import"
+import { registerLive2DRuntimeProtocol } from "./live2d-runtime"
 
 const TEST_ONBOARDING = process.env.OPENCODE_TEST_ONBOARDING === "1"
 const SIDECAR_VERSION = process.env.OPENCODE_SIDECAR_V2 === "1" ? "v2" : "v1"
@@ -281,6 +282,7 @@ const main = Effect.gen(function* () {
   app.setAsDefaultProtocolClient("opencode")
   registerRendererProtocol()
   registerWifeProtocol()
+  registerLive2DRuntimeProtocol()
   setDockIcon()
   const updater = setupAutoUpdater(stopSidecars)
   const menuDeps = {

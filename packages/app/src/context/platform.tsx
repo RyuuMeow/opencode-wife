@@ -31,6 +31,18 @@ export type WifeModelFolderPick = {
   files: WifeModelFolderManifestEntry[]
 }
 
+export type Live2DRuntimeStatus = {
+  installed: boolean
+  source?: string
+  sha256?: string
+  version?: string
+  installedAt?: string
+}
+
+export type Live2DRuntimeInstallResult =
+  | { ok: true; status: Live2DRuntimeStatus }
+  | { ok: false; code: "canceled" | "core-not-found" | "invalid-size" | "invalid-core" }
+
 export type FatalRendererErrorLog = {
   error: string
   url: string
@@ -75,6 +87,11 @@ type PlatformBase = {
 
   /** Pick a Live2D model folder with a native dialog, scan it, and whitelist it for the wife:// protocol (desktop only) */
   pickWifeModelFolder?(characterId: string): Promise<WifeModelFolderPick | null>
+
+  /** Install and manage a user-supplied Live2D Cubism Core runtime. */
+  getLive2DRuntimeStatus?(): Promise<Live2DRuntimeStatus>
+  installLive2DRuntime?(): Promise<Live2DRuntimeInstallResult>
+  removeLive2DRuntime?(): Promise<void>
 
   /** Storage mechanism, defaults to localStorage */
   storage?: (name?: string) => SyncStorage | AsyncStorage

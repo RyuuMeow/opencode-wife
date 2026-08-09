@@ -1,4 +1,4 @@
-import { Component, Show, createMemo, createSignal } from "solid-js"
+import { Component, Show, createMemo, createSignal, onMount } from "solid-js"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { Icon } from "@opencode-ai/ui/v2/icon"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
@@ -27,12 +27,22 @@ const contrastOptions = ["soft", "standard", "strong"] satisfies WifeChatContras
 const motionOptions = ["full", "subtle", "off"] satisfies WifeChatMotion[]
 const headerOptions = ["every", "turn", "hidden"] satisfies WifeChatHeader[]
 
+const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core", string> = {
+  "core-not-found": "wife.runtime.error.coreNotFound",
+  "invalid-size": "wife.runtime.error.invalidSize",
+  "invalid-core": "wife.runtime.error.invalidCore",
+}
+
 export const SettingsWifeV2: Component = () => {
   const language = useLanguage()
   const settings = useSettings()
   const models = useModels()
   const platform = usePlatform()
   const [importing, setImporting] = createSignal(false)
+  const [runtimeInstalled, setRuntimeInstalled] = createSignal(false)
+  const [runtimeBusy, setRuntimeBusy] = createSignal(false)
+  const [runtimeError, setRuntimeError] = createSignal<string>()
+  onMount(() => void platform.getLive2DRuntimeStatus?.().then((status) => setRuntimeInstalled(status.installed)))
   const selectedModel = createMemo(() => {
     const value = settings.general.wifeChoiceModel()
     return models.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID)
@@ -248,6 +258,80 @@ export const SettingsWifeV2: Component = () => {
             </SettingsRowV2>
           </SettingsListV2>
         </div>
+
+        <Show when={platform.installLive2DRuntime}>
+          {(installRuntime) => (
+            <div class="settings-v2-section">
+              <h3 class="settings-v2-section-title">{language.t("settings.wife.section.runtime")}</h3>
+              <SettingsListV2>
+                <SettingsRowV2
+                  title={language.t("settings.wife.runtime.title")}
+                  description={language.t(
+                    runtimeInstalled() ? "settings.wife.runtime.installed" : "settings.wife.runtime.missing",
+                  )}
+                >
+                  <div class="flex items-center gap-2">
+                    <ButtonV2
+                      variant="outline"
+                      size="normal"
+                      onClick={() => platform.openExternal("https://www.live2d.com/en/sdk/download/web/")}
+                    >
+                      {language.t("wife.runtime.download")}
+                    </ButtonV2>
+                    <ButtonV2
+                      variant="neutral"
+                      size="normal"
+                      disabled={runtimeBusy()}
+                      onClick={() => {
+                        setRuntimeBusy(true)
+                        setRuntimeError(undefined)
+                        void installRuntime()()
+                          .then((result) => {
+                            if (!result.ok) {
+                              if (result.code !== "canceled") setRuntimeError(language.t(RUNTIME_ERROR_KEYS[result.code]))
+                              return
+                            }
+                            setRuntimeInstalled(true)
+                            void platform.restart()
+                          })
+                          .catch((error) =>
+                            setRuntimeError(error instanceof Error ? error.message : String(error)),
+                          )
+                          .finally(() => setRuntimeBusy(false))
+                      }}
+                    >
+                      {language.t(runtimeInstalled() ? "settings.wife.runtime.replace" : "wife.runtime.install")}
+                    </ButtonV2>
+                    <Show when={runtimeInstalled() && platform.removeLive2DRuntime}>
+                      {(removeRuntime) => (
+                        <ButtonV2
+                          variant="ghost-muted"
+                          size="normal"
+                          disabled={runtimeBusy()}
+                          onClick={() => {
+                            setRuntimeBusy(true)
+                            setRuntimeError(undefined)
+                            void removeRuntime()()
+                              .then(() => platform.restart())
+                              .catch((error) =>
+                                setRuntimeError(error instanceof Error ? error.message : String(error)),
+                              )
+                              .finally(() => setRuntimeBusy(false))
+                          }}
+                        >
+                          {language.t("settings.wife.runtime.remove")}
+                        </ButtonV2>
+                      )}
+                    </Show>
+                  </div>
+                  <Show when={runtimeError()}>
+                    <span class="text-12-regular text-icon-critical-base">{runtimeError()}</span>
+                  </Show>
+                </SettingsRowV2>
+              </SettingsListV2>
+            </div>
+          )}
+        </Show>
 
         <Show when={platform.importOpenCodePreferences}>
           {(runImport) => (

@@ -26,6 +26,7 @@ import { createDesktopDraftStore } from "./draft-store"
 import { nativeT } from "./native-translations"
 import { pickWifeModelFolder } from "./wife"
 import type { ProfileImportResult } from "./profile-import"
+import { getLive2DRuntimeStatus, installLive2DRuntime, removeLive2DRuntime } from "./live2d-runtime"
 
 const pickerFilters = (ext?: string[]) => {
   if (!ext || ext.length === 0) return undefined
@@ -215,6 +216,9 @@ export function registerIpcHandlers(deps: Deps) {
   ipcMain.handle("wife-pick-model-folder", (_event: IpcMainInvokeEvent, characterId: string) => {
     return pickWifeModelFolder(characterId)
   })
+  ipcMain.handle("wife-live2d-runtime-status", () => getLive2DRuntimeStatus())
+  ipcMain.handle("wife-live2d-runtime-install", () => installLive2DRuntime())
+  ipcMain.handle("wife-live2d-runtime-remove", () => removeLive2DRuntime())
 
   ipcMain.on("open-external", (_event: IpcMainEvent, url: string) => {
     openExternalURL(url)

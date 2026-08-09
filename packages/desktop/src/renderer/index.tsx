@@ -209,6 +209,9 @@ const createPlatform = (windowState: DesktopWindowState): Platform => {
     },
 
     pickWifeModelFolder: (characterId) => window.api.pickWifeModelFolder(characterId),
+    getLive2DRuntimeStatus: () => window.api.getLive2DRuntimeStatus(),
+    installLive2DRuntime: () => window.api.installLive2DRuntime(),
+    removeLive2DRuntime: () => window.api.removeLive2DRuntime(),
     importOpenCodePreferences: () => window.api.importOpenCodePreferences(),
 
     openExternal(url: string) {
