@@ -38,13 +38,12 @@ import { McpBrowser } from "./browser"
 const DEFAULT_TIMEOUT = 30_000
 const CLIENT_OPTIONS = {
   capabilities: {
-    // https://github.com/anomalyco/opencode/issues/11948
+    // sampling is disabled pending upstream MCP sampling support
     // sampling: {},
-    // https://github.com/anomalyco/opencode/issues/23066
+    // elicitation is disabled pending upstream MCP elicitation support
     // elicitation: {},
-    // https://github.com/anomalyco/opencode/issues/2308
+    // roots are supported; tasks stay disabled pending upstream task support
     roots: {},
-    // https://github.com/anomalyco/opencode/issues/28567
     // tasks: {},
   },
 } satisfies ClientOptions
