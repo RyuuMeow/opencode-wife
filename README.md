@@ -61,9 +61,9 @@ Panel controls:
 
 OpenCode Wife does **not** bundle `live2dcubismcore.min.js` or any sample model.
 
-1. **Settings → Wife → Live2D runtime** → **Download compatible core**.
-2. The button opens the official Live2D CDN file (`live2dcubismcore.min.js`); review the [Live2D license terms](https://www.live2d.com/en/sdk/license/).
-3. Select the downloaded file. The app verifies it, records its version and SHA-256, and installs it into the Wife profile.
+1. **Settings → Wife → Live2D runtime** → **Download and install**.
+2. Wife downloads the compatible Core from the official Live2D CDN and verifies it (version and SHA-256 are recorded); downloading implies acceptance of the [Live2D license terms](https://www.live2d.com/en/sdk/license/).
+3. **Choose file…** accepts an SDK ZIP or `live2dcubismcore.min.js` from an older SDK release.
 4. Replace or remove the runtime at any time from the same screen.
 
 **Core compatibility**: the bundled runtime requires a Cubism Core with the classic `csmGetDrawableRenderOrders` API. The latest Cubism 5 SDK release renamed it and is rejected with a clear message — use the official CDN file (`https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js`) or an earlier SDK release instead.

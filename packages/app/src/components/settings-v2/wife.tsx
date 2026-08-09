@@ -27,11 +27,15 @@ const contrastOptions = ["soft", "standard", "strong"] satisfies WifeChatContras
 const motionOptions = ["full", "subtle", "off"] satisfies WifeChatMotion[]
 const headerOptions = ["every", "turn", "hidden"] satisfies WifeChatHeader[]
 
-const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core", string> = {
+const RUNTIME_ERROR_KEYS: Record<
+  "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" | "download-failed",
+  string
+> = {
   "core-not-found": "wife.runtime.error.coreNotFound",
   "invalid-size": "wife.runtime.error.invalidSize",
   "invalid-core": "wife.runtime.error.invalidCore",
   "incompatible-core": "wife.runtime.error.incompatibleCore",
+  "download-failed": "wife.runtime.error.downloadFailed",
 }
 
 export const SettingsWifeV2: Component = () => {
@@ -272,15 +276,37 @@ export const SettingsWifeV2: Component = () => {
                   )}
                 >
                   <div class="flex items-center gap-2">
+                    <Show when={platform.downloadLive2DRuntime}>
+                      {(downloadRuntime) => (
+                        <ButtonV2
+                          variant="neutral"
+                          size="normal"
+                          disabled={runtimeBusy()}
+                          onClick={() => {
+                            setRuntimeBusy(true)
+                            setRuntimeError(undefined)
+                            void downloadRuntime()()
+                              .then((result) => {
+                                if (!result.ok) {
+                                  if (result.code !== "canceled")
+                                    setRuntimeError(language.t(RUNTIME_ERROR_KEYS[result.code]))
+                                  return
+                                }
+                                setRuntimeInstalled(true)
+                                void platform.restart()
+                              })
+                              .catch((error) =>
+                                setRuntimeError(error instanceof Error ? error.message : String(error)),
+                              )
+                              .finally(() => setRuntimeBusy(false))
+                          }}
+                        >
+                          {language.t(runtimeInstalled() ? "settings.wife.runtime.replace" : "wife.runtime.downloadAndInstall")}
+                        </ButtonV2>
+                      )}
+                    </Show>
                     <ButtonV2
                       variant="outline"
-                      size="normal"
-                      onClick={() => platform.openExternal("https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js")}
-                    >
-                      {language.t("wife.runtime.download")}
-                    </ButtonV2>
-                    <ButtonV2
-                      variant="neutral"
                       size="normal"
                       disabled={runtimeBusy()}
                       onClick={() => {
@@ -301,7 +327,7 @@ export const SettingsWifeV2: Component = () => {
                           .finally(() => setRuntimeBusy(false))
                       }}
                     >
-                      {language.t(runtimeInstalled() ? "settings.wife.runtime.replace" : "wife.runtime.install")}
+                      {language.t("wife.runtime.chooseFile")}
                     </ButtonV2>
                     <Show when={runtimeInstalled() && platform.removeLive2DRuntime}>
                       {(removeRuntime) => (

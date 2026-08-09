@@ -57,7 +57,7 @@ export type Live2DRuntimeStatus = {
 }
 export type Live2DRuntimeInstallResult =
   | { ok: true; status: Live2DRuntimeStatus }
-  | { ok: false; code: "canceled" | "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" }
+  | { ok: false; code: "canceled" | "download-failed" | "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" }
 
 export type ElectronAPI = {
   killSidecar: () => Promise<void>
@@ -112,6 +112,7 @@ export type ElectronAPI = {
     files: { relativePath: string; size: number; text: string | null }[]
   } | null>
   getLive2DRuntimeStatus: () => Promise<Live2DRuntimeStatus>
+  downloadLive2DRuntime: () => Promise<Live2DRuntimeInstallResult>
   installLive2DRuntime: () => Promise<Live2DRuntimeInstallResult>
   removeLive2DRuntime: () => Promise<void>
   openExternal: (url: string) => void

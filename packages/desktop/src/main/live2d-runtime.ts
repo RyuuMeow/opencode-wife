@@ -17,11 +17,13 @@ import {
 
 export const live2dRuntimeProtocol = "wife-runtime"
 
+const CORE_DOWNLOAD_URL = "https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js"
+
 export type { Live2DRuntimeStatus } from "./live2d-runtime-core"
 
 export type Live2DRuntimeInstallResult =
   | { ok: true; status: Live2DRuntimeStatus }
-  | { ok: false; code: "canceled" | Live2DRuntimeInstallErrorCode }
+  | { ok: false; code: "canceled" | "download-failed" | Live2DRuntimeInstallErrorCode }
 
 export async function getLive2DRuntimeStatus(): Promise<Live2DRuntimeStatus> {
   const development = process.env.LIVE2D_CUBISM_CORE_PATH
@@ -31,6 +33,18 @@ export async function getLive2DRuntimeStatus(): Promise<Live2DRuntimeStatus> {
   const metadata = await readMetadata()
   if (!metadata || !(await validFile(corePath()))) return { installed: false }
   return metadata
+}
+
+export async function downloadLive2DRuntime(): Promise<Live2DRuntimeInstallResult> {
+  let data: Uint8Array
+  try {
+    const response = await net.fetch(CORE_DOWNLOAD_URL)
+    if (!response.ok) return { ok: false, code: "download-failed" }
+    data = new Uint8Array(await response.arrayBuffer())
+  } catch {
+    return { ok: false, code: "download-failed" }
+  }
+  return installCoreFromBytes(data, "live2dcubismcore.min.js")
 }
 
 export async function installLive2DRuntime(): Promise<Live2DRuntimeInstallResult> {
@@ -43,30 +57,8 @@ export async function installLive2DRuntime(): Promise<Live2DRuntimeInstallResult
   })
   const selected = result.filePaths[0]
   if (result.canceled || !selected) return { ok: false, code: "canceled" }
-  try {
-    const data = await readCoreFromFile(selected)
-    validateCore(data)
-    await mkdir(runtimeRoot(), { recursive: true })
-    const temporary = `${corePath()}.${process.pid}.tmp`
-    await writeFile(temporary, data)
-    await rename(temporary, corePath())
-    const text = new TextDecoder().decode(data.subarray(0, Math.min(data.length, 32_000)))
-    const status: Live2DRuntimeStatus = {
-      installed: true,
-      source: basename(selected),
-      sha256: createHash("sha256").update(data).digest("hex"),
-      version: detectCoreVersion(text),
-      installedAt: new Date().toISOString(),
-    }
-    await writeFile(metadataPath(), `${JSON.stringify(status, null, 2)}\n`, "utf8")
-    return { ok: true, status }
-  } catch (error) {
-    if (error instanceof Live2DRuntimeInstallError) {
-      writeLog("live2d", "core install rejected", { code: error.code, source: basename(selected) }, "warn")
-      return { ok: false, code: error.code }
-    }
-    throw error
-  }
+  const data = await readCoreFromFile(selected)
+  return installCoreFromBytes(data, basename(selected))
 }
 
 export async function removeLive2DRuntime() {
@@ -85,6 +77,32 @@ export function registerLive2DRuntimeProtocol() {
       return new Response("Not found", { status: 404 })
     })
   })
+}
+
+async function installCoreFromBytes(data: Uint8Array, source: string): Promise<Live2DRuntimeInstallResult> {
+  try {
+    validateCore(data)
+    await mkdir(runtimeRoot(), { recursive: true })
+    const temporary = `${corePath()}.${process.pid}.tmp`
+    await writeFile(temporary, data)
+    await rename(temporary, corePath())
+    const text = new TextDecoder().decode(data.subarray(0, Math.min(data.length, 32_000)))
+    const status: Live2DRuntimeStatus = {
+      installed: true,
+      source,
+      sha256: createHash("sha256").update(data).digest("hex"),
+      version: detectCoreVersion(text),
+      installedAt: new Date().toISOString(),
+    }
+    await writeFile(metadataPath(), `${JSON.stringify(status, null, 2)}\n`, "utf8")
+    return { ok: true, status }
+  } catch (error) {
+    if (error instanceof Live2DRuntimeInstallError) {
+      writeLog("live2d", "core install rejected", { code: error.code, source }, "warn")
+      return { ok: false, code: error.code }
+    }
+    throw error
+  }
 }
 
 async function readMetadata() {

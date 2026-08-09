@@ -15,7 +15,7 @@ import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
 import { useLayout } from "@/context/layout"
 import { useLocal, type ModelKey, type ModelSelection } from "@/context/local"
-import { usePlatform } from "@/context/platform"
+import { usePlatform, type Live2DRuntimeInstallResult } from "@/context/platform"
 import { useSDK } from "@/context/sdk"
 import { useServerSDK } from "@/context/server-sdk"
 import { useSettings } from "@/context/settings"
@@ -68,11 +68,15 @@ type WifePanelPreference = {
 
 let live2dRuntimeLoad: Promise<void> | undefined
 
-const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core", string> = {
+const RUNTIME_ERROR_KEYS: Record<
+  "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" | "download-failed",
+  string
+> = {
   "core-not-found": "wife.runtime.error.coreNotFound",
   "invalid-size": "wife.runtime.error.invalidSize",
   "invalid-core": "wife.runtime.error.invalidCore",
   "incompatible-core": "wife.runtime.error.incompatibleCore",
+  "download-failed": "wife.runtime.error.downloadFailed",
 }
 
 function loadLive2DRuntime() {
@@ -94,6 +98,7 @@ function loadLive2DRuntime() {
 function RuntimeSetup(props: {
   state: () => "missing" | "installing" | "error"
   error: () => string | undefined
+  onDownload: () => void
   onInstall: () => void
 }) {
   const language = useLanguage()
@@ -108,15 +113,16 @@ function RuntimeSetup(props: {
         </Show>
       </div>
       <div class="flex flex-wrap items-center justify-center gap-2">
+        <ButtonV2 size="small" variant="neutral" disabled={props.state() === "installing"} onClick={props.onDownload}>
+          {language.t(props.state() === "installing" ? "wife.runtime.installing" : "wife.runtime.downloadAndInstall")}
+        </ButtonV2>
         <ButtonV2
           size="small"
           variant="outline"
-          onClick={() => platform.openExternal("https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js")}
+          disabled={props.state() === "installing"}
+          onClick={props.onInstall}
         >
-          {language.t("wife.runtime.download")}
-        </ButtonV2>
-        <ButtonV2 size="small" variant="neutral" disabled={props.state() === "installing"} onClick={props.onInstall}>
-          {language.t(props.state() === "installing" ? "wife.runtime.installing" : "wife.runtime.install")}
+          {language.t("wife.runtime.chooseFile")}
         </ButtonV2>
       </div>
       <button
@@ -195,6 +201,32 @@ export function WifePanel(props: {
     onCleanup(() => window.clearTimeout(timer))
   })
 
+  const applyRuntimeResult = (result: Live2DRuntimeInstallResult) => {
+    if (!result.ok) {
+      if (result.code === "canceled") {
+        setRuntimeState("missing")
+        return
+      }
+      setRuntimeError(language.t(RUNTIME_ERROR_KEYS[result.code]))
+      setRuntimeState("error")
+      return
+    }
+    void loadLive2DRuntime().then(() => setRuntimeState("ready"))
+  }
+
+  const downloadRuntime = () => {
+    const download = platform.downloadLive2DRuntime
+    if (!download) return
+    setRuntimeError(undefined)
+    setRuntimeState("installing")
+    void download()
+      .then(applyRuntimeResult)
+      .catch((error) => {
+        setRuntimeError(error instanceof Error ? error.message : String(error))
+        setRuntimeState("error")
+      })
+  }
+
   const installRuntime = () => {
     const install = platform.installLive2DRuntime
     if (!install) {
@@ -204,18 +236,7 @@ export function WifePanel(props: {
     setRuntimeError(undefined)
     setRuntimeState("installing")
     void install()
-      .then((result) => {
-        if (!result.ok) {
-          if (result.code === "canceled") {
-            setRuntimeState("missing")
-            return
-          }
-          setRuntimeError(language.t(RUNTIME_ERROR_KEYS[result.code]))
-          setRuntimeState("error")
-          return
-        }
-        void loadLive2DRuntime().then(() => setRuntimeState("ready"))
-      })
+      .then(applyRuntimeResult)
       .catch((error) => {
         setRuntimeError(error instanceof Error ? error.message : String(error))
         setRuntimeState("error")
@@ -545,6 +566,7 @@ export function WifePanel(props: {
                                 : "missing"
                           }
                           error={runtimeError}
+                          onDownload={downloadRuntime}
                           onInstall={installRuntime}
                         />
                       </Show>

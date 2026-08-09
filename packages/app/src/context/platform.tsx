@@ -41,7 +41,7 @@ export type Live2DRuntimeStatus = {
 
 export type Live2DRuntimeInstallResult =
   | { ok: true; status: Live2DRuntimeStatus }
-  | { ok: false; code: "canceled" | "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" }
+  | { ok: false; code: "canceled" | "download-failed" | "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" }
 
 export type FatalRendererErrorLog = {
   error: string
@@ -90,6 +90,7 @@ type PlatformBase = {
 
   /** Install and manage a user-supplied Live2D Cubism Core runtime. */
   getLive2DRuntimeStatus?(): Promise<Live2DRuntimeStatus>
+  downloadLive2DRuntime?(): Promise<Live2DRuntimeInstallResult>
   installLive2DRuntime?(): Promise<Live2DRuntimeInstallResult>
   removeLive2DRuntime?(): Promise<void>
 

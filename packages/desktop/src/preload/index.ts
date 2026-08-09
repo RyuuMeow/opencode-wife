@@ -100,6 +100,7 @@ const api: ElectronAPI = {
   saveFilePicker: (opts) => ipcRenderer.invoke("save-file-picker", opts),
   pickWifeModelFolder: (characterId) => ipcRenderer.invoke("wife-pick-model-folder", characterId),
   getLive2DRuntimeStatus: () => ipcRenderer.invoke("wife-live2d-runtime-status"),
+  downloadLive2DRuntime: () => ipcRenderer.invoke("wife-live2d-runtime-download"),
   installLive2DRuntime: () => ipcRenderer.invoke("wife-live2d-runtime-install"),
   removeLive2DRuntime: () => ipcRenderer.invoke("wife-live2d-runtime-remove"),
   openExternal: (url) => ipcRenderer.send("open-external", url),

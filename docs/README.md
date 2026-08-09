@@ -6,7 +6,7 @@
 ## Getting started
 
 1. Install the Windows x64 installer. The first release is unsigned, so Windows SmartScreen will warn — choose "More info" → "Run anyway".
-2. Side Chat works out of the box. Live2D is optional: open **Settings → Wife → Live2D runtime**, download the Web SDK from Live2D, accept its terms, and select the SDK ZIP or `live2dcubismcore.min.js`.
+2. Side Chat works out of the box. Live2D is optional: open **Settings → Wife → Live2D runtime** and choose **Download and install** — the compatible Cubism Core is fetched from the official Live2D CDN and verified (download implies acceptance of the Live2D terms).
 3. Attach a Live2D model folder to a character (**Settings → Wife → Characters** → Edit → model folder). The panel (`mod+alt+w`) shows the character overlaid with the Side Chat.
 
 ### Panel controls
