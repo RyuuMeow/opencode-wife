@@ -158,8 +158,7 @@ export const dict = {
   "command.terminal.toggle": "สลับเทอร์มินัล",
   "command.fileTree.toggle": "สลับแผนผังไฟล์",
   "command.review.toggle": "สลับการตรวจสอบ",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "สลับ Wife",
   "command.terminal.new": "เทอร์มินัลใหม่",
   "command.terminal.new.description": "สร้างแท็บเทอร์มินัลใหม่",
   "command.steps.toggle": "สลับขั้นตอน",
@@ -742,7 +741,6 @@ export const dict = {
   "session.tab.context": "บริบท",
   "session.tab.unknown": "เซสชันที่ไม่รู้จัก",
   "session.panel.reviewAndFiles": "ตรวจสอบและไฟล์",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "ไม่พบเซสชันนี้",
   "session.error.notFound.description": "แท็บนี้อ้างถึงเซสชันที่ไม่มีอยู่บนเซิร์ฟเวอร์นี้แล้ว",
@@ -900,48 +898,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "โหมด Wife",
   "wife.characters.title": "ตัวละคร",
   "wife.characters.empty": "ยังไม่ได้ลงทะเบียนตัวละครใด ๆ",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "ยังไม่ได้กำหนดค่า",
+  "wife.characters.newDefault": "ตัวละครใหม่",
+  "settings.wife.section.chat": "แชทด้านข้าง",
+  "settings.wife.section.choices": "ตัวเลือกการตอบกลับ",
+  "settings.wife.choices.enabled.title": "สร้างตัวเลือกการตอบกลับ",
+  "settings.wife.choices.enabled.description": "แนะนำคำตอบสั้น ๆ หลังจากการตอบกลับของ Wife สำเร็จแต่ละครั้ง",
+  "settings.wife.choices.model.title": "โมเดลสร้างตัวเลือก",
+  "settings.wife.choices.model.description": "ใช้โมเดลราคาถูกแยกต่างหากโดยไม่ทำให้การตอบกลับหลักล่าช้า",
+  "settings.wife.choices.model.unavailable": "โมเดลหรือตัวแปรการให้เหตุผลที่เลือกไม่พร้อมใช้งาน",
+  "settings.wife.choices.variant.title": "ระดับการใช้เหตุผล",
+  "settings.wife.choices.variant.description": "ระดับที่ต่ำกว่ามักเพียงพอสำหรับคำแนะนำการตอบกลับสั้น ๆ",
+  "wife.characters.settings.changeModel": "เปลี่ยนโมเดล",
+  "wife.characters.settings.model": "โมเดล Live2D",
+  "wife.characters.settings.delete": "ลบตัวละคร",
+  "wife.characters.settings.removeAvatar": "นำอวตารออก",
+  "wife.characters.settings.general": "ทั่วไป",
+  "wife.characters.settings.persona": "บุคลิก",
+  "wife.characters.settings.personaDescription": "กำหนดว่าตัวละครนี้เรียกคุณอย่างไรและพูดในแชทด้านข้างอย่างไร",
+  "wife.characters.settings.userAddress": "วิธีที่พวกเขาเรียกคุณ",
+  "wife.characters.settings.userAddressDescription": "ชื่อหรือตำแหน่งที่ตัวละครใช้เรียกคุณ (ไม่บังคับ)",
+  "wife.characters.settings.userAddressPlaceholder": "เช่น กัปตัน",
+  "wife.characters.settings.personaInstructions": "บุคลิกและสไตล์การพูด",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "อธิบายบุคลิกภาพ ความสัมพันธ์ น้ำเสียง และนิสัยการสนทนาของตัวละคร",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "เช่น สงบและช่างสังเกต พูดเป็นธรรมชาติด้วยอารมณ์ขันเบา ๆ",
+  "wife.characters.settings.dangerZone": "โซนอันตราย",
+  "wife.characters.settings.nameDescription": "ชื่อที่แสดงของตัวละคร",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "เลือกโฟลเดอร์ที่มีโมเดลและทรัพยากรทั้งหมด (.model3.json, .moc3, พื้นผิว, การเคลื่อนไหว)",
+  "wife.characters.settings.avatarDescription": "รูปโปรไฟล์สี่เหลี่ยมที่แสดงสำหรับตัวละครนี้",
+  "wife.characters.settings.mappingDescription": "จับคู่การเคลื่อนไหวและการแสดงออกกับสถานะของตัวละคร",
+  "wife.characters.settings.deleteDescription": "ลบตัวละครนี้และการตั้งค่าอย่างถาวร",
+  "wife.characters.edit": "แก้ไข",
+  "wife.characters.settings": "การตั้งค่าตัวละคร",
+  "wife.characters.settings.avatar": "อวตาร",
+  "wife.characters.backToList": "กลับไปยังตัวละคร",
   "wife.import.title": "นำเข้าตัวละคร",
   "wife.import.step.scan.title": "ผลการสแกน",
   "wife.import.step.mapping.title": "การจับคู่ความหมาย",
@@ -965,85 +958,57 @@ export const dict = {
   "wife.mapping.emotions": "อารมณ์",
   "wife.mapping.none": "ไม่มี",
   "wife.mapping.fallback": "ถอยกลับไปที่",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "แนบโมเดล Live2D กับตัวละครเพื่อดูที่นี่",
+  "wife.panel.empty.web": "การเรนเดอร์ Live2D พร้อมใช้งานในแอปเดสก์ท็อป",
+  "wife.panel.empty.loadFailed": "ไม่สามารถโหลดโมเดล Live2D ได้",
+  "wife.panel.empty.runtimeMissing": "รันไทม์ Live2D ไม่พร้อมใช้งาน",
+  "wife.panel.empty.openSettings": "เปิดการตั้งค่า",
+  "wife.panel.chat.placeholder": "พูดคุยกับเพื่อนร่วมทางของคุณ…",
+  "wife.panel.commands.send.title": "ส่งไปยังเอเจนต์",
+  "wife.panel.commands.send.description": "เปลี่ยนแชทด้านข้างนี้เป็นพรอมต์ของเอเจนต์ที่แก้ไขได้",
+  "wife.panel.commands.send.working": "กำลังเตรียมสำหรับเอเจนต์",
+  "wife.panel.commands.send.draftTitle": "ร่างของเอเจนต์ไม่ว่างเปล่า",
+  "wife.panel.commands.send.draftDescription": "แทนที่ข้อความและการกล่าวถึง หรือเพิ่มงานที่เตรียมไว้",
+  "wife.panel.commands.send.replace": "แทนที่",
+  "wife.panel.commands.send.append": "เพิ่ม",
+  "wife.panel.commands.clear.title": "ล้างแชทด้านข้าง",
+  "wife.panel.commands.clear.suggestionDescription": "ล้างแชทด้านข้างนี้และความทรงจำอย่างถาวร",
+  "wife.panel.commands.clear.description": "การดำเนินการนี้จะลบประวัติและความทรงจำของแชทด้านข้างปัจจุบันอย่างถาวร",
+  "wife.panel.commands.clear.confirm": "ล้าง",
+  "wife.panel.commands.clear.working": "กำลังล้างแชทด้านข้าง",
+  "wife.panel.chat.historyTitle": "ประวัติแชท",
+  "wife.panel.chat.historyClose": "ปิดประวัติแชท",
+  "wife.panel.chat.roleAssistant": "เพื่อนร่วมทาง",
+  "wife.panel.chat.roleUser": "คุณ",
+  "wife.panel.selectCharacter": "เลือกตัวละคร",
+  "wife.panel.modelInteraction.enter": "ปรับโมเดล Live2D",
+  "wife.panel.modelInteraction.exit": "กลับไปที่แชท",
+  "wife.panel.test.none": "ไม่มี",
+  "wife.panel.test.state.idle": "ว่าง",
+  "wife.panel.test.state.listening": "กำลังฟัง",
+  "wife.panel.test.state.thinking": "กำลังคิด",
+  "wife.panel.test.state.working": "กำลังทำงาน",
+  "wife.panel.test.state.waiting_user": "กำลังรอคุณ",
+  "wife.panel.test.state.speaking": "กำลังพูด",
+  "wife.panel.test.state.success": "สำเร็จ",
+  "wife.panel.test.state.error": "ข้อผิดพลาด",
+  "wife.panel.test.gesture.thinking": "กำลังคิด",
+  "wife.panel.test.gesture.nod": "พยักหน้า",
+  "wife.panel.test.gesture.shake_head": "ส่ายหัว",
+  "wife.panel.test.gesture.wave": "โบกมือ",
+  "wife.panel.test.gesture.look_at_user": "มองคุณ",
+  "wife.panel.test.gesture.celebrate": "เฉลิมฉลอง",
+  "wife.panel.test.emotion.neutral": "เป็นกลาง",
+  "wife.panel.test.emotion.focused": "จดจ่อ",
+  "wife.panel.test.emotion.happy": "มีความสุข",
+  "wife.panel.test.emotion.concerned": "กังวล",
+  "wife.panel.test.emotion.confused": "สับสน",
+  "wife.panel.test.emotion.annoyed": "หงุดหงิด",
+  "wife.panel.test.emotion.embarrassed": "เขินอาย",
   "settings.general.row.wifeMode.description":
     "แสดงเพื่อนร่วมทางที่ตอบสนองต่อเซสชันการเขียนโค้ดของคุณ ปิดเพื่อใช้โหมดคลาสสิกโดยไม่มีเลเยอร์ Wife",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "การมองเห็นข้อความ",
+  "settings.general.row.wifeChatHeightRatio.description": "สัดส่วนความสูงของแผงที่ฟองแชทจะเต็มได้ก่อนที่ข้อความเก่าจะจางหาย",
 
   "settings.general.row.language.title": "ภาษา",
   "settings.general.row.language.description": "เปลี่ยนภาษาที่แสดงสำหรับ OpenCode",

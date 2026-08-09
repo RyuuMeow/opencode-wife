@@ -153,8 +153,7 @@ export const dict = {
   "command.terminal.toggle": "Przełącz terminal",
   "command.fileTree.toggle": "Przełącz drzewo plików",
   "command.review.toggle": "Przełącz przegląd",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Przełącz Wife",
   "command.terminal.new": "Nowy terminal",
   "command.terminal.new.description": "Utwórz nową kartę terminala",
   "command.steps.toggle": "Przełącz kroki",
@@ -697,7 +696,6 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Nieznana sesja",
   "session.panel.reviewAndFiles": "Przegląd i pliki",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Nie można znaleźć tej sesji",
   "session.error.notFound.description": "Ta karta wskazuje sesję, która nie istnieje już na tym serwerze.",
@@ -850,48 +848,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Tryb Wife",
   "wife.characters.title": "Postacie",
   "wife.characters.empty": "Nie zarejestrowano jeszcze żadnej postaci",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Nieskonfigurowane",
+  "wife.characters.newDefault": "Nowa postać",
+  "settings.wife.section.chat": "Czat boczny",
+  "settings.wife.section.choices": "Opcje odpowiedzi",
+  "settings.wife.choices.enabled.title": "Generuj opcje odpowiedzi",
+  "settings.wife.choices.enabled.description": "Sugeruj krótkie odpowiedzi po każdej udanej odpowiedzi Wife",
+  "settings.wife.choices.model.title": "Model generowania opcji",
+  "settings.wife.choices.model.description": "Używa osobnego niedrogiego modelu bez opóźniania głównej odpowiedzi",
+  "settings.wife.choices.model.unavailable": "Wybrany model lub wariant rozumowania jest niedostępny",
+  "settings.wife.choices.variant.title": "Poziom rozumowania",
+  "settings.wife.choices.variant.description": "Niższy poziom zwykle wystarcza do krótkich sugestii odpowiedzi",
+  "wife.characters.settings.changeModel": "Zmień model",
+  "wife.characters.settings.model": "Model Live2D",
+  "wife.characters.settings.delete": "Usuń postać",
+  "wife.characters.settings.removeAvatar": "Usuń awatar",
+  "wife.characters.settings.general": "Ogólne",
   "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaDescription": "Określ, jak ta postać zwraca się do Ciebie i mówi w Czacie bocznym",
+  "wife.characters.settings.userAddress": "Jak się do Ciebie zwracają",
+  "wife.characters.settings.userAddressDescription": "Opcjonalne imię lub tytuł, którego postać używa wobec Ciebie",
+  "wife.characters.settings.userAddressPlaceholder": "np. Kapitanie",
+  "wife.characters.settings.personaInstructions": "Persona i styl mówienia",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Opisz osobowość, relację, ton i nawyki konwersacyjne postaci",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "np. Spokojny i spostrzegawczy, mówi naturalnie z delikatnym humorem",
+  "wife.characters.settings.dangerZone": "Strefa niebezpieczna",
+  "wife.characters.settings.nameDescription": "Wyświetlana nazwa postaci",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "Wybierz folder zawierający model i wszystkie jego zasoby (.model3.json, .moc3, tekstury, ruchy)",
+  "wife.characters.settings.avatarDescription": "Kwadratowe zdjęcie profilowe wyświetlane dla tej postaci",
+  "wife.characters.settings.mappingDescription": "Przypisz ruchy i wyrazy do stanów postaci",
+  "wife.characters.settings.deleteDescription": "Trwale usuń tę postać i jej ustawienia",
+  "wife.characters.edit": "Edytuj",
+  "wife.characters.settings": "Ustawienia postaci",
+  "wife.characters.settings.avatar": "Awatar",
+  "wife.characters.backToList": "Wróć do postaci",
   "wife.import.title": "Importuj postać",
   "wife.import.step.scan.title": "Wyniki skanowania",
   "wife.import.step.mapping.title": "Mapowanie semantyczne",
@@ -915,85 +908,57 @@ export const dict = {
   "wife.mapping.emotions": "Emocje",
   "wife.mapping.none": "Brak",
   "wife.mapping.fallback": "Powrót do",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Dołącz model Live2D do postaci, aby zobaczyć go tutaj",
+  "wife.panel.empty.web": "Renderowanie Live2D jest dostępne w aplikacji desktop",
+  "wife.panel.empty.loadFailed": "Nie udało się załadować modelu Live2D",
+  "wife.panel.empty.runtimeMissing": "Środowisko uruchomieniowe Live2D jest niedostępne",
+  "wife.panel.empty.openSettings": "Otwórz ustawienia",
+  "wife.panel.chat.placeholder": "Porozmawiaj ze swoim towarzyszem…",
+  "wife.panel.commands.send.title": "Wyślij do Agenta",
+  "wife.panel.commands.send.description": "Zamień ten czat boczny w edytowalny prompt Agenta",
+  "wife.panel.commands.send.working": "Przygotowywanie dla Agenta",
+  "wife.panel.commands.send.draftTitle": "Szkic Agenta nie jest pusty",
+  "wife.panel.commands.send.draftDescription": "Zastąp jego tekst i wzmianki lub dołącz przygotowane zadanie.",
+  "wife.panel.commands.send.replace": "Zastąp",
+  "wife.panel.commands.send.append": "Dołącz",
+  "wife.panel.commands.clear.title": "Wyczyść czat boczny",
+  "wife.panel.commands.clear.suggestionDescription": "Trwale wyczyść ten czat boczny i jego pamięć",
+  "wife.panel.commands.clear.description": "To trwale usunie historię i pamięć bieżącego czatu bocznego.",
+  "wife.panel.commands.clear.confirm": "Wyczyść",
+  "wife.panel.commands.clear.working": "Czyszczenie czatu bocznego",
+  "wife.panel.chat.historyTitle": "Historia czatu",
+  "wife.panel.chat.historyClose": "Zamknij historię czatu",
+  "wife.panel.chat.roleAssistant": "Towarzysz",
+  "wife.panel.chat.roleUser": "Ty",
+  "wife.panel.selectCharacter": "Wybierz postać",
+  "wife.panel.modelInteraction.enter": "Dostosuj model Live2D",
+  "wife.panel.modelInteraction.exit": "Wróć do czatu",
+  "wife.panel.test.none": "Brak",
+  "wife.panel.test.state.idle": "Bezczynny",
+  "wife.panel.test.state.listening": "Słucha",
+  "wife.panel.test.state.thinking": "Myśli",
+  "wife.panel.test.state.working": "Pracuje",
+  "wife.panel.test.state.waiting_user": "Czeka na Ciebie",
+  "wife.panel.test.state.speaking": "Mówi",
+  "wife.panel.test.state.success": "Sukces",
+  "wife.panel.test.state.error": "Błąd",
+  "wife.panel.test.gesture.thinking": "Myśli",
+  "wife.panel.test.gesture.nod": "Kiwnięcie głową",
+  "wife.panel.test.gesture.shake_head": "Potrząsanie głową",
+  "wife.panel.test.gesture.wave": "Machanie",
+  "wife.panel.test.gesture.look_at_user": "Patrzy na Ciebie",
+  "wife.panel.test.gesture.celebrate": "Świętowanie",
+  "wife.panel.test.emotion.neutral": "Neutralny",
+  "wife.panel.test.emotion.focused": "Skupiony",
+  "wife.panel.test.emotion.happy": "Szczęśliwy",
+  "wife.panel.test.emotion.concerned": "Zaniepokojony",
+  "wife.panel.test.emotion.confused": "Zdezorientowany",
+  "wife.panel.test.emotion.annoyed": "Zirytowany",
+  "wife.panel.test.emotion.embarrassed": "Zażenowany",
   "settings.general.row.wifeMode.description":
     "Pokazuje towarzyszkę, która reaguje na Twoją sesję kodowania. Wyłącz, aby korzystać z trybu klasycznego bez warstwy Wife.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Widoczność wiadomości",
+  "settings.general.row.wifeChatHeightRatio.description": "Część wysokości panelu, którą dymki czatu mogą wypełnić, zanim starsze wiadomości znikną",
   "settings.general.row.language.title": "Język",
   "settings.general.row.language.description": "Zmień język wyświetlania dla OpenCode",
   "settings.general.row.shell.title": "Powłoka terminala",

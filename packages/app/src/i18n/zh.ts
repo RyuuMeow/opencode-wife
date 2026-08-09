@@ -174,8 +174,7 @@ export const dict = {
   "command.fileTree.toggle": "切换文件树",
 
   "command.review.toggle": "切换审查",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "切换 Wife",
 
   "command.terminal.new": "新建终端",
   "command.terminal.new.description": "创建新的终端标签页",
@@ -743,7 +742,6 @@ export const dict = {
   "session.tab.context": "上下文",
   "session.tab.unknown": "未知会话",
   "session.panel.reviewAndFiles": "审查和文件",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "找不到此会话",
   "session.error.notFound.description": "此标签页指向的会话已不存在于此服务器上。",
@@ -898,48 +896,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife 模式",
   "wife.characters.title": "角色",
   "wife.characters.empty": "尚未注册任何角色",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "未配置",
+  "wife.characters.newDefault": "新角色",
+  "settings.wife.section.chat": "侧边聊天",
+  "settings.wife.section.choices": "回复选项",
+  "settings.wife.choices.enabled.title": "生成回复选项",
+  "settings.wife.choices.enabled.description": "在每次成功的 Wife 回复后建议简短回复",
+  "settings.wife.choices.model.title": "选项生成模型",
+  "settings.wife.choices.model.description": "使用独立的低成本模型，不延迟主回复",
+  "settings.wife.choices.model.unavailable": "所选模型或推理变体不可用",
+  "settings.wife.choices.variant.title": "推理力度",
+  "settings.wife.choices.variant.description": "较低的力度通常足以生成简短回复建议",
+  "wife.characters.settings.changeModel": "更换模型",
+  "wife.characters.settings.model": "Live2D 模型",
+  "wife.characters.settings.delete": "删除角色",
+  "wife.characters.settings.removeAvatar": "移除头像",
+  "wife.characters.settings.general": "通用",
+  "wife.characters.settings.persona": "人设",
+  "wife.characters.settings.personaDescription": "定义此角色在侧边聊天中如何称呼你、如何说话",
+  "wife.characters.settings.userAddress": "如何称呼你",
+  "wife.characters.settings.userAddressDescription": "角色用来称呼你的可选名字或称号",
+  "wife.characters.settings.userAddressPlaceholder": "例如：指挥官",
+  "wife.characters.settings.personaInstructions": "人设与说话风格",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "描述角色的性格、关系、语气和对话习惯",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "例如：冷静且善于观察，说话自然，带点温和的幽默",
+  "wife.characters.settings.dangerZone": "危险区",
+  "wife.characters.settings.nameDescription": "角色显示名称",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "选择包含模型及其所有资源的文件夹（.model3.json、.moc3、纹理、动作）",
+  "wife.characters.settings.avatarDescription": "显示此角色所用的方形头像",
+  "wife.characters.settings.mappingDescription": "将动作和表情映射到角色状态",
+  "wife.characters.settings.deleteDescription": "永久删除此角色及其设置",
+  "wife.characters.edit": "编辑",
+  "wife.characters.settings": "角色设置",
+  "wife.characters.settings.avatar": "头像",
+  "wife.characters.backToList": "返回角色列表",
   "wife.import.title": "导入角色",
   "wife.import.step.scan.title": "扫描结果",
   "wife.import.step.mapping.title": "语义映射",
@@ -963,85 +956,57 @@ export const dict = {
   "wife.mapping.emotions": "情绪",
   "wife.mapping.none": "无",
   "wife.mapping.fallback": "回退到",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "为角色附加一个 Live2D 模型即可在此查看",
+  "wife.panel.empty.web": "Live2D 渲染可在桌面应用中查看",
+  "wife.panel.empty.loadFailed": "Live2D 模型加载失败",
+  "wife.panel.empty.runtimeMissing": "Live2D 运行时不可用",
+  "wife.panel.empty.openSettings": "打开设置",
+  "wife.panel.chat.placeholder": "和你的伴侣聊聊…",
+  "wife.panel.commands.send.title": "发送给 Agent",
+  "wife.panel.commands.send.description": "将此侧边聊天整理为可编辑的 Agent 提示词",
+  "wife.panel.commands.send.working": "正在准备发送给 Agent",
+  "wife.panel.commands.send.draftTitle": "Agent 草稿不为空",
+  "wife.panel.commands.send.draftDescription": "替换其中的文本和提及，或将准备好的任务追加在后面。",
+  "wife.panel.commands.send.replace": "替换",
+  "wife.panel.commands.send.append": "追加",
+  "wife.panel.commands.clear.title": "清空侧边聊天",
+  "wife.panel.commands.clear.suggestionDescription": "永久清除此侧边聊天及其记忆",
+  "wife.panel.commands.clear.description": "这会永久删除当前侧边聊天的历史和记忆。",
+  "wife.panel.commands.clear.confirm": "清空",
+  "wife.panel.commands.clear.working": "正在清空侧边聊天",
+  "wife.panel.chat.historyTitle": "聊天记录",
+  "wife.panel.chat.historyClose": "关闭聊天记录",
+  "wife.panel.chat.roleAssistant": "伴侣",
+  "wife.panel.chat.roleUser": "你",
+  "wife.panel.selectCharacter": "选择角色",
+  "wife.panel.modelInteraction.enter": "调整 Live2D 模型",
+  "wife.panel.modelInteraction.exit": "返回聊天",
+  "wife.panel.test.none": "无",
+  "wife.panel.test.state.idle": "空闲",
+  "wife.panel.test.state.listening": "聆听",
+  "wife.panel.test.state.thinking": "思考",
+  "wife.panel.test.state.working": "工作中",
+  "wife.panel.test.state.waiting_user": "等待你",
+  "wife.panel.test.state.speaking": "说话中",
+  "wife.panel.test.state.success": "成功",
+  "wife.panel.test.state.error": "错误",
+  "wife.panel.test.gesture.thinking": "思考",
+  "wife.panel.test.gesture.nod": "点头",
+  "wife.panel.test.gesture.shake_head": "摇头",
+  "wife.panel.test.gesture.wave": "挥手",
+  "wife.panel.test.gesture.look_at_user": "看向你",
+  "wife.panel.test.gesture.celebrate": "庆祝",
+  "wife.panel.test.emotion.neutral": "平静",
+  "wife.panel.test.emotion.focused": "专注",
+  "wife.panel.test.emotion.happy": "开心",
+  "wife.panel.test.emotion.concerned": "担忧",
+  "wife.panel.test.emotion.confused": "困惑",
+  "wife.panel.test.emotion.annoyed": "不耐烦",
+  "wife.panel.test.emotion.embarrassed": "害羞",
   "settings.general.row.wifeMode.description":
     "显示一个能对你的编程会话作出反应的角色伴侣。关闭后使用不含 Wife 层的经典模式。",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "消息可见度",
+  "settings.general.row.wifeChatHeightRatio.description": "聊天气泡在旧消息淡出前可占用的面板高度比例",
   "settings.general.row.language.title": "语言",
   "settings.general.row.language.description": "更改 OpenCode 的显示语言",
   "settings.general.row.shell.title": "终端 Shell",

@@ -147,8 +147,7 @@ export const dict = {
   "command.terminal.toggle": "Växla terminal",
   "command.fileTree.toggle": "Växla filträdet",
   "command.review.toggle": "Växla granskning",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Växla Wife",
   "command.terminal.new": "Ny terminal",
   "command.terminal.new.description": "Skapa en ny terminalflik",
   "command.steps.toggle": "Växla steg",
@@ -708,7 +707,6 @@ export const dict = {
   "session.tab.context": "Kontext",
   "session.tab.unknown": "Okänd session",
   "session.panel.reviewAndFiles": "Granskning och filer",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Denna session kan inte hittas",
   "session.error.notFound.description": "Den här fliken pekar på en session som inte längre finns på den här servern.",
@@ -932,48 +930,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife-läge",
   "wife.characters.title": "Karaktärer",
   "wife.characters.empty": "Inga karaktärer registrerade ännu",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Inte konfigurerad",
+  "wife.characters.newDefault": "Ny karaktär",
+  "settings.wife.section.chat": "Sidochatt",
+  "settings.wife.section.choices": "Svarsalternativ",
+  "settings.wife.choices.enabled.title": "Generera svarsalternativ",
+  "settings.wife.choices.enabled.description": "Föreslå korta svar efter varje lyckat Wife-svar",
+  "settings.wife.choices.model.title": "Modell för alternativgenerering",
+  "settings.wife.choices.model.description": "Använder en separat billig modell utan att fördröja huvudsvar",
+  "settings.wife.choices.model.unavailable": "Den valda modellen eller resonemangsvarianten är inte tillgänglig",
+  "settings.wife.choices.variant.title": "Resoneringsinsats",
+  "settings.wife.choices.variant.description": "Lägre insats räcker oftast för korta svarsförslag",
+  "wife.characters.settings.changeModel": "Byt modell",
+  "wife.characters.settings.model": "Live2D-modell",
+  "wife.characters.settings.delete": "Ta bort karaktär",
+  "wife.characters.settings.removeAvatar": "Ta bort avatar",
+  "wife.characters.settings.general": "Allmänt",
   "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaDescription": "Definiera hur denna karaktär tilltalar dig och pratar i Sidechat",
+  "wife.characters.settings.userAddress": "Hur de tilltalar dig",
+  "wife.characters.settings.userAddressDescription": "Valfritt namn eller titel som karaktären använder för dig",
+  "wife.characters.settings.userAddressPlaceholder": "t.ex. Kapten",
+  "wife.characters.settings.personaInstructions": "Persona och samtalsstil",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Beskriv karaktärens personlighet, relation, ton och samtalsvanor",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "t.ex. Lugn och iakttagande, pratar naturligt med mild humor",
+  "wife.characters.settings.dangerZone": "Riskzon",
+  "wife.characters.settings.nameDescription": "Karaktärens visningsnamn",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
+    "Välj mappen som innehåller modellen och alla dess tillgångar (.model3.json, .moc3, texturer, rörelser)",
+  "wife.characters.settings.avatarDescription": "Kvadratisk profilbild som visas för denna karaktär",
+  "wife.characters.settings.mappingDescription": "Mappa rörelser och uttryck till karaktärens tillstånd",
+  "wife.characters.settings.deleteDescription": "Ta bort denna karaktär och dess inställningar permanent",
+  "wife.characters.edit": "Redigera",
+  "wife.characters.settings": "Karaktärsinställningar",
   "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+  "wife.characters.backToList": "Tillbaka till karaktärer",
   "wife.import.title": "Importera karaktär",
   "wife.import.step.scan.title": "Skanningsresultat",
   "wife.import.step.mapping.title": "Semantisk mappning",
@@ -997,85 +990,57 @@ export const dict = {
   "wife.mapping.emotions": "Känslor",
   "wife.mapping.none": "Ingen",
   "wife.mapping.fallback": "Faller tillbaka till",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
+  "wife.panel.empty.noModel": "Koppla en Live2D-modell till en karaktär för att se den här",
+  "wife.panel.empty.web": "Live2D-rendering är tillgänglig i skrivbordsappen",
+  "wife.panel.empty.loadFailed": "Det gick inte att ladda Live2D-modellen",
+  "wife.panel.empty.runtimeMissing": "Live2D-körtiden är inte tillgänglig",
+  "wife.panel.empty.openSettings": "Öppna inställningar",
+  "wife.panel.chat.placeholder": "Prata med din följeslagare…",
+  "wife.panel.commands.send.title": "Skicka till agent",
+  "wife.panel.commands.send.description": "Gör om denna sidechatt till en redigerbar agentprompt",
+  "wife.panel.commands.send.working": "Förbereder för agent",
+  "wife.panel.commands.send.draftTitle": "Agentutkastet är inte tomt",
+  "wife.panel.commands.send.draftDescription": "Ersätt dess text och omnämnanden, eller lägg till den förberedda uppgiften.",
+  "wife.panel.commands.send.replace": "Ersätt",
+  "wife.panel.commands.send.append": "Lägg till",
+  "wife.panel.commands.clear.title": "Rensa sidechatt",
+  "wife.panel.commands.clear.suggestionDescription": "Rensa denna sidechatt och dess minne permanent",
+  "wife.panel.commands.clear.description": "Detta raderar permanent den aktuella sidechattens logg och minne.",
+  "wife.panel.commands.clear.confirm": "Rensa",
+  "wife.panel.commands.clear.working": "Rensar sidechatt",
+  "wife.panel.chat.historyTitle": "Chattlogg",
+  "wife.panel.chat.historyClose": "Stäng chattlogg",
+  "wife.panel.chat.roleAssistant": "Följeslagare",
+  "wife.panel.chat.roleUser": "Du",
+  "wife.panel.selectCharacter": "Välj karaktär",
+  "wife.panel.modelInteraction.enter": "Justera Live2D-modell",
+  "wife.panel.modelInteraction.exit": "Tillbaka till chatten",
+  "wife.panel.test.none": "Ingen",
+  "wife.panel.test.state.idle": "Inaktiv",
+  "wife.panel.test.state.listening": "Lyssnar",
+  "wife.panel.test.state.thinking": "Tänker",
+  "wife.panel.test.state.working": "Arbetar",
+  "wife.panel.test.state.waiting_user": "Väntar på dig",
+  "wife.panel.test.state.speaking": "Pratar",
+  "wife.panel.test.state.success": "Lyckades",
+  "wife.panel.test.state.error": "Fel",
+  "wife.panel.test.gesture.thinking": "Tänker",
+  "wife.panel.test.gesture.nod": "Nicka",
+  "wife.panel.test.gesture.shake_head": "Skaka på huvudet",
+  "wife.panel.test.gesture.wave": "Vinka",
+  "wife.panel.test.gesture.look_at_user": "Titta på dig",
+  "wife.panel.test.gesture.celebrate": "Fira",
   "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.test.emotion.focused": "Fokuserad",
+  "wife.panel.test.emotion.happy": "Glad",
+  "wife.panel.test.emotion.concerned": "Oroad",
+  "wife.panel.test.emotion.confused": "Förvirrad",
+  "wife.panel.test.emotion.annoyed": "Irriterad",
+  "wife.panel.test.emotion.embarrassed": "Generad",
   "settings.general.row.wifeMode.description":
     "Visa en karaktärskamrat som reagerar på din kodningssession. Stäng av för att använda klassiskt läge utan Wife-lagret.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Synlighet för chatmeddelanden",
+  "settings.general.row.wifeChatHeightRatio.description": "Andel av panelhöjden som chatbubblor kan fylla innan äldre meddelanden tonas ut",
   "settings.general.row.language.title": "Språk",
   "settings.general.row.language.description": "Ändra visningsspråket för OpenCode",
   "settings.general.row.shell.title": "Terminalskal",

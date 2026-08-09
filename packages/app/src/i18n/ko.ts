@@ -49,8 +49,7 @@ export const dict = {
   "command.terminal.toggle": "터미널 표시/숨기기",
   "command.fileTree.toggle": "파일 트리 표시/숨기기",
   "command.review.toggle": "검토 표시/숨기기",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Wife 켜기/끄기",
   "command.terminal.new": "새 터미널",
   "command.terminal.new.description": "새 터미널 탭 생성",
   "command.steps.toggle": "단계 표시/숨기기",
@@ -475,7 +474,6 @@ export const dict = {
   "session.tab.review": "검토",
   "session.tab.context": "컨텍스트",
   "session.panel.reviewAndFiles": "검토 및 파일",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.review.filesChanged": "{{count}}개 파일 변경됨",
   "session.review.change.one": "변경",
@@ -594,48 +592,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife 모드",
   "wife.characters.title": "캐릭터",
   "wife.characters.empty": "등록된 캐릭터가 없습니다",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "미구성",
+  "wife.characters.newDefault": "새 캐릭터",
+  "settings.wife.section.chat": "사이드 채팅",
+  "settings.wife.section.choices": "답변 선택지",
+  "settings.wife.choices.enabled.title": "답변 선택지 생성",
+  "settings.wife.choices.enabled.description": "Wife 응답이 성공할 때마다 짧은 답변을 제안합니다",
+  "settings.wife.choices.model.title": "선택지 생성 모델",
+  "settings.wife.choices.model.description": "기본 응답을 지연시키지 않고 별도의 저비용 모델을 사용합니다",
+  "settings.wife.choices.model.unavailable": "선택한 모델 또는 추론 변형을 사용할 수 없습니다",
+  "settings.wife.choices.variant.title": "추론 노력",
+  "settings.wife.choices.variant.description": "짧은 답변 제안에는 낮은 노력으로 충분한 경우가 많습니다",
+  "wife.characters.settings.changeModel": "모델 변경",
+  "wife.characters.settings.model": "Live2D 모델",
+  "wife.characters.settings.delete": "캐릭터 삭제",
+  "wife.characters.settings.removeAvatar": "아바타 제거",
+  "wife.characters.settings.general": "일반",
+  "wife.characters.settings.persona": "페르소나",
+  "wife.characters.settings.personaDescription": "이 캐릭터가 당신을 어떻게 부르고 사이드 채팅에서 어떻게 말하는지 정의합니다",
+  "wife.characters.settings.userAddress": "당신을 부르는 호칭",
+  "wife.characters.settings.userAddressDescription": "캐릭터가 당신을 부르는 데 사용하는 선택적 이름 또는 호칭",
+  "wife.characters.settings.userAddressPlaceholder": "예: 캡틴",
+  "wife.characters.settings.personaInstructions": "페르소나 및 말투",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "캐릭터의 성격, 관계, 말투, 대화 습관을 설명하세요",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "예: 차분하고 관찰력이 있으며 부드러운 유머로 자연스럽게 말함",
+  "wife.characters.settings.dangerZone": "위험 구역",
+  "wife.characters.settings.nameDescription": "캐릭터 표시 이름",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "모델과 모든 에셋(.model3.json, .moc3, 텍스처, 모션)이 포함된 폴더를 선택하세요",
+  "wife.characters.settings.avatarDescription": "이 캐릭터에 표시되는 정사각형 프로필 사진",
+  "wife.characters.settings.mappingDescription": "동작과 표정을 캐릭터 상태에 매핑합니다",
+  "wife.characters.settings.deleteDescription": "이 캐릭터와 설정을 영구적으로 제거합니다",
+  "wife.characters.edit": "편집",
+  "wife.characters.settings": "캐릭터 설정",
+  "wife.characters.settings.avatar": "아바타",
+  "wife.characters.backToList": "캐릭터로 돌아가기",
   "wife.import.title": "캐릭터 가져오기",
   "wife.import.step.scan.title": "검사 결과",
   "wife.import.step.mapping.title": "의미 매핑",
@@ -659,85 +652,57 @@ export const dict = {
   "wife.mapping.emotions": "감정",
   "wife.mapping.none": "없음",
   "wife.mapping.fallback": "대체",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "캐릭터에 Live2D 모델을 연결하면 여기에 표시됩니다",
+  "wife.panel.empty.web": "Live2D 렌더링은 데스크톱 앱에서 사용할 수 있습니다",
+  "wife.panel.empty.loadFailed": "Live2D 모델을 불러오지 못했습니다",
+  "wife.panel.empty.runtimeMissing": "Live2D 런타임을 사용할 수 없습니다",
+  "wife.panel.empty.openSettings": "설정 열기",
+  "wife.panel.chat.placeholder": "당신의 동료와 대화하세요…",
+  "wife.panel.commands.send.title": "에이전트에게 보내기",
+  "wife.panel.commands.send.description": "이 사이드 채팅을 편집 가능한 에이전트 프롬프트로 변환합니다",
+  "wife.panel.commands.send.working": "에이전트 준비 중",
+  "wife.panel.commands.send.draftTitle": "에이전트 초안이 비어 있지 않습니다",
+  "wife.panel.commands.send.draftDescription": "텍스트와 멘션을 바꾸거나 준비된 작업을 추가하세요.",
+  "wife.panel.commands.send.replace": "바꾸기",
+  "wife.panel.commands.send.append": "추가",
+  "wife.panel.commands.clear.title": "사이드 채팅 지우기",
+  "wife.panel.commands.clear.suggestionDescription": "이 사이드 채팅과 메모리를 영구적으로 지웁니다",
+  "wife.panel.commands.clear.description": "현재 사이드 채팅의 기록과 메모리가 영구적으로 삭제됩니다.",
+  "wife.panel.commands.clear.confirm": "지우기",
+  "wife.panel.commands.clear.working": "사이드 채팅 지우는 중",
+  "wife.panel.chat.historyTitle": "채팅 기록",
+  "wife.panel.chat.historyClose": "채팅 기록 닫기",
+  "wife.panel.chat.roleAssistant": "동료",
+  "wife.panel.chat.roleUser": "당신",
+  "wife.panel.selectCharacter": "캐릭터 선택",
+  "wife.panel.modelInteraction.enter": "Live2D 모델 조정",
+  "wife.panel.modelInteraction.exit": "채팅으로 돌아가기",
+  "wife.panel.test.none": "없음",
+  "wife.panel.test.state.idle": "대기 중",
+  "wife.panel.test.state.listening": "듣는 중",
+  "wife.panel.test.state.thinking": "생각 중",
+  "wife.panel.test.state.working": "작업 중",
+  "wife.panel.test.state.waiting_user": "당신을 기다리는 중",
+  "wife.panel.test.state.speaking": "말하는 중",
+  "wife.panel.test.state.success": "성공",
+  "wife.panel.test.state.error": "오류",
+  "wife.panel.test.gesture.thinking": "생각 중",
+  "wife.panel.test.gesture.nod": "고개 끄덕임",
+  "wife.panel.test.gesture.shake_head": "고개 저음",
+  "wife.panel.test.gesture.wave": "손 흔들기",
+  "wife.panel.test.gesture.look_at_user": "당신을 바라봄",
+  "wife.panel.test.gesture.celebrate": "축하",
+  "wife.panel.test.emotion.neutral": "무표정",
+  "wife.panel.test.emotion.focused": "집중",
+  "wife.panel.test.emotion.happy": "기쁨",
+  "wife.panel.test.emotion.concerned": "걱정",
+  "wife.panel.test.emotion.confused": "혼란",
+  "wife.panel.test.emotion.annoyed": "짜증",
+  "wife.panel.test.emotion.embarrassed": "민망함",
   "settings.general.row.wifeMode.description":
     "코딩 세션에 반응하는 캐릭터 컴패니언을 표시합니다. Wife 레이어 없이 클래식 모드를 사용하려면 비활성화하세요.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "메시지 표시량",
+  "settings.general.row.wifeChatHeightRatio.description": "오래된 메시지가 사라지기 전에 채팅 버블이 차지할 수 있는 패널 높이의 비율",
   "settings.general.row.language.title": "언어",
   "settings.general.row.language.description": "OpenCode 표시 언어 변경",
   "settings.general.row.appearance.title": "모양",

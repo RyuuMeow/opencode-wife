@@ -164,8 +164,7 @@ export const dict = {
   "command.terminal.toggle": "Terminali aç/kapat",
   "command.fileTree.toggle": "Dosya ağacını aç/kapat",
   "command.review.toggle": "İncelemeyi aç/kapat",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Wife'i değiştir",
   "command.terminal.new": "Yeni terminal",
   "command.terminal.new.description": "Yeni bir terminal sekmesi oluştur",
   "command.steps.toggle": "Adımları aç/kapat",
@@ -754,7 +753,6 @@ export const dict = {
   "session.tab.context": "Bağlam",
   "session.tab.unknown": "Bilinmeyen Oturum",
   "session.panel.reviewAndFiles": "İnceleme ve dosyalar",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Bu oturum bulunamıyor",
   "session.error.notFound.description": "Bu sekme, artık bu sunucuda bulunmayan bir oturuma yönlendiriyor.",
@@ -918,48 +916,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife Modu",
   "wife.characters.title": "Karakterler",
   "wife.characters.empty": "Henüz kayıtlı karakter yok",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "Yapılandırılmadı",
+  "wife.characters.newDefault": "Yeni karakter",
+  "settings.wife.section.chat": "Yan sohbet",
+  "settings.wife.section.choices": "Yanıt seçenekleri",
+  "settings.wife.choices.enabled.title": "Yanıt seçenekleri üret",
+  "settings.wife.choices.enabled.description": "Her başarılı Wife yanıtından sonra kısa yanıtlar öner",
+  "settings.wife.choices.model.title": "Seçenek üretme modeli",
+  "settings.wife.choices.model.description": "Ana yanıtı geciktirmeden ayrı bir düşük maliyetli model kullanır",
+  "settings.wife.choices.model.unavailable": "Seçilen model veya muhakeme varyantı kullanılamıyor",
+  "settings.wife.choices.variant.title": "Muhakeme çabası",
+  "settings.wife.choices.variant.description": "Kısa yanıt önerileri için genellikle düşük çaba yeterlidir",
+  "wife.characters.settings.changeModel": "Modeli değiştir",
+  "wife.characters.settings.model": "Live2D modeli",
+  "wife.characters.settings.delete": "Karakteri sil",
+  "wife.characters.settings.removeAvatar": "Avatarı kaldır",
+  "wife.characters.settings.general": "Genel",
+  "wife.characters.settings.persona": "Kişilik",
+  "wife.characters.settings.personaDescription": "Bu karakterin size nasıl hitap ettiğini ve Yan Sohbet'te nasıl konuştuğunu tanımlayın",
+  "wife.characters.settings.userAddress": "Sana nasıl hitap ediyorlar",
+  "wife.characters.settings.userAddressDescription": "Karakterin sizin için kullandığı isteğe bağlı ad veya unvan",
+  "wife.characters.settings.userAddressPlaceholder": "örn. Kaptan",
+  "wife.characters.settings.personaInstructions": "Kişilik ve konuşma tarzı",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Karakterin kişiliğini, ilişkisini, tonunu ve konuşma alışkanlıklarını tanımlayın",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "örn. Sakin ve gözlemci, yumuşak bir mizahla doğal konuşur",
+  "wife.characters.settings.dangerZone": "Tehlikeli bölge",
+  "wife.characters.settings.nameDescription": "Karakterin görünen adı",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
+    "Modeli ve tüm varlıklarını içeren klasörü seçin (.model3.json, .moc3, dokular, hareketler)",
+  "wife.characters.settings.avatarDescription": "Bu karakter için gösterilen kare profil resmi",
+  "wife.characters.settings.mappingDescription": "Hareketleri ve ifadeleri karakter durumlarıyla eşleştir",
+  "wife.characters.settings.deleteDescription": "Bu karakteri ve ayarlarını kalıcı olarak kaldır",
+  "wife.characters.edit": "Düzenle",
+  "wife.characters.settings": "Karakter ayarları",
   "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+  "wife.characters.backToList": "Karakterlere geri dön",
   "wife.import.title": "Karakter içe aktar",
   "wife.import.step.scan.title": "Tarama sonuçları",
   "wife.import.step.mapping.title": "Anlamsal eşleme",
@@ -983,85 +976,57 @@ export const dict = {
   "wife.mapping.emotions": "Duygular",
   "wife.mapping.none": "Yok",
   "wife.mapping.fallback": "Şuna geri döner",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Burada görmek için bir karaktere Live2D modeli ekleyin",
+  "wife.panel.empty.web": "Live2D oluşturma, masaüstü uygulamasında kullanılabilir",
+  "wife.panel.empty.loadFailed": "Live2D modeli yüklenemedi",
+  "wife.panel.empty.runtimeMissing": "Live2D çalışma zamanı kullanılamıyor",
+  "wife.panel.empty.openSettings": "Ayarları aç",
+  "wife.panel.chat.placeholder": "Yoldaşınla konuş…",
+  "wife.panel.commands.send.title": "Ajana gönder",
+  "wife.panel.commands.send.description": "Bu yan sohbeti düzenlenebilir bir Ajan istemine dönüştür",
+  "wife.panel.commands.send.working": "Ajan için hazırlanıyor",
+  "wife.panel.commands.send.draftTitle": "Ajan taslağı boş değil",
+  "wife.panel.commands.send.draftDescription": "Metnini ve bahsedilenleri değiştirin veya hazırlanan görevi ekleyin.",
+  "wife.panel.commands.send.replace": "Değiştir",
+  "wife.panel.commands.send.append": "Ekle",
+  "wife.panel.commands.clear.title": "Yan sohbeti temizle",
+  "wife.panel.commands.clear.suggestionDescription": "Bu yan sohbeti ve hafızasını kalıcı olarak temizle",
+  "wife.panel.commands.clear.description": "Bu, geçerli yan sohbetin geçmişini ve hafızasını kalıcı olarak siler.",
+  "wife.panel.commands.clear.confirm": "Temizle",
+  "wife.panel.commands.clear.working": "Yan sohbet temizleniyor",
+  "wife.panel.chat.historyTitle": "Sohbet geçmişi",
+  "wife.panel.chat.historyClose": "Sohbet geçmişini kapat",
+  "wife.panel.chat.roleAssistant": "Yoldaş",
+  "wife.panel.chat.roleUser": "Sen",
+  "wife.panel.selectCharacter": "Karakter seç",
+  "wife.panel.modelInteraction.enter": "Live2D modelini ayarla",
+  "wife.panel.modelInteraction.exit": "Sohbete dön",
+  "wife.panel.test.none": "Yok",
+  "wife.panel.test.state.idle": "Boşta",
+  "wife.panel.test.state.listening": "Dinliyor",
+  "wife.panel.test.state.thinking": "Düşünüyor",
+  "wife.panel.test.state.working": "Çalışıyor",
+  "wife.panel.test.state.waiting_user": "Seni bekliyor",
+  "wife.panel.test.state.speaking": "Konuşuyor",
+  "wife.panel.test.state.success": "Başarılı",
+  "wife.panel.test.state.error": "Hata",
+  "wife.panel.test.gesture.thinking": "Düşünüyor",
+  "wife.panel.test.gesture.nod": "Baş sallama",
+  "wife.panel.test.gesture.shake_head": "Baş sallama (hayır)",
+  "wife.panel.test.gesture.wave": "El sallama",
+  "wife.panel.test.gesture.look_at_user": "Sana bakma",
+  "wife.panel.test.gesture.celebrate": "Kutlama",
+  "wife.panel.test.emotion.neutral": "Nötr",
+  "wife.panel.test.emotion.focused": "Odaklanmış",
+  "wife.panel.test.emotion.happy": "Mutlu",
+  "wife.panel.test.emotion.concerned": "Endişeli",
+  "wife.panel.test.emotion.confused": "Kafası karışık",
+  "wife.panel.test.emotion.annoyed": "Rahatsız",
+  "wife.panel.test.emotion.embarrassed": "Utangaç",
   "settings.general.row.wifeMode.description":
     "Kodlama oturumunuza tepki veren bir karakter arkadaşı gösterir. Wife katmanı olmadan Klasik Modu kullanmak için kapatın.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Mesaj görünürlüğü",
+  "settings.general.row.wifeChatHeightRatio.description": "Eski mesajlar kaybolmadan önce sohbet baloncuklarının doldurabileceği panel yüksekliği payı",
 
   "settings.general.row.language.title": "Dil",
   "settings.general.row.language.description": "OpenCode'un görünüm dilini değiştirin",

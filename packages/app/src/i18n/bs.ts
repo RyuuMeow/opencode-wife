@@ -160,8 +160,7 @@ export const dict = {
   "command.terminal.toggle": "Prikaži/sakrij terminal",
   "command.fileTree.toggle": "Prikaži/sakrij stablo datoteka",
   "command.review.toggle": "Prikaži/sakrij pregled",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Uključi/isključi Wife",
   "command.terminal.new": "Novi terminal",
   "command.terminal.new.description": "Kreiraj novu karticu terminala",
   "command.steps.toggle": "Prikaži/sakrij korake",
@@ -750,7 +749,6 @@ export const dict = {
   "session.tab.context": "Kontekst",
   "session.tab.unknown": "Nepoznata sesija",
   "session.panel.reviewAndFiles": "Pregled i datoteke",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Ova sesija nije pronađena",
   "session.error.notFound.description": "Ova kartica upućuje na sesiju koja više ne postoji na ovom serveru.",
@@ -913,48 +911,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife režim",
   "wife.characters.title": "Likovi",
   "wife.characters.empty": "Još nijedan lik nije registrovan",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Nije konfigurisano",
+  "wife.characters.newDefault": "Novi lik",
+  "settings.wife.section.chat": "Bočni chat",
+  "settings.wife.section.choices": "Opcije odgovora",
+  "settings.wife.choices.enabled.title": "Generiši opcije odgovora",
+  "settings.wife.choices.enabled.description": "Predloži kratke odgovore nakon svakog uspješnog Wife odgovora",
+  "settings.wife.choices.model.title": "Model za generisanje opcija",
+  "settings.wife.choices.model.description": "Koristi zaseban jeftin model bez odlaganja glavnog odgovora",
+  "settings.wife.choices.model.unavailable": "Odabrani model ili varijanta razmišljanja nije dostupna",
+  "settings.wife.choices.variant.title": "Nivo razmišljanja",
+  "settings.wife.choices.variant.description": "Niži nivo je obično dovoljan za kratke prijedloge odgovora",
+  "wife.characters.settings.changeModel": "Promijeni model",
   "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
+  "wife.characters.settings.delete": "Obriši lika",
+  "wife.characters.settings.removeAvatar": "Ukloni avatar",
+  "wife.characters.settings.general": "Općenito",
   "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaDescription": "Definiraj kako ti se ovaj lik obraća i kako govori u Bočnom chatu",
+  "wife.characters.settings.userAddress": "Kako ti se obraća",
+  "wife.characters.settings.userAddressDescription": "Opcijsko ime ili titula koju lik koristi za tebe",
+  "wife.characters.settings.userAddressPlaceholder": "npr. Kapetane",
+  "wife.characters.settings.personaInstructions": "Persona i stil govora",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Opiši ličnost, odnos, ton i navike u razgovoru lika",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "npr. Smiren i pažljiv, govori prirodno s blagim humorom",
+  "wife.characters.settings.dangerZone": "Opasna zona",
+  "wife.characters.settings.nameDescription": "Prikazano ime lika",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
+    "Odaberite mapu koja sadrži model i sve njegove resurse (.model3.json, .moc3, teksture, pokrete)",
+  "wife.characters.settings.avatarDescription": "Kvadratna profilna slika prikazana za ovog lika",
+  "wife.characters.settings.mappingDescription": "Mapiraj pokrete i izraze na stanja lika",
+  "wife.characters.settings.deleteDescription": "Trajno ukloni ovog lika i njegove postavke",
+  "wife.characters.edit": "Uredi",
+  "wife.characters.settings": "Postavke lika",
   "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+  "wife.characters.backToList": "Nazad na likove",
   "wife.import.title": "Uvezi lika",
   "wife.import.step.scan.title": "Rezultati skeniranja",
   "wife.import.step.mapping.title": "Semantičko mapiranje",
@@ -978,85 +971,57 @@ export const dict = {
   "wife.mapping.emotions": "Emocije",
   "wife.mapping.none": "Ništa",
   "wife.mapping.fallback": "Vraća se na",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Priloži Live2D model liku da ga vidiš ovdje",
+  "wife.panel.empty.web": "Live2D prikaz je dostupan u desktop aplikaciji",
+  "wife.panel.empty.loadFailed": "Učitavanje Live2D modela nije uspjelo",
+  "wife.panel.empty.runtimeMissing": "Live2D runtime nije dostupan",
+  "wife.panel.empty.openSettings": "Otvori postavke",
+  "wife.panel.chat.placeholder": "Razgovaraj sa svojim pratiocem…",
+  "wife.panel.commands.send.title": "Pošalji Agentu",
+  "wife.panel.commands.send.description": "Pretvori ovaj bočni chat u urediv Agent prompt",
+  "wife.panel.commands.send.working": "Pripremanje za Agenta",
+  "wife.panel.commands.send.draftTitle": "Nacrt Agenta nije prazan",
+  "wife.panel.commands.send.draftDescription": "Zamijeni njegov tekst i pominjanja ili dodaj pripremljeni zadatak.",
+  "wife.panel.commands.send.replace": "Zamijeni",
+  "wife.panel.commands.send.append": "Dodaj",
+  "wife.panel.commands.clear.title": "Očisti bočni chat",
+  "wife.panel.commands.clear.suggestionDescription": "Trajno očisti ovaj bočni chat i njegovu memoriju",
+  "wife.panel.commands.clear.description": "Ovo trajno briše trenutnu historiju bočnog chata i memoriju.",
+  "wife.panel.commands.clear.confirm": "Očisti",
+  "wife.panel.commands.clear.working": "Čišćenje bočnog chata",
+  "wife.panel.chat.historyTitle": "Historija chata",
+  "wife.panel.chat.historyClose": "Zatvori historiju chata",
+  "wife.panel.chat.roleAssistant": "Pratilac",
+  "wife.panel.chat.roleUser": "Ti",
+  "wife.panel.selectCharacter": "Odaberi lika",
+  "wife.panel.modelInteraction.enter": "Podesi Live2D model",
+  "wife.panel.modelInteraction.exit": "Nazad na chat",
+  "wife.panel.test.none": "Ništa",
+  "wife.panel.test.state.idle": "Neaktivan",
+  "wife.panel.test.state.listening": "Sluša",
+  "wife.panel.test.state.thinking": "Razmišlja",
+  "wife.panel.test.state.working": "Radi",
+  "wife.panel.test.state.waiting_user": "Čeka te",
+  "wife.panel.test.state.speaking": "Govori",
+  "wife.panel.test.state.success": "Uspjeh",
+  "wife.panel.test.state.error": "Greška",
+  "wife.panel.test.gesture.thinking": "Razmišlja",
+  "wife.panel.test.gesture.nod": "Klimanje glavom",
+  "wife.panel.test.gesture.shake_head": "Tresenje glavom",
+  "wife.panel.test.gesture.wave": "Mahanje",
+  "wife.panel.test.gesture.look_at_user": "Gleda te",
+  "wife.panel.test.gesture.celebrate": "Proslava",
+  "wife.panel.test.emotion.neutral": "Neutralno",
+  "wife.panel.test.emotion.focused": "Fokusirano",
+  "wife.panel.test.emotion.happy": "Sretno",
+  "wife.panel.test.emotion.concerned": "Zabrinuto",
+  "wife.panel.test.emotion.confused": "Zbunjeno",
+  "wife.panel.test.emotion.annoyed": "Iziritirano",
+  "wife.panel.test.emotion.embarrassed": "Posramljeno",
   "settings.general.row.wifeMode.description":
     "Prikažite lika pratioca koji reaguje na vašu sesiju kodiranja. Isključite da koristite klasični režim bez Wife sloja.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Vidljivost poruka",
+  "settings.general.row.wifeChatHeightRatio.description": "Udio visine panela koji mjehurići chata mogu ispuniti prije nego starije poruke izblijede",
 
   "settings.general.row.language.title": "Jezik",
   "settings.general.row.language.description": "Promijeni jezik prikaza u OpenCode-u",

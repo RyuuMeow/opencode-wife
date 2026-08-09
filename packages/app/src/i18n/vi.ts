@@ -153,8 +153,7 @@ export const dict = {
   "command.terminal.toggle": "Bật/tắt terminal",
   "command.fileTree.toggle": "Bật/tắt cây tệp",
   "command.review.toggle": "Bật/tắt phần xem lại",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Bật/tắt Wife",
   "command.terminal.new": "Terminal mới",
   "command.terminal.new.description": "Tạo một tab terminal mới",
   "command.steps.toggle": "Bật/tắt các bước",
@@ -713,7 +712,6 @@ export const dict = {
   "session.tab.context": "Ngữ cảnh",
   "session.tab.unknown": "Phiên không xác định",
   "session.panel.reviewAndFiles": "Xem lại và tệp",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Không thể tìm thấy phiên này",
   "session.error.notFound.description": "Tab này trỏ đến một phiên không còn tồn tại trên máy chủ này.",
@@ -938,48 +936,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Chế độ Wife",
   "wife.characters.title": "Nhân vật",
   "wife.characters.empty": "Chưa có nhân vật nào được đăng ký",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "Chưa được cấu hình",
+  "wife.characters.newDefault": "Nhân vật mới",
+  "settings.wife.section.chat": "Chat phụ",
+  "settings.wife.section.choices": "Lựa chọn trả lời",
+  "settings.wife.choices.enabled.title": "Tạo lựa chọn trả lời",
+  "settings.wife.choices.enabled.description": "Gợi ý câu trả lời ngắn sau mỗi phản hồi Wife thành công",
+  "settings.wife.choices.model.title": "Mô hình tạo lựa chọn",
+  "settings.wife.choices.model.description": "Sử dụng một mô hình chi phí thấp riêng biệt mà không làm chậm phản hồi chính",
+  "settings.wife.choices.model.unavailable": "Mô hình hoặc biến thể suy luận đã chọn không khả dụng",
+  "settings.wife.choices.variant.title": "Mức suy luận",
+  "settings.wife.choices.variant.description": "Mức thấp hơn thường đủ cho các gợi ý trả lời ngắn",
+  "wife.characters.settings.changeModel": "Đổi mô hình",
+  "wife.characters.settings.model": "Mô hình Live2D",
+  "wife.characters.settings.delete": "Xóa nhân vật",
+  "wife.characters.settings.removeAvatar": "Xóa hình đại diện",
+  "wife.characters.settings.general": "Chung",
+  "wife.characters.settings.persona": "Tính cách",
+  "wife.characters.settings.personaDescription": "Xác định cách nhân vật này xưng hô với bạn và nói chuyện trong Chat phụ",
+  "wife.characters.settings.userAddress": "Cách họ xưng hô với bạn",
+  "wife.characters.settings.userAddressDescription": "Tên hoặc danh xưng tùy chọn mà nhân vật dùng cho bạn",
+  "wife.characters.settings.userAddressPlaceholder": "ví dụ: Thuyền trưởng",
+  "wife.characters.settings.personaInstructions": "Tính cách và phong cách nói chuyện",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Mô tả tính cách, mối quan hệ, giọng điệu và thói quen trò chuyện của nhân vật",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "ví dụ: Điềm tĩnh và tinh ý, nói chuyện tự nhiên với khiếu hài hước nhẹ nhàng",
+  "wife.characters.settings.dangerZone": "Vùng nguy hiểm",
+  "wife.characters.settings.nameDescription": "Tên hiển thị của nhân vật",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "Chọn thư mục chứa mô hình và tất cả tài nguyên của nó (.model3.json, .moc3, kết cấu, chuyển động)",
+  "wife.characters.settings.avatarDescription": "Ảnh hồ sơ vuông hiển thị cho nhân vật này",
+  "wife.characters.settings.mappingDescription": "Ánh xạ chuyển động và biểu cảm sang trạng thái nhân vật",
+  "wife.characters.settings.deleteDescription": "Xóa vĩnh viễn nhân vật này và các cài đặt của nó",
+  "wife.characters.edit": "Chỉnh sửa",
+  "wife.characters.settings": "Cài đặt nhân vật",
+  "wife.characters.settings.avatar": "Hình đại diện",
+  "wife.characters.backToList": "Quay lại nhân vật",
   "wife.import.title": "Nhập nhân vật",
   "wife.import.step.scan.title": "Kết quả quét",
   "wife.import.step.mapping.title": "Ánh xạ ngữ nghĩa",
@@ -1003,85 +996,57 @@ export const dict = {
   "wife.mapping.emotions": "Cảm xúc",
   "wife.mapping.none": "Không có",
   "wife.mapping.fallback": "Dự phòng về",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Gắn mô hình Live2D vào nhân vật để xem ở đây",
+  "wife.panel.empty.web": "Kết xuất Live2D có sẵn trong ứng dụng desktop",
+  "wife.panel.empty.loadFailed": "Không tải được mô hình Live2D",
+  "wife.panel.empty.runtimeMissing": "Runtime Live2D không khả dụng",
+  "wife.panel.empty.openSettings": "Mở cài đặt",
+  "wife.panel.chat.placeholder": "Trò chuyện với người đồng hành của bạn…",
+  "wife.panel.commands.send.title": "Gửi cho tác nhân",
+  "wife.panel.commands.send.description": "Biến chat phụ này thành lời nhắc của tác nhân có thể chỉnh sửa",
+  "wife.panel.commands.send.working": "Đang chuẩn bị cho tác nhân",
+  "wife.panel.commands.send.draftTitle": "Bản nháp của tác nhân không trống",
+  "wife.panel.commands.send.draftDescription": "Thay thế văn bản và đề cập của nó, hoặc thêm nhiệm vụ đã chuẩn bị.",
+  "wife.panel.commands.send.replace": "Thay thế",
+  "wife.panel.commands.send.append": "Thêm vào",
+  "wife.panel.commands.clear.title": "Xóa chat phụ",
+  "wife.panel.commands.clear.suggestionDescription": "Xóa vĩnh viễn chat phụ này và bộ nhớ của nó",
+  "wife.panel.commands.clear.description": "Thao tác này sẽ xóa vĩnh viễn lịch sử và bộ nhớ của chat phụ hiện tại.",
+  "wife.panel.commands.clear.confirm": "Xóa",
+  "wife.panel.commands.clear.working": "Đang xóa chat phụ",
+  "wife.panel.chat.historyTitle": "Lịch sử chat",
+  "wife.panel.chat.historyClose": "Đóng lịch sử chat",
+  "wife.panel.chat.roleAssistant": "Người đồng hành",
+  "wife.panel.chat.roleUser": "Bạn",
+  "wife.panel.selectCharacter": "Chọn nhân vật",
+  "wife.panel.modelInteraction.enter": "Điều chỉnh mô hình Live2D",
+  "wife.panel.modelInteraction.exit": "Quay lại chat",
+  "wife.panel.test.none": "Không có",
+  "wife.panel.test.state.idle": "Rảnh rỗi",
+  "wife.panel.test.state.listening": "Đang lắng nghe",
+  "wife.panel.test.state.thinking": "Đang suy nghĩ",
+  "wife.panel.test.state.working": "Đang làm việc",
+  "wife.panel.test.state.waiting_user": "Đang chờ bạn",
+  "wife.panel.test.state.speaking": "Đang nói",
+  "wife.panel.test.state.success": "Thành công",
+  "wife.panel.test.state.error": "Lỗi",
+  "wife.panel.test.gesture.thinking": "Đang suy nghĩ",
+  "wife.panel.test.gesture.nod": "Gật đầu",
+  "wife.panel.test.gesture.shake_head": "Lắc đầu",
+  "wife.panel.test.gesture.wave": "Vẫy tay",
+  "wife.panel.test.gesture.look_at_user": "Nhìn bạn",
+  "wife.panel.test.gesture.celebrate": "Ăn mừng",
+  "wife.panel.test.emotion.neutral": "Trung lập",
+  "wife.panel.test.emotion.focused": "Tập trung",
+  "wife.panel.test.emotion.happy": "Vui vẻ",
+  "wife.panel.test.emotion.concerned": "Lo lắng",
+  "wife.panel.test.emotion.confused": "Bối rối",
+  "wife.panel.test.emotion.annoyed": "Khó chịu",
+  "wife.panel.test.emotion.embarrassed": "Ngượng ngùng",
   "settings.general.row.wifeMode.description":
     "Hiển thị một nhân vật đồng hành phản ứng với phiên lập trình của bạn. Tắt để sử dụng Chế độ Cổ điển mà không có lớp Wife.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Mức hiển thị tin nhắn",
+  "settings.general.row.wifeChatHeightRatio.description": "Phần chiều cao bảng điều khiển mà các bong bóng chat có thể chiếm trước khi tin nhắn cũ mờ dần",
   "settings.general.row.language.title": "Ngôn ngữ",
   "settings.general.row.language.description": "Thay đổi ngôn ngữ hiển thị cho OpenCode",
   "settings.general.row.shell.title": "Shell terminal",

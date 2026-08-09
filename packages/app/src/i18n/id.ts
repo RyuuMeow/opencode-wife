@@ -160,8 +160,7 @@ export const dict = {
   "command.terminal.toggle": "Alihkan terminal",
   "command.fileTree.toggle": "Alihkan pohon berkas",
   "command.review.toggle": "Alihkan tinjauan",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Alihkan Wife",
   "command.terminal.new": "Terminal baru",
   "command.terminal.new.description": "Buat tab terminal baru",
   "command.steps.toggle": "Alihkan langkah",
@@ -768,7 +767,6 @@ export const dict = {
   "session.tab.context": "Konteks",
   "session.tab.unknown": "Sesi Tidak Dikenal",
   "session.panel.reviewAndFiles": "Tinjauan dan berkas",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Sesi ini tidak dapat ditemukan",
   "session.error.notFound.description": "Tab ini mengarah ke sesi yang sudah tidak ada di server ini.",
@@ -1006,48 +1004,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Mode Wife",
   "wife.characters.title": "Karakter",
   "wife.characters.empty": "Belum ada karakter yang terdaftar",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Belum dikonfigurasi",
+  "wife.characters.newDefault": "Karakter baru",
+  "settings.wife.section.chat": "Chat samping",
+  "settings.wife.section.choices": "Pilihan jawaban",
+  "settings.wife.choices.enabled.title": "Hasilkan pilihan jawaban",
+  "settings.wife.choices.enabled.description": "Sarankan jawaban singkat setelah setiap jawaban Wife berhasil",
+  "settings.wife.choices.model.title": "Model pembuat pilihan",
+  "settings.wife.choices.model.description": "Menggunakan model murah terpisah tanpa menunda jawaban utama",
+  "settings.wife.choices.model.unavailable": "Model atau varian penalaran yang dipilih tidak tersedia",
+  "settings.wife.choices.variant.title": "Upaya penalaran",
+  "settings.wife.choices.variant.description": "Upaya yang lebih rendah biasanya cukup untuk saran jawaban singkat",
+  "wife.characters.settings.changeModel": "Ganti model",
+  "wife.characters.settings.model": "Model Live2D",
+  "wife.characters.settings.delete": "Hapus karakter",
+  "wife.characters.settings.removeAvatar": "Hapus avatar",
+  "wife.characters.settings.general": "Umum",
   "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaDescription": "Tentukan bagaimana karakter ini menyapa dan berbicara kepada Anda di Chat Samping",
+  "wife.characters.settings.userAddress": "Bagaimana mereka menyapa Anda",
+  "wife.characters.settings.userAddressDescription": "Nama atau gelar opsional yang digunakan karakter untuk Anda",
+  "wife.characters.settings.userAddressPlaceholder": "mis. Kapten",
+  "wife.characters.settings.personaInstructions": "Persona dan gaya bicara",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Jelaskan kepribadian, hubungan, nada, dan kebiasaan percakapan karakter",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "mis. Tenang dan jeli, berbicara natural dengan humor lembut",
+  "wife.characters.settings.dangerZone": "Zona berbahaya",
+  "wife.characters.settings.nameDescription": "Nama tampilan karakter",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
+    "Pilih folder yang berisi model dan semua asetnya (.model3.json, .moc3, tekstur, gerakan)",
+  "wife.characters.settings.avatarDescription": "Foto profil persegi yang ditampilkan untuk karakter ini",
+  "wife.characters.settings.mappingDescription": "Petakan gerakan dan ekspresi ke status karakter",
+  "wife.characters.settings.deleteDescription": "Hapus karakter ini beserta pengaturannya secara permanen",
+  "wife.characters.edit": "Sunting",
+  "wife.characters.settings": "Pengaturan karakter",
   "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+  "wife.characters.backToList": "Kembali ke karakter",
   "wife.import.title": "Impor karakter",
   "wife.import.step.scan.title": "Hasil pemindaian",
   "wife.import.step.mapping.title": "Pemetaan semantik",
@@ -1071,85 +1064,57 @@ export const dict = {
   "wife.mapping.emotions": "Emosi",
   "wife.mapping.none": "Tidak ada",
   "wife.mapping.fallback": "Kembali ke",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Lampirkan model Live2D ke karakter untuk melihatnya di sini",
+  "wife.panel.empty.web": "Rendering Live2D tersedia di aplikasi desktop",
+  "wife.panel.empty.loadFailed": "Gagal memuat model Live2D",
+  "wife.panel.empty.runtimeMissing": "Runtime Live2D tidak tersedia",
+  "wife.panel.empty.openSettings": "Buka pengaturan",
+  "wife.panel.chat.placeholder": "Bicaralah dengan pendamping Anda…",
+  "wife.panel.commands.send.title": "Kirim ke Agen",
+  "wife.panel.commands.send.description": "Ubah chat samping ini menjadi prompt Agen yang dapat disunting",
+  "wife.panel.commands.send.working": "Menyiapkan untuk Agen",
+  "wife.panel.commands.send.draftTitle": "Draf Agen tidak kosong",
+  "wife.panel.commands.send.draftDescription": "Ganti teks dan sebutannya, atau tambahkan tugas yang telah disiapkan.",
+  "wife.panel.commands.send.replace": "Ganti",
+  "wife.panel.commands.send.append": "Tambahkan",
+  "wife.panel.commands.clear.title": "Bersihkan chat samping",
+  "wife.panel.commands.clear.suggestionDescription": "Bersihkan chat samping ini dan memorinya secara permanen",
+  "wife.panel.commands.clear.description": "Ini akan menghapus riwayat dan memori chat samping saat ini secara permanen.",
+  "wife.panel.commands.clear.confirm": "Bersihkan",
+  "wife.panel.commands.clear.working": "Membersihkan chat samping",
+  "wife.panel.chat.historyTitle": "Riwayat chat",
+  "wife.panel.chat.historyClose": "Tutup riwayat chat",
+  "wife.panel.chat.roleAssistant": "Pendamping",
+  "wife.panel.chat.roleUser": "Anda",
+  "wife.panel.selectCharacter": "Pilih karakter",
+  "wife.panel.modelInteraction.enter": "Sesuaikan model Live2D",
+  "wife.panel.modelInteraction.exit": "Kembali ke chat",
+  "wife.panel.test.none": "Tidak ada",
+  "wife.panel.test.state.idle": "Diam",
+  "wife.panel.test.state.listening": "Mendengarkan",
+  "wife.panel.test.state.thinking": "Berpikir",
+  "wife.panel.test.state.working": "Bekerja",
+  "wife.panel.test.state.waiting_user": "Menunggu Anda",
+  "wife.panel.test.state.speaking": "Berbicara",
+  "wife.panel.test.state.success": "Berhasil",
+  "wife.panel.test.state.error": "Gagal",
+  "wife.panel.test.gesture.thinking": "Berpikir",
+  "wife.panel.test.gesture.nod": "Mengangguk",
+  "wife.panel.test.gesture.shake_head": "Menggeleng",
+  "wife.panel.test.gesture.wave": "Melambaikan tangan",
+  "wife.panel.test.gesture.look_at_user": "Menatap Anda",
+  "wife.panel.test.gesture.celebrate": "Merayakan",
+  "wife.panel.test.emotion.neutral": "Netral",
+  "wife.panel.test.emotion.focused": "Fokus",
+  "wife.panel.test.emotion.happy": "Bahagia",
+  "wife.panel.test.emotion.concerned": "Khawatir",
+  "wife.panel.test.emotion.confused": "Bingung",
+  "wife.panel.test.emotion.annoyed": "Jengkel",
+  "wife.panel.test.emotion.embarrassed": "Malu",
   "settings.general.row.wifeMode.description":
     "Tampilkan pendamping karakter yang merespons sesi pengodean Anda. Nonaktifkan untuk menggunakan Mode Klasik tanpa lapisan Wife.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Visibilitas pesan",
+  "settings.general.row.wifeChatHeightRatio.description": "Bagian tinggi panel yang dapat diisi gelembung chat sebelum pesan lama memudar",
 
   "settings.general.row.language.title": "Bahasa",
   "settings.general.row.language.description": "Ubah bahasa tampilan untuk OpenCode",

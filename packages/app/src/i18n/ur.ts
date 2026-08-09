@@ -154,8 +154,7 @@ export const dict = {
   "command.terminal.toggle": "ٹرمینل دکھائیں یا چھپائیں",
   "command.fileTree.toggle": "فائل ٹری دکھائیں یا چھپائیں",
   "command.review.toggle": "جائزہ دکھائیں یا چھپائیں",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Wife کو ٹوگل کریں",
   "command.terminal.new": "نیا ٹرمینل",
   "command.terminal.new.description": "ایک نیا ٹرمینل ٹیب بنائیں",
   "command.steps.toggle": "اقدامات دکھائیں یا چھپائیں",
@@ -714,7 +713,6 @@ export const dict = {
   "session.tab.context": "سیاق و سباق",
   "session.tab.unknown": "نامعلوم سیشن",
   "session.panel.reviewAndFiles": "جائزہ اور فائلیں۔",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "یہ سیشن نہیں مل سکتا",
   "session.error.notFound.description": "یہ ٹیب ایک سیشن کی طرف اشارہ کرتا ہے جو اس سرور پر اب موجود نہیں ہے۔",
@@ -936,48 +934,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "وائف موڈ",
   "wife.characters.title": "کردار",
   "wife.characters.empty": "ابھی کوئی کردار رجسٹر نہیں ہوا",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
-  "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.unconfigured": "ترتیب شدہ نہیں",
+  "wife.characters.newDefault": "نیا کردار",
+  "settings.wife.section.chat": "سائیڈ چیٹ",
+  "settings.wife.section.choices": "جوابی اختیارات",
+  "settings.wife.choices.enabled.title": "جوابی اختیارات تیار کریں",
+  "settings.wife.choices.enabled.description": "ہر کامیاب Wife جواب کے بعد مختصر جوابات تجویز کریں",
+  "settings.wife.choices.model.title": "اختیارات تیار کرنے کا ماڈل",
+  "settings.wife.choices.model.description": "مرکزی جواب میں تاخیر کیے بغیر ایک الگ کم لاگت والا ماڈل استعمال کرتا ہے",
+  "settings.wife.choices.model.unavailable": "منتخب ماڈل یا استدلال کی قسم دستیاب نہیں ہے",
+  "settings.wife.choices.variant.title": "استدلال کی کوشش",
+  "settings.wife.choices.variant.description": "مختصر جوابی تجاویز کے لیے عام طور پر کم کوشش کافی ہوتی ہے",
+  "wife.characters.settings.changeModel": "ماڈل تبدیل کریں",
+  "wife.characters.settings.model": "Live2D ماڈل",
+  "wife.characters.settings.delete": "کردار حذف کریں",
+  "wife.characters.settings.removeAvatar": "اوتار ہٹائیں",
+  "wife.characters.settings.general": "عام",
+  "wife.characters.settings.persona": "شخصیت",
+  "wife.characters.settings.personaDescription": "طے کریں کہ یہ کردار آپ کو کیسے مخاطب کرتا ہے اور سائیڈ چیٹ میں کیسے بولتا ہے",
+  "wife.characters.settings.userAddress": "وہ آپ کو کیسے مخاطب کرتے ہیں",
+  "wife.characters.settings.userAddressDescription": "اختیاری نام یا خطاب جو کردار آپ کے لیے استعمال کرتا ہے",
+  "wife.characters.settings.userAddressPlaceholder": "مثال: کپتان",
+  "wife.characters.settings.personaInstructions": "شخصیت اور گفتگو کا انداز",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "کردار کی شخصیت، تعلق، لہجے اور گفتگو کی عادات بیان کریں",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "مثال: پرسکون اور مشاہدہ کار، نرم مزاح کے ساتھ فطری گفتگو",
+  "wife.characters.settings.dangerZone": "خطرناک زون",
+  "wife.characters.settings.nameDescription": "کردار کا ظاہر کردہ نام",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
-  "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+    "وہ فولڈر منتخب کریں جس میں ماڈل اور اس کے تمام اثاثے ہوں (.model3.json, .moc3, بناوٹ, حرکات)",
+  "wife.characters.settings.avatarDescription": "اس کردار کے لیے دکھائی جانے والی مربع پروفائل تصویر",
+  "wife.characters.settings.mappingDescription": "حرکات اور تاثرات کو کردار کی حالتوں سے جوڑیں",
+  "wife.characters.settings.deleteDescription": "اس کردار اور اس کی ترتیبات کو مستقل طور پر ہٹائیں",
+  "wife.characters.edit": "ترمیم کریں",
+  "wife.characters.settings": "کردار کی ترتیبات",
+  "wife.characters.settings.avatar": "اوتار",
+  "wife.characters.backToList": "کرداروں پر واپس جائیں",
   "wife.import.title": "کردار درآمد کریں",
   "wife.import.step.scan.title": "اسکین کے نتائج",
   "wife.import.step.mapping.title": "معنیاتی میپنگ",
@@ -1001,85 +994,57 @@ export const dict = {
   "wife.mapping.emotions": "جذبات",
   "wife.mapping.none": "کوئی نہیں",
   "wife.mapping.fallback": "اس پر واپس جاتا ہے",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "یہاں دیکھنے کے لیے کردار کے ساتھ Live2D ماڈل منسلک کریں",
+  "wife.panel.empty.web": "Live2D رینڈرنگ ڈیسک ٹاپ ایپ میں دستیاب ہے",
+  "wife.panel.empty.loadFailed": "Live2D ماڈل لوڈ کرنے میں ناکام",
+  "wife.panel.empty.runtimeMissing": "Live2D رن ٹائم دستیاب نہیں ہے",
+  "wife.panel.empty.openSettings": "ترتیبات کھولیں",
+  "wife.panel.chat.placeholder": "اپنے ساتھی سے بات کریں…",
+  "wife.panel.commands.send.title": "ایجنٹ کو بھیجیں",
+  "wife.panel.commands.send.description": "اس سائیڈ چیٹ کو قابل تدوین ایجنٹ پرامپٹ میں تبدیل کریں",
+  "wife.panel.commands.send.working": "ایجنٹ کے لیے تیاری ہو رہی ہے",
+  "wife.panel.commands.send.draftTitle": "ایجنٹ کا مسودہ خالی نہیں ہے",
+  "wife.panel.commands.send.draftDescription": "اس کا متن اور ذکر تبدیل کریں، یا تیار شدہ کام شامل کریں۔",
+  "wife.panel.commands.send.replace": "تبدیل کریں",
+  "wife.panel.commands.send.append": "شامل کریں",
+  "wife.panel.commands.clear.title": "سائیڈ چیٹ صاف کریں",
+  "wife.panel.commands.clear.suggestionDescription": "اس سائیڈ چیٹ اور اس کی یادداشت کو مستقل طور پر صاف کریں",
+  "wife.panel.commands.clear.description": "یہ موجودہ سائیڈ چیٹ کی ہسٹری اور یادداشت کو مستقل طور پر حذف کر دے گا۔",
+  "wife.panel.commands.clear.confirm": "صاف کریں",
+  "wife.panel.commands.clear.working": "سائیڈ چیٹ صاف کی جا رہی ہے",
+  "wife.panel.chat.historyTitle": "چیٹ ہسٹری",
+  "wife.panel.chat.historyClose": "چیٹ ہسٹری بند کریں",
+  "wife.panel.chat.roleAssistant": "ساتھی",
+  "wife.panel.chat.roleUser": "آپ",
+  "wife.panel.selectCharacter": "کردار منتخب کریں",
+  "wife.panel.modelInteraction.enter": "Live2D ماڈل ایڈجسٹ کریں",
+  "wife.panel.modelInteraction.exit": "چیٹ پر واپس جائیں",
+  "wife.panel.test.none": "کوئی نہیں",
+  "wife.panel.test.state.idle": "غیر فعال",
+  "wife.panel.test.state.listening": "سن رہا ہے",
+  "wife.panel.test.state.thinking": "سوچ رہا ہے",
+  "wife.panel.test.state.working": "کام کر رہا ہے",
+  "wife.panel.test.state.waiting_user": "آپ کا انتظار ہے",
+  "wife.panel.test.state.speaking": "بول رہا ہے",
+  "wife.panel.test.state.success": "کامیابی",
+  "wife.panel.test.state.error": "خرابی",
+  "wife.panel.test.gesture.thinking": "سوچ رہا ہے",
+  "wife.panel.test.gesture.nod": "سر ہلانا",
+  "wife.panel.test.gesture.shake_head": "سر جھٹکانا",
+  "wife.panel.test.gesture.wave": "ہاتھ ہلانا",
+  "wife.panel.test.gesture.look_at_user": "آپ کی طرف دیکھنا",
+  "wife.panel.test.gesture.celebrate": "جشن منانا",
+  "wife.panel.test.emotion.neutral": "غیر جانبدار",
+  "wife.panel.test.emotion.focused": "مرکوز",
+  "wife.panel.test.emotion.happy": "خوش",
+  "wife.panel.test.emotion.concerned": "پریشان",
+  "wife.panel.test.emotion.confused": "الجھن میں",
+  "wife.panel.test.emotion.annoyed": "ناراض",
+  "wife.panel.test.emotion.embarrassed": "شرمندہ",
   "settings.general.row.wifeMode.description":
     "اپنے کوڈنگ سیشن پر رد عمل ظاہر کرنے والا ایک کردار دکھائیں۔ وائف پرت کے بغیر کلاسک موڈ استعمال کرنے کے لیے اسے بند کریں۔",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "پیغامات کی نمائش",
+  "settings.general.row.wifeChatHeightRatio.description": "پینل کی اونچائی کا وہ حصہ جو چیٹ بلبلز پرانے پیغامات کے دھندلے ہونے سے پہلے بھر سکتے ہیں",
   "settings.general.row.language.title": "زبان",
   "settings.general.row.language.description": "OpenCode کے لیے ڈسپلے کی زبان تبدیل کریں۔",
   "settings.general.row.shell.title": "ٹرمینل شیل",

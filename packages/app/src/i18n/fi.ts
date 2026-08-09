@@ -53,8 +53,7 @@ export const dict = {
   "command.terminal.toggle": "Näytä tai piilota terminaali",
   "command.fileTree.toggle": "Näytä tai piilota tiedostopuu",
   "command.review.toggle": "Näytä tai piilota tarkistus",
-  // TODO: translate via translate:app
-  "command.wife.toggle": "Toggle wife",
+  "command.wife.toggle": "Vaihda Wife-tilaa",
   "command.terminal.new": "Uusi terminaali",
   "command.terminal.new.description": "Luo uusi terminaalivälilehti",
   "command.steps.toggle": "Näytä tai piilota vaiheet",
@@ -601,7 +600,6 @@ export const dict = {
   "session.tab.context": "Konteksti",
   "session.tab.unknown": "Tuntematon istunto",
   "session.panel.reviewAndFiles": "Tarkistus ja tiedostot",
-  // TODO: translate via translate:app
   "session.panel.wife": "Wife",
   "session.error.notFound": "Tätä istuntoa ei löydy",
   "session.error.notFound.description": "Tämä välilehti osoittaa istuntoon, jota ei enää ole tällä palvelimella.",
@@ -826,48 +824,43 @@ export const dict = {
   "settings.general.row.wifeMode.title": "Wife-tila",
   "wife.characters.title": "Hahmot",
   "wife.characters.empty": "Hahmoja ei ole vielä rekisteröity",
-  // TODO: translate via translate:app
-  "wife.characters.unconfigured": "Not configured",
-  "wife.characters.newDefault": "New character",
-  "settings.wife.section.chat": "Side chat", // TODO: translate via translate:app
-  "settings.wife.section.choices": "Reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.title": "Generate reply choices", // TODO: translate via translate:app
-  "settings.wife.choices.enabled.description": "Suggest short replies after each successful Wife response", // TODO: translate via translate:app
-  "settings.wife.choices.model.title": "Choice generation model", // TODO: translate via translate:app
-  "settings.wife.choices.model.description": "Uses a separate low-cost model without delaying the main response", // TODO: translate via translate:app
-  "settings.wife.choices.model.unavailable": "The selected model or reasoning variant is unavailable", // TODO: translate via translate:app
-  "settings.wife.choices.variant.title": "Reasoning effort", // TODO: translate via translate:app
-  "settings.wife.choices.variant.description": "Lower effort is usually sufficient for short reply suggestions", // TODO: translate via translate:app
-  "wife.characters.settings.changeModel": "Change model",
-  // TODO: translate via translate:app
-  "wife.characters.settings.model": "Live2D model",
-  "wife.characters.settings.delete": "Delete character",
-  "wife.characters.settings.removeAvatar": "Remove avatar",
-  // TODO: translate via translate:app
-  "wife.characters.settings.general": "General",
-  // TODO: translate via translate:app
+  "wife.characters.unconfigured": "Ei määritetty",
+  "wife.characters.newDefault": "Uusi hahmo",
+  "settings.wife.section.chat": "Sivuchat",
+  "settings.wife.section.choices": "Vastausvaihtoehdot",
+  "settings.wife.choices.enabled.title": "Luo vastausvaihtoehdot",
+  "settings.wife.choices.enabled.description": "Ehdota lyhyitä vastauksia jokaisen onnistuneen Wife-vastauksen jälkeen",
+  "settings.wife.choices.model.title": "Vaihtoehtojen luontimalli",
+  "settings.wife.choices.model.description": "Käyttää erillistä edullista mallia viivästyttämättä päävastausta",
+  "settings.wife.choices.model.unavailable": "Valittu malli tai päättelyvariantti ei ole saatavilla",
+  "settings.wife.choices.variant.title": "Päättelyn taso",
+  "settings.wife.choices.variant.description": "Alempi taso riittää yleensä lyhyisiin vastausehdotuksiin",
+  "wife.characters.settings.changeModel": "Vaihda malli",
+  "wife.characters.settings.model": "Live2D-malli",
+  "wife.characters.settings.delete": "Poista hahmo",
+  "wife.characters.settings.removeAvatar": "Poista avatar",
+  "wife.characters.settings.general": "Yleiset",
   "wife.characters.settings.persona": "Persona",
-  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
-  "wife.characters.settings.userAddress": "How they address you",
-  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
-  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
-  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaDescription": "Määritä, miten tämä hahmo puhuttelee sinua ja puhuu Sivuchatissa",
+  "wife.characters.settings.userAddress": "Miten he puhuttelevat sinua",
+  "wife.characters.settings.userAddressDescription": "Valinnainen nimi tai titteli, jota hahmo käyttää sinusta",
+  "wife.characters.settings.userAddressPlaceholder": "esim. Kapteeni",
+  "wife.characters.settings.personaInstructions": "Persona ja puhetyyli",
   "wife.characters.settings.personaInstructionsDescription":
-    "Describe the character's personality, relationship, tone, and conversational habits",
+    "Kuvaile hahmon persoonallisuutta, suhdetta, sävyä ja keskustelutottumuksia",
   "wife.characters.settings.personaInstructionsPlaceholder":
-    "e.g. Calm and observant, speaking naturally with gentle humor",
-  "wife.characters.settings.dangerZone": "Danger zone",
-  "wife.characters.settings.nameDescription": "Character display name",
+    "esim. Rauhallinen ja tarkkaavainen, puhuu luontevasti lempeällä huumorilla",
+  "wife.characters.settings.dangerZone": "Vaaravyöhyke",
+  "wife.characters.settings.nameDescription": "Hahmon näyttönimi",
   "wife.characters.settings.modelDescription":
-    "Choose the folder that contains the model and all of its assets (.model3.json, .moc3, textures, motions)",
-  "wife.characters.settings.avatarDescription": "Square profile picture shown for this character",
-  "wife.characters.settings.mappingDescription": "Map motions and expressions to character states",
-  "wife.characters.settings.deleteDescription": "Remove this character and its settings permanently",
-  // TODO: translate via translate:app
-  "wife.characters.edit": "Edit",
-  "wife.characters.settings": "Character settings",
+    "Valitse kansio, joka sisältää mallin ja kaikki sen resurssit (.model3.json, .moc3, tekstuurit, liikkeet)",
+  "wife.characters.settings.avatarDescription": "Neliönmuotoinen profiilikuva, joka näytetään tälle hahmolle",
+  "wife.characters.settings.mappingDescription": "Yhdistä liikkeet ja ilmeet hahmon tiloihin",
+  "wife.characters.settings.deleteDescription": "Poista tämä hahmo ja sen asetukset pysyvästi",
+  "wife.characters.edit": "Muokkaa",
+  "wife.characters.settings": "Hahmon asetukset",
   "wife.characters.settings.avatar": "Avatar",
-  "wife.characters.backToList": "Back to characters",
+  "wife.characters.backToList": "Takaisin hahmoihin",
   "wife.import.title": "Tuo hahmo",
   "wife.import.step.scan.title": "Skannauksen tulokset",
   "wife.import.step.mapping.title": "Semanttinen kartoitus",
@@ -891,85 +884,57 @@ export const dict = {
   "wife.mapping.emotions": "Tunteet",
   "wife.mapping.none": "Ei mitään",
   "wife.mapping.fallback": "Palaa takaisin",
-  // TODO: translate via translate:app
-  "wife.panel.empty.noModel": "Attach a Live2D model to a character to see it here",
-  // TODO: translate via translate:app
-  "wife.panel.empty.web": "Live2D rendering is available in the desktop app",
-  // TODO: translate via translate:app
-  "wife.panel.empty.loadFailed": "Failed to load the Live2D model",
-  // TODO: translate via translate:app
-  "wife.panel.empty.runtimeMissing": "The Live2D runtime is not available",
-  // TODO: translate via translate:app
-  "wife.panel.empty.openSettings": "Open settings",
-  "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
-  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
-  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
-  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
-  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
-  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
-  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
-  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
-  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
-  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
-  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
-  "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
-  "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
-  "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app
-  "wife.panel.chat.roleUser": "You", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.selectCharacter": "Select character",
-  "wife.panel.modelInteraction.enter": "Adjust Live2D model", // TODO: translate via translate:app
-  "wife.panel.modelInteraction.exit": "Return to chat", // TODO: translate via translate:app
-  // TODO: translate via translate:app
-  "wife.panel.test.none": "None",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.idle": "Idle",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.listening": "Listening",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.working": "Working",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.waiting_user": "Waiting for you",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.speaking": "Speaking",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.success": "Success",
-  // TODO: translate via translate:app
-  "wife.panel.test.state.error": "Error",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.thinking": "Thinking",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.nod": "Nod",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.shake_head": "Shake head",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.wave": "Wave",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.look_at_user": "Look at you",
-  // TODO: translate via translate:app
-  "wife.panel.test.gesture.celebrate": "Celebrate",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.neutral": "Neutral",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.focused": "Focused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.happy": "Happy",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.concerned": "Concerned",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.confused": "Confused",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.annoyed": "Annoyed",
-  // TODO: translate via translate:app
-  "wife.panel.test.emotion.embarrassed": "Embarrassed",
+  "wife.panel.empty.noModel": "Liitä Live2D-malli hahmoon nähdäksesi se täällä",
+  "wife.panel.empty.web": "Live2D-renderöinti on saatavilla työpöytäsovelluksessa",
+  "wife.panel.empty.loadFailed": "Live2D-mallin lataaminen epäonnistui",
+  "wife.panel.empty.runtimeMissing": "Live2D-suoritusaika ei ole käytettävissä",
+  "wife.panel.empty.openSettings": "Avaa asetukset",
+  "wife.panel.chat.placeholder": "Juttele kumppanisi kanssa…",
+  "wife.panel.commands.send.title": "Lähetä Agentille",
+  "wife.panel.commands.send.description": "Muuta tämä sivuchat muokattavaksi Agent-kehotteeksi",
+  "wife.panel.commands.send.working": "Valmistellaan Agentille",
+  "wife.panel.commands.send.draftTitle": "Agent-luonnos ei ole tyhjä",
+  "wife.panel.commands.send.draftDescription": "Korvaa sen teksti ja maininnat tai liitä valmisteltu tehtävä.",
+  "wife.panel.commands.send.replace": "Korvaa",
+  "wife.panel.commands.send.append": "Lisää",
+  "wife.panel.commands.clear.title": "Tyhjennä sivuchat",
+  "wife.panel.commands.clear.suggestionDescription": "Tyhjennä tämä sivuchat ja sen muisti pysyvästi",
+  "wife.panel.commands.clear.description": "Tämä poistaa pysyvästi nykyisen sivuchatin historian ja muistin.",
+  "wife.panel.commands.clear.confirm": "Tyhjennä",
+  "wife.panel.commands.clear.working": "Tyhjennetään sivuchatia",
+  "wife.panel.chat.historyTitle": "Chathistoria",
+  "wife.panel.chat.historyClose": "Sulje chathistoria",
+  "wife.panel.chat.roleAssistant": "Kumppani",
+  "wife.panel.chat.roleUser": "Sinä",
+  "wife.panel.selectCharacter": "Valitse hahmo",
+  "wife.panel.modelInteraction.enter": "Säädä Live2D-mallia",
+  "wife.panel.modelInteraction.exit": "Palaa chattiin",
+  "wife.panel.test.none": "Ei mitään",
+  "wife.panel.test.state.idle": "Toimettomana",
+  "wife.panel.test.state.listening": "Kuuntelee",
+  "wife.panel.test.state.thinking": "Ajattelee",
+  "wife.panel.test.state.working": "Työskentelee",
+  "wife.panel.test.state.waiting_user": "Odottaa sinua",
+  "wife.panel.test.state.speaking": "Puhuu",
+  "wife.panel.test.state.success": "Onnistui",
+  "wife.panel.test.state.error": "Virhe",
+  "wife.panel.test.gesture.thinking": "Ajattelee",
+  "wife.panel.test.gesture.nod": "Nyökkää",
+  "wife.panel.test.gesture.shake_head": "Pudistaa päätä",
+  "wife.panel.test.gesture.wave": "Heiluttaa",
+  "wife.panel.test.gesture.look_at_user": "Katsoo sinua",
+  "wife.panel.test.gesture.celebrate": "Juhlii",
+  "wife.panel.test.emotion.neutral": "Neutraali",
+  "wife.panel.test.emotion.focused": "Keskittynyt",
+  "wife.panel.test.emotion.happy": "Iloinen",
+  "wife.panel.test.emotion.concerned": "Huolestunut",
+  "wife.panel.test.emotion.confused": "Hämmentynyt",
+  "wife.panel.test.emotion.annoyed": "Ärsyyntynyt",
+  "wife.panel.test.emotion.embarrassed": "Nolostunut",
   "settings.general.row.wifeMode.description":
     "Näytä hahmokumppani, joka reagoi koodaussessioosi. Poista käytöstä käyttääksesi klassista tilaa ilman Wife-kerrosta.",
-  "settings.general.row.wifeChatHeightRatio.title": "Chat message visibility", // TODO: translate via translate:app
-  "settings.general.row.wifeChatHeightRatio.description": "Share of the panel height chat bubbles may fill before older messages fade out", // TODO: translate via translate:app
+  "settings.general.row.wifeChatHeightRatio.title": "Viestien näkyvyys",
+  "settings.general.row.wifeChatHeightRatio.description": "Osuus paneelin korkeudesta, jonka chat-kuplat voivat täyttää ennen kuin vanhemmat viestit haalistuvat",
   "settings.general.row.language.title": "Kieli",
   "settings.general.row.language.description": "Vaihda OpenCoden näyttökieli",
   "settings.general.row.shell.title": "Terminaalin komentotulkki",
