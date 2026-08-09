@@ -97,7 +97,7 @@ type SessionMessage = {
     role: "user" | "assistant"
     structured?: unknown
   }
-  parts: Array<{ type: string; text?: string }>
+  parts: Array<{ type: string; text?: string; synthetic?: boolean; ignored?: boolean }>
 }
 
 type Conversation = {
@@ -204,6 +204,13 @@ export async function runWifePromptWithFallback(input: {
   if (!format || !wifeFormatUnsupported(first.error)) throw first.error
   input.markTextOnly()
   return input.prompt(undefined)
+}
+
+export async function completeWifeReplyChoices(reply: WifeReply, repair: () => Promise<WifeReply>) {
+  if (reply.choices.length >= 2) return reply
+  const repaired = await repair()
+  if (repaired.choices.length < 2) throw new Error("Wife choice repair returned too few choices")
+  return { ...reply, choices: repaired.choices }
 }
 
 export function wifeBubbleReadingDelay(message: string) {
@@ -557,10 +564,41 @@ export function createWifeChatController(input: {
           if (!reply) throw new Error("Wife prompt returned invalid structured output")
           return reply
         }
-        return runWifePromptWithFallback({
+        const reply = await runWifePromptWithFallback({
           textOnly: capabilities.textModels[key] === true,
           prompt,
           markTextOnly: () => setCapabilities("textModels", key, true),
+        })
+        return completeWifeReplyChoices(reply, async () => {
+          const repairIDs = createWifePromptIdentifiers()
+          const response = await sdk().client.session.prompt({
+            sessionID: session.id,
+            directory: sdk().directory,
+            messageID: repairIDs.messageID,
+            agent: agent.name,
+            model: { providerID: model.providerID, modelID: model.modelID },
+            variant: model.variant,
+            tools: { read: false, glob: false, grep: false },
+            system: wifeChoiceRepairSystemPrompt(),
+            parts: [
+              {
+                id: repairIDs.partID,
+                type: "text",
+                text: "Add the missing reply choices for your immediately preceding response.",
+                synthetic: true,
+              },
+            ],
+          })
+          if (response.error) throw response.error
+          if (!response.data || response.data.info.error) {
+            throw response.data?.info.error ?? new Error("Wife choice repair returned no response")
+          }
+          const repaired = normalizeWifeReplyText(textContent(response.data.parts))
+          if (!repaired) throw new Error("Wife choice repair returned invalid output")
+          return repaired
+        }).catch((error: unknown) => {
+          console.warn("[wife.chat] choice repair failed", wifeChatError(error) ?? "Unknown error")
+          return reply
         })
       })
       .then((reply) => ({ reply }))
@@ -875,7 +913,10 @@ function hasDenyAllPermission(permission: Session["permission"]) {
 
 function textContent(parts: SessionMessage["parts"]) {
   return parts
-    .filter((part) => part.type === "text" && typeof part.text === "string")
+    .filter(
+      (part) =>
+        part.type === "text" && typeof part.text === "string" && part.synthetic !== true && part.ignored !== true,
+    )
     .map((part) => part.text?.trim() ?? "")
     .filter(Boolean)
     .join("\n")
@@ -973,6 +1014,14 @@ Return only this tagged format, with no Markdown fences or text outside the tags
 <choice>one natural user reply</choice>
 <choice>another natural user reply</choice>`
   }`
+}
+
+export function wifeChoiceRepairSystemPrompt() {
+  return `Generate reply choices for the assistant response immediately before the synthetic request.
+Return exactly 2 or 3 brief, distinct, natural replies the user could send next, in the same language as that response.
+Do not repeat, summarize, continue, or answer the response. Do not use tools. Return only these tags with no Markdown fences or other text:
+<choice>one natural user reply</choice>
+<choice>another natural user reply</choice>`
 }
 
 export function wifeHandoffSystemPrompt() {

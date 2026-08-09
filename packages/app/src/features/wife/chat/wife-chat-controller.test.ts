@@ -1,6 +1,7 @@
 import type { Session } from "@opencode-ai/sdk/v2/client"
 import { describe, expect, test } from "bun:test"
 import {
+  completeWifeReplyChoices,
   createWifeReplyGate,
   createWifePromptIdentifiers,
   isWifeSession,
@@ -12,6 +13,7 @@ import {
   wifeBubbleReadingDelay,
   wifeBubbleRevealDelays,
   wifeChatError,
+  wifeChoiceRepairSystemPrompt,
   wifeErrorStatus,
   wifeHandoffSystemPrompt,
   wifeFormatUnsupported,
@@ -59,6 +61,17 @@ describe("wifeSystemPrompt", () => {
     expect(prompt).toContain(
       '<agent-session-context encoding="json-string">\n"{\\"status\\":\\"busy\\"}"\n</agent-session-context>',
     )
+  })
+})
+
+describe("wifeChoiceRepairSystemPrompt", () => {
+  test("requests choices only without tools or repeated assistant content", () => {
+    const prompt = wifeChoiceRepairSystemPrompt()
+    expect(prompt).toContain("exactly 2 or 3")
+    expect(prompt).toContain("Do not repeat")
+    expect(prompt).toContain("Do not use tools")
+    expect(prompt).toContain("<choice>")
+    expect(prompt).not.toContain("<message>")
   })
 })
 
@@ -321,6 +334,38 @@ describe("wife prompt compatibility", () => {
   })
 })
 
+describe("wife choice repair", () => {
+  test("skips repair when the original reply already has enough choices", async () => {
+    const state = { repairs: 0 }
+    const reply = { messages: ["好了。"], choices: ["繼續", "先等等"] }
+    expect(
+      await completeWifeReplyChoices(reply, async () => {
+        state.repairs += 1
+        return { messages: [], choices: ["不該使用"] }
+      }),
+    ).toBe(reply)
+    expect(state.repairs).toBe(0)
+  })
+
+  test("replaces missing choices with a valid repair result", async () => {
+    expect(
+      await completeWifeReplyChoices({ messages: ["好了。"], choices: [] }, async () => ({
+        messages: [],
+        choices: ["繼續", "換個方向"],
+      })),
+    ).toEqual({ messages: ["好了。"], choices: ["繼續", "換個方向"] })
+  })
+
+  test("rejects an incomplete repair so the caller can keep the original reply", () => {
+    expect(
+      completeWifeReplyChoices({ messages: ["好了。"], choices: [] }, async () => ({
+        messages: [],
+        choices: ["只有一個"],
+      })),
+    ).rejects.toThrow("too few choices")
+  })
+})
+
 describe("projectWifeHistory", () => {
   test("projects structured assistant messages and keeps only current choices", () => {
     expect(
@@ -361,6 +406,31 @@ describe("projectWifeHistory", () => {
         { id: "user-2", role: "user", content: "繼續" },
       ],
       choices: [],
+    })
+  })
+
+  test("omits synthetic and ignored repair prompts from projected history", () => {
+    expect(
+      projectWifeHistory([
+        {
+          info: { id: "assistant-1", role: "assistant" },
+          parts: [{ type: "text", text: "原本回答。" }],
+        },
+        {
+          info: { id: "repair-user", role: "user" },
+          parts: [
+            { type: "text", text: "repair", synthetic: true },
+            { type: "text", text: "ignored", ignored: true },
+          ],
+        },
+        {
+          info: { id: "repair-assistant", role: "assistant" },
+          parts: [{ type: "text", text: "<choice>繼續</choice>\n<choice>換個方向</choice>" }],
+        },
+      ]),
+    ).toEqual({
+      messages: [{ id: "assistant-1:0", role: "assistant", content: "原本回答。" }],
+      choices: ["繼續", "換個方向"],
     })
   })
 
