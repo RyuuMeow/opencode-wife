@@ -152,7 +152,7 @@ describe("wife session identity", () => {
     ).toBe(false)
     expect(
       requiresWifeSessionRebuild(
-        { ...value, metadata: { ...value.metadata, [WIFE_METADATA_VERSION]: "1" } },
+        { ...value, metadata: { ...value.metadata, [WIFE_METADATA_VERSION]: "3" } },
         "main-session",
       ),
     ).toBe(true)

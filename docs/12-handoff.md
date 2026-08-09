@@ -55,7 +55,7 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 - schema-to-text compatibility retries reuse one chronologically sortable app `messageID`/`partID`; do not replace these with descriptive UUID prefixes because the session loop compares message IDs to determine whether an assistant turn follows its user turn
 - Wife character/model/variant selection is persisted per main session and remains independent from the agent composer; Live2D zoom and position remain global per character
 - the Wife resize handle moves to its trailing edge when a review/side panel is present, giving each three-column divider one unambiguous resize target
-- Wife chat metadata is versioned; pre-v3 sessions containing legacy structured-format payloads are retired once and replaced automatically
+- Wife chat metadata is versioned; pre-v4 sessions are aborted, retired, and replaced automatically because legacy `msg_wife_*` prompt IDs permanently outrank chronological IDs and can keep the session loop running
 - controller ownership lives in `SessionPage`, not `WifePanel`, so collapsing the panel does not interrupt work; stop aborts the Wife session and generation guards prevent late replies from crossing session boundaries
 - loading and failures stay inside the assistant bubble surface with V2 semantic tokens; archived Wife sessions are excluded from ordinary completion/error notifications
 

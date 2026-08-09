@@ -330,6 +330,8 @@ export function createWifeChatController(input: {
   }
 
   const retire = async (session: Session, ownerSessionID: string) => {
+    const aborted = await sdk().client.session.abort({ sessionID: session.id, directory: sdk().directory })
+    if (aborted.error) throw aborted.error
     const response = await sdk().client.session.update({
       sessionID: session.id,
       directory: sdk().directory,
@@ -381,10 +383,13 @@ export function createWifeChatController(input: {
     const session = response.data?.find(
       (item) =>
         item.metadata?.[WIFE_METADATA_KIND] === WIFE_METADATA_VALUE &&
-        item.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID &&
-        item.metadata?.[WIFE_METADATA_VERSION] === WIFE_METADATA_VERSION_VALUE,
+        item.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID,
     )
     if (!session) return undefined
+    if (requiresWifeSessionRebuild(session, ownerSessionID)) {
+      await retire(session, ownerSessionID)
+      return undefined
+    }
     return secure(session, ownerSessionID)
   }
 
