@@ -39,6 +39,18 @@ describe("normalizeWifeReply", () => {
     expect(normalizeWifeReplyText(messages.join(""))?.messages).toEqual(messages)
   })
 
+  test("keeps deliberately grouped sentences in one bubble", () => {
+    expect(
+      normalizeWifeReply({
+        messages: ["短句。", "<keep>這兩句要連在一起。分開反而不自然。</keep>"],
+        choices: ["繼續", "換個方向"],
+      }),
+    ).toEqual({
+      messages: ["短句。", "這兩句要連在一起。分開反而不自然。"],
+      choices: ["繼續", "換個方向"],
+    })
+  })
+
   test("rejects malformed structured output", () => {
     expect(normalizeWifeReply(undefined)).toBeUndefined()
     expect(normalizeWifeReply({ messages: [], choices: [] })).toBeUndefined()
@@ -54,6 +66,18 @@ describe("normalizeWifeReply", () => {
     expect(normalizeWifeReplyText('```json\n{"messages":["嗨！"],"choices":[]}\n```')).toEqual({
       messages: ["嗨！"],
       choices: [],
+    })
+    expect(
+      normalizeWifeReplyText(
+        "<message>先說結論。</message>\n<message><keep>這兩句要一起看。拆開會失去語氣。</keep></message>\n<choice>繼續說</choice>\n<choice>換個方向</choice>",
+      ),
+    ).toEqual({
+      messages: ["先說結論。", "這兩句要一起看。拆開會失去語氣。"],
+      choices: ["繼續說", "換個方向"],
+    })
+    expect(normalizeWifeReplyText("你想從哪裡開始？\n- 看專案架構\n- 規劃功能\n- Review 程式碼")).toEqual({
+      messages: ["你想從哪裡開始？"],
+      choices: ["看專案架構", "規劃功能", "Review 程式碼"],
     })
     expect(normalizeWifeReplyText("你好呀！今天想聊什麼？")).toEqual({
       messages: ["你好呀！", "今天想聊什麼？"],
@@ -145,6 +169,7 @@ describe("wife prompt compatibility", () => {
       type: "json_schema",
       schema: WIFE_REPLY_SCHEMA,
     })
+    expect(WIFE_REPLY_SCHEMA.properties.choices.minItems).toBe(2)
   })
 
   test("extracts readable SDK and provider errors", () => {
