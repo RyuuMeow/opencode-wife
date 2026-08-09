@@ -223,6 +223,7 @@ export function WifePanel(props: {
     return props.chat.submit(
       text,
       selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant"),
+      selectedCharacter()?.behavior,
       { providerID: model.provider.id, modelID: model.id, variant: selectedVariant() },
     )
   }

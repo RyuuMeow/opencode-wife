@@ -3,6 +3,7 @@ import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
 import { Icon } from "@opencode-ai/ui/v2/icon"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import { TextInputV2 } from "@opencode-ai/ui/v2/text-input-v2"
+import { TextareaV2 } from "@opencode-ai/ui/v2/textarea-v2"
 import {
   createEmptyAvatar,
   findModel3Files,
@@ -91,6 +92,10 @@ export const CharacterSettings: Component<{
 
   const setName = (value: string) => {
     registry.update(props.id, { name: value })
+  }
+
+  const setBehavior = (patch: { userAddress?: string; personaInstructions?: string }) => {
+    registry.update(props.id, { behavior: { ...character()?.behavior, ...patch } })
   }
 
   const updateMappings = (next: SuggestedMappings) => {
@@ -334,6 +339,45 @@ export const CharacterSettings: Component<{
             ))}
           </div>
         </Show>
+      </div>
+
+      <div class="settings-v2-section">
+        <h3 class="settings-v2-section-title">{language.t("wife.characters.settings.persona")}</h3>
+        <span class="text-12-regular text-v2-text-text-muted">
+          {language.t("wife.characters.settings.personaDescription")}
+        </span>
+        <SettingsListV2>
+          <SettingsRowV2
+            title={language.t("wife.characters.settings.userAddress")}
+            description={language.t("wife.characters.settings.userAddressDescription")}
+          >
+            <div class="w-64 max-w-full">
+              <TextInputV2
+                type="text"
+                appearance="base"
+                value={character()?.behavior?.userAddress ?? ""}
+                onInput={(event) => setBehavior({ userAddress: event.currentTarget.value || undefined })}
+                placeholder={language.t("wife.characters.settings.userAddressPlaceholder")}
+                aria-label={language.t("wife.characters.settings.userAddress")}
+              />
+            </div>
+          </SettingsRowV2>
+          <SettingsRowV2
+            title={language.t("wife.characters.settings.personaInstructions")}
+            description={language.t("wife.characters.settings.personaInstructionsDescription")}
+          >
+            <div class="w-96 max-w-full">
+              <TextareaV2
+                rows={5}
+                maxLength={2000}
+                value={character()?.behavior?.personaInstructions ?? ""}
+                onInput={(event) => setBehavior({ personaInstructions: event.currentTarget.value || undefined })}
+                placeholder={language.t("wife.characters.settings.personaInstructionsPlaceholder")}
+                aria-label={language.t("wife.characters.settings.personaInstructions")}
+              />
+            </div>
+          </SettingsRowV2>
+        </SettingsListV2>
       </div>
 
       <Show when={capabilities()}>

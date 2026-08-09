@@ -908,6 +908,17 @@ export const dict = {
   "wife.characters.settings.removeAvatar": "Remove avatar",
   // TODO: translate via translate:app
   "wife.characters.settings.general": "General",
+  // TODO: translate via translate:app
+  "wife.characters.settings.persona": "Persona",
+  "wife.characters.settings.personaDescription": "Define how this character addresses you and speaks in Side Chat",
+  "wife.characters.settings.userAddress": "How they address you",
+  "wife.characters.settings.userAddressDescription": "Optional name or title the character uses for you",
+  "wife.characters.settings.userAddressPlaceholder": "e.g. Captain",
+  "wife.characters.settings.personaInstructions": "Persona and speaking style",
+  "wife.characters.settings.personaInstructionsDescription":
+    "Describe the character's personality, relationship, tone, and conversational habits",
+  "wife.characters.settings.personaInstructionsPlaceholder":
+    "e.g. Calm and observant, speaking naturally with gentle humor",
   "wife.characters.settings.dangerZone": "Danger zone",
   "wife.characters.settings.nameDescription": "Character display name",
   "wife.characters.settings.modelDescription":

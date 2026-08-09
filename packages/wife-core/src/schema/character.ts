@@ -145,6 +145,7 @@ export type SpeechPolicy = {
 
 export type CharacterBehaviorDefaults = {
   userAddress?: string
+  personaInstructions?: string
   speech?: Partial<SpeechPolicy>
 }
 

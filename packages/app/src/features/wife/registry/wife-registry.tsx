@@ -49,7 +49,10 @@ export const { use: useWifeRegistry, provider: WifeRegistryProvider } = createSi
       return id
     }
 
-    const update = (id: string, patch: Partial<Pick<CharacterDefinition, "name" | "avatar" | "avatarImage">>) => {
+    const update = (
+      id: string,
+      patch: Partial<Pick<CharacterDefinition, "name" | "avatar" | "avatarImage" | "behavior">>,
+    ) => {
       setStore("characters", (characters) => characters.map((item) => (item.id === id ? { ...item, ...patch } : item)))
     }
 
