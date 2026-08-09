@@ -1,8 +1,9 @@
 import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } from "solid-js"
+import { createStore } from "solid-js/store"
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
-import { wifeBubbleFitCount } from "./wife-chat-layout"
+import { wifeBubbleExpelled, wifeBubbleFitCount } from "./wife-chat-layout"
 import "./wife-chat-area.css"
 
 export type WifeChatMessage = {
@@ -11,11 +12,19 @@ export type WifeChatMessage = {
   content: string
 }
 
-const EXIT_DURATION_MS = 300
+const EXIT_DURATION_MS = 280
 export const HISTORY_WHEEL_DISTANCE = 240
 const INITIAL_VISIBLE_COUNT = 10
 const BUBBLE_BASE = "rounded-xl px-3 py-2 text-v2-text-text-base backdrop-blur-sm"
 const BUBBLE_STYLE = { "--font-size-base": "15px" } as JSX.CSSProperties
+
+type LeavingMessage = {
+  message: WifeChatMessage
+  top: number
+  left: number
+  width: number
+  phase: "staged" | "leaving"
+}
 
 export function WifeChatArea(props: {
   messages: () => WifeChatMessage[]
@@ -33,11 +42,10 @@ export function WifeChatArea(props: {
   errorLabel: () => string
   interactive: () => boolean
 }) {
-  const [leavingIds, setLeavingIds] = createSignal<string[]>([])
-  const [exitedIds, setExitedIds] = createSignal<string[]>([])
   const [enteringIds, setEnteringIds] = createSignal<string[]>([])
   const [visibleCount, setVisibleCount] = createSignal(INITIAL_VISIBLE_COUNT)
   const [measured, setMeasured] = createSignal(false)
+  const [animation, setAnimation] = createStore<{ leaving: LeavingMessage[] }>({ leaving: [] })
   let root: HTMLDivElement | undefined
   let content: HTMLDivElement | undefined
   let messageList: HTMLDivElement | undefined
@@ -47,6 +55,12 @@ export function WifeChatArea(props: {
   let initialized = false
   let measureFrame: number | undefined
   const animationTimers = new Set<ReturnType<typeof setTimeout>>()
+  const animationFrames = new Set<number>()
+
+  const finishLeaving = (ids: string[]) => {
+    const removed = new Set(ids)
+    setAnimation("leaving", (items) => items.filter((item) => !removed.has(item.message.id)))
+  }
 
   const evaluate = () => {
     const messages = props.messages()
@@ -57,15 +71,17 @@ export function WifeChatArea(props: {
       setMeasured(true)
       return
     }
-    if (leavingIds().length > 0) return
     const count = visibleCount()
     const total = messages.length
     if (count > total) {
       setVisibleCount(total)
       return
     }
+    const activeBubbles = Array.from(bubbles.children).filter(
+      (item): item is HTMLElement => item instanceof HTMLElement && item.dataset.wifeChatMessage === "active",
+    )
     const nextCount = wifeBubbleFitCount({
-      messageHeights: Array.from(bubbles.children).map((item) => item.getBoundingClientRect().height),
+      messageHeights: activeBubbles.map((item) => item.getBoundingClientRect().height),
       reservedHeight: Math.max(0, list.getBoundingClientRect().height - bubbles.getBoundingClientRect().height),
       containerHeight: root.clientHeight,
       heightRatio: props.heightRatio(),
@@ -78,24 +94,51 @@ export function WifeChatArea(props: {
       return
     }
     if (count <= 1 || nextCount >= count) return
-    const expelled = messages[total - count]
-    if (!expelled || leavingIds().includes(expelled.id)) return
-    batch(() => {
-      setEnteringIds((ids) => ids.filter((id) => id !== expelled.id))
-      setLeavingIds((ids) => [...ids, expelled.id])
+    const leaving = new Set(animation.leaving.map((item) => item.message.id))
+    const expelled = wifeBubbleExpelled(messages, count, nextCount).filter((message) => !leaving.has(message.id))
+    if (expelled.length === 0) return
+    const rootRect = root.getBoundingClientRect()
+    const nodes = new Map(
+      activeBubbles.flatMap((item) => (item.dataset.messageId ? [[item.dataset.messageId, item] as const] : [])),
+    )
+    const staged = expelled.flatMap((message) => {
+      const node = nodes.get(message.id)
+      if (!node) return []
+      const rect = node.getBoundingClientRect()
+      return [
+        {
+          message,
+          top: rect.top - rootRect.top,
+          left: rect.left - rootRect.left,
+          width: rect.width,
+          phase: "staged" as const,
+        },
+      ]
     })
-    const timer = setTimeout(() => {
-      animationTimers.delete(timer)
-      setExitedIds((ids) => [...ids, expelled.id])
-      queueMicrotask(() => {
-        batch(() => {
-          setLeavingIds((ids) => ids.filter((id) => id !== expelled.id))
-          setExitedIds((ids) => ids.filter((id) => id !== expelled.id))
-        })
-      })
-    }, EXIT_DURATION_MS)
-    animationTimers.add(timer)
-    setVisibleCount(count - 1)
+    batch(() => {
+      const expelledIds = new Set(expelled.map((message) => message.id))
+      setEnteringIds((ids) => ids.filter((id) => !expelledIds.has(id)))
+      setAnimation("leaving", (items) => [...items, ...staged])
+      setVisibleCount(nextCount)
+    })
+    const ids = staged.map((item) => item.message.id)
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      queueMicrotask(() => finishLeaving(ids))
+      return
+    }
+    const frame = requestAnimationFrame(() => {
+      animationFrames.delete(frame)
+      const stagedIds = new Set(ids)
+      setAnimation("leaving", (items) =>
+        items.map((item) => (stagedIds.has(item.message.id) ? { ...item, phase: "leaving" } : item)),
+      )
+      const timer = setTimeout(() => {
+        animationTimers.delete(timer)
+        finishLeaving(ids)
+      }, EXIT_DURATION_MS + 100)
+      animationTimers.add(timer)
+    })
+    animationFrames.add(frame)
   }
 
   // New messages become visible candidates before height evaluation. Changing
@@ -132,7 +175,6 @@ export function WifeChatArea(props: {
     props.loading()
     props.error()
     props.heightRatio()
-    leavingIds()
     visibleCount()
     queueMicrotask(evaluate)
   })
@@ -150,20 +192,13 @@ export function WifeChatArea(props: {
   }, evaluate)
   onCleanup(() => {
     animationTimers.forEach(clearTimeout)
+    animationFrames.forEach(cancelAnimationFrame)
     if (measureFrame !== undefined) cancelAnimationFrame(measureFrame)
   })
 
   const visible = () => {
     const messages = props.messages()
-    const recent = messages.slice(-Math.min(visibleCount(), messages.length))
-    const recentIds = new Set(recent.map((message) => message.id))
-    const exited = new Set(exitedIds())
-    const leaving = leavingIds()
-      .map((id) => messages.find((message) => message.id === id))
-      .filter((message): message is WifeChatMessage =>
-        !!message && !recentIds.has(message.id) && !exited.has(message.id)
-      )
-    return [...leaving, ...recent]
+    return messages.slice(-Math.min(visibleCount(), messages.length))
   }
 
   const openHistory = (event: WheelEvent) => {
@@ -197,34 +232,13 @@ export function WifeChatArea(props: {
             <For each={visible()}>
               {(message) => (
                 <div
+                  data-wife-chat-message="active"
+                  data-message-id={message.id}
                   classList={{
-                    "animate-out fade-out duration-300": leavingIds().includes(message.id),
                     "animate-in fade-in slide-in-from-bottom-2 duration-300": enteringIds().includes(message.id),
                   }}
                 >
-                  {message.role === "assistant" ? (
-                    <div class="flex flex-col items-start">
-                      <div class="flex items-center gap-2">
-                        <Avatar image={props.avatarImage()} />
-                        <span class="text-12-regular text-v2-text-text-muted">{props.characterName()}</span>
-                      </div>
-                      <div
-                        class={`${BUBBLE_BASE} mt-1 max-w-[85%] bg-v2-background-bg-layer-02`}
-                        style={BUBBLE_STYLE}
-                      >
-                        <Markdown text={message.content} />
-                      </div>
-                    </div>
-                  ) : (
-                    <div class="flex flex-col items-end">
-                      <div
-                        class={`${BUBBLE_BASE} max-w-[85%] bg-v2-background-bg-layer-01`}
-                        style={BUBBLE_STYLE}
-                      >
-                        <Markdown text={message.content} />
-                      </div>
-                    </div>
-                  )}
+                  <ChatMessage message={message} avatarImage={props.avatarImage()} characterName={props.characterName()} />
                 </div>
               )}
             </For>
@@ -284,8 +298,49 @@ export function WifeChatArea(props: {
             </div>
           </div>
         </div>
+        <div class="pointer-events-none absolute inset-0 z-10 overflow-hidden" aria-hidden="true">
+          <For each={animation.leaving}>
+            {(item) => (
+              <div
+                class="wife-chat-message-leaving absolute"
+                classList={{ "wife-chat-message-leaving-active": item.phase === "leaving" }}
+                style={{ top: `${item.top}px`, left: `${item.left}px`, width: `${item.width}px` }}
+                onTransitionEnd={(event) => {
+                  if (event.currentTarget !== event.target || event.propertyName !== "opacity") return
+                  finishLeaving([item.message.id])
+                }}
+              >
+                <ChatMessage
+                  message={item.message}
+                  avatarImage={props.avatarImage()}
+                  characterName={props.characterName()}
+                />
+              </div>
+            )}
+          </For>
+        </div>
       </div>
     </Show>
+  )
+}
+
+function ChatMessage(props: { message: WifeChatMessage; avatarImage: string | undefined; characterName: string | undefined }) {
+  return props.message.role === "assistant" ? (
+    <div class="flex flex-col items-start">
+      <div class="flex items-center gap-2">
+        <Avatar image={props.avatarImage} />
+        <span class="text-12-regular text-v2-text-text-muted">{props.characterName}</span>
+      </div>
+      <div class={`${BUBBLE_BASE} mt-1 max-w-[85%] bg-v2-background-bg-layer-02`} style={BUBBLE_STYLE}>
+        <Markdown text={props.message.content} />
+      </div>
+    </div>
+  ) : (
+    <div class="flex flex-col items-end">
+      <div class={`${BUBBLE_BASE} max-w-[85%] bg-v2-background-bg-layer-01`} style={BUBBLE_STYLE}>
+        <Markdown text={props.message.content} />
+      </div>
+    </div>
   )
 }
 

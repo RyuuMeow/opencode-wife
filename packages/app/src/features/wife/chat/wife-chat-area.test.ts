@@ -1,5 +1,5 @@
 import { describe, expect, test } from "bun:test"
-import { wifeBubbleFitCount } from "./wife-chat-layout"
+import { wifeBubbleExpelled, wifeBubbleFitCount } from "./wife-chat-layout"
 
 describe("wifeBubbleFitCount", () => {
   test("keeps the newest bubbles that fit alongside reserved controls", () => {
@@ -36,5 +36,19 @@ describe("wifeBubbleFitCount", () => {
         gap: 12,
       }),
     ).toBe(1)
+  })
+})
+
+describe("wifeBubbleExpelled", () => {
+  test("returns every expelled visible bubble in one batch", () => {
+    expect(wifeBubbleExpelled(["hidden", "one", "two", "three", "four"], 4, 1)).toEqual([
+      "one",
+      "two",
+      "three",
+    ])
+  })
+
+  test("does not expel hidden history or bubbles that still fit", () => {
+    expect(wifeBubbleExpelled(["hidden", "one", "two"], 2, 2)).toEqual([])
   })
 })

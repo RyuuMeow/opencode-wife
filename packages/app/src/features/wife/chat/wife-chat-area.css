@@ -24,9 +24,27 @@
   animation-delay: 300ms;
 }
 
+.wife-chat-message-leaving {
+  opacity: 1;
+  transform: translateY(0);
+  transition:
+    opacity 280ms ease-out,
+    transform 280ms ease-out;
+  will-change: opacity, transform;
+}
+
+.wife-chat-message-leaving-active {
+  opacity: 0;
+  transform: translateY(-3px);
+}
+
 @media (prefers-reduced-motion: reduce) {
   .wife-thinking-dot {
     animation: none;
     opacity: 0.7;
+  }
+
+  .wife-chat-message-leaving {
+    transition: none;
   }
 }

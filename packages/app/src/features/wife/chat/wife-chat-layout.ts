@@ -17,3 +17,9 @@ export function wifeBubbleFitCount(input: {
   )
   return Math.max(1, result.count)
 }
+
+export function wifeBubbleExpelled<T>(messages: T[], visibleCount: number, nextCount: number) {
+  const count = Math.min(visibleCount, messages.length)
+  const remove = Math.max(0, count - nextCount)
+  return messages.slice(messages.length - count, messages.length - count + remove)
+}
