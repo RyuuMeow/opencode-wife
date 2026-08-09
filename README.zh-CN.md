@@ -66,6 +66,8 @@ OpenCode Wife **不附带** `live2dcubismcore.min.js` 或任何示例模型。
 3. 选择 SDK ZIP 或 `live2dcubismcore.min.js`。App 会验证文件、记录版本与 SHA-256,并安装到 Wife profile。
 4. 随时可在同一界面替换或移除运行环境。
 
+**Core 兼容性**:内置运行时需要具备旧版 `csmGetDrawableRenderOrders` API 的 Cubism Core。最新的 Cubism 5 SDK 改用了新名称,安装时会被拒绝并显示清晰提示 — 请改用官方 CDN 文件(`https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js`)或较早的 SDK 版本。
+
 渲染需要 Live2D 模型:**Settings → Wife → Characters** 添加角色并选择模型文件夹。官方免费的 [Hiyori 示例](https://www.live2d.com/en/learn/sample/momose-hiyori/) 是不错的起点 — 使用前请确认其条款。导入模型的方式见[文档](./docs/README.md)。
 
 没有这些东西 Side Chat 也完全正常 — 面板只会显示 setup 状态。

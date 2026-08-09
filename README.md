@@ -66,6 +66,8 @@ OpenCode Wife does **not** bundle `live2dcubismcore.min.js` or any sample model.
 3. Select the SDK ZIP or `live2dcubismcore.min.js`. The app verifies the file, records its version and SHA-256, and installs it into the Wife profile.
 4. Replace or remove the runtime at any time from the same screen.
 
+**Core compatibility**: the bundled runtime requires a Cubism Core with the classic `csmGetDrawableRenderOrders` API. The latest Cubism 5 SDK release renamed it and is rejected with a clear message — use the official CDN file (`https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js`) or an earlier SDK release instead.
+
 A Live2D model is required for rendering: open **Settings → Wife → Characters**, add a character, and pick its model folder. The free official [Hiyori sample](https://www.live2d.com/en/learn/sample/momose-hiyori/) is a good starting point — review its terms before use. Importing models is covered in the [documentation](./docs/README.md).
 
 Side Chat works fine without any of this — the panel just shows a setup state.

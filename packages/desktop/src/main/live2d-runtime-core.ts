@@ -13,7 +13,11 @@ export type Live2DRuntimeStatus = {
   installedAt?: string
 }
 
-export type Live2DRuntimeInstallErrorCode = "core-not-found" | "invalid-size" | "invalid-core"
+export type Live2DRuntimeInstallErrorCode =
+  | "core-not-found"
+  | "invalid-size"
+  | "invalid-core"
+  | "incompatible-core"
 
 export class Live2DRuntimeInstallError extends Error {
   code: Live2DRuntimeInstallErrorCode
@@ -42,9 +46,14 @@ export function validateCore(data: Uint8Array) {
   if (data.byteLength === 0 || data.byteLength > MAX_CORE_BYTES) {
     throw new Live2DRuntimeInstallError("invalid-size")
   }
-  const text = new TextDecoder().decode(data.subarray(0, Math.min(data.length, 128_000)))
+  const text = new TextDecoder().decode(data)
   if (!text.includes("Live2DCubismCore") && !text.includes("CubismCore")) {
     throw new Live2DRuntimeInstallError("invalid-core")
+  }
+  // pixi-live2d-display requires the csmGetDrawableRenderOrders API; Cubism 5 SDK
+  // cores renamed it (drawOrders) and render incompletely with this runtime.
+  if (!text.includes("csmGetDrawableRenderOrders")) {
+    throw new Live2DRuntimeInstallError("incompatible-core")
   }
 }
 

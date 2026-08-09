@@ -27,10 +27,11 @@ const contrastOptions = ["soft", "standard", "strong"] satisfies WifeChatContras
 const motionOptions = ["full", "subtle", "off"] satisfies WifeChatMotion[]
 const headerOptions = ["every", "turn", "hidden"] satisfies WifeChatHeader[]
 
-const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core", string> = {
+const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core", string> = {
   "core-not-found": "wife.runtime.error.coreNotFound",
   "invalid-size": "wife.runtime.error.invalidSize",
   "invalid-core": "wife.runtime.error.invalidCore",
+  "incompatible-core": "wife.runtime.error.incompatibleCore",
 }
 
 export const SettingsWifeV2: Component = () => {

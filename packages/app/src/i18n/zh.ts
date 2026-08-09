@@ -939,6 +939,7 @@ export const dict = {
   "wife.runtime.error.coreNotFound": "所选 SDK ZIP 中找不到 live2dcubismcore.min.js。",
   "wife.runtime.error.invalidSize": "所选 Cubism Core 文件为空或过大。",
   "wife.runtime.error.invalidCore": "所选文件不是有效的 Live2D Cubism Core 运行时。",
+  "wife.runtime.error.incompatibleCore": "此 Cubism Core 与内置运行时不兼容。请使用官方 CDN 版本(cubism.live2d.com/sdk-web/cubismcore)或更早的 SDK 版本。",
   "wife.runtime.install": "选择 SDK 文件",
   "wife.runtime.installing": "正在安装…",
   "wife.runtime.license": "Live2D 授权信息",

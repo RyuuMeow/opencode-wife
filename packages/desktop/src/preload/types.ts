@@ -57,7 +57,7 @@ export type Live2DRuntimeStatus = {
 }
 export type Live2DRuntimeInstallResult =
   | { ok: true; status: Live2DRuntimeStatus }
-  | { ok: false; code: "canceled" | "core-not-found" | "invalid-size" | "invalid-core" }
+  | { ok: false; code: "canceled" | "core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core" }
 
 export type ElectronAPI = {
   killSidecar: () => Promise<void>

@@ -11,7 +11,8 @@ import {
   validateCore,
 } from "./live2d-runtime-core"
 
-const VALID_CORE = "/* Live2DCubismCore 5.0.2 */ (function () { const Core = {} })()"
+const VALID_CORE =
+  "/* Live2DCubismCore 5.0.2 */ var Live2DCubismCore; !function (C) { C.csmGetDrawableRenderOrders = function () {} }()"
 
 async function withTempFile(name: string, data: Uint8Array, run: (path: string) => Promise<void>) {
   const dir = await mkdtemp(join(tmpdir(), "wife-runtime-"))
@@ -140,6 +141,20 @@ describe("validateCore", () => {
 
   test("rejects a file that is not a Cubism core", () => {
     expect(() => validateCore(new TextEncoder().encode("hello world"))).toThrow("invalid-core")
+  })
+
+  test("rejects a Cubism 5 SDK core without the render-orders API", () => {
+    const core5 = new TextEncoder().encode(
+      "/* Live2DCubismCore 5 */ var Live2DCubismCore; !function (C) { C.csmGetDrawableCount = function () {} }()",
+    )
+    expect(() => validateCore(core5)).toThrow("incompatible-core")
+  })
+
+  test("accepts a core with the render-orders API", () => {
+    const core = new TextEncoder().encode(
+      "/* Live2DCubismCore */ var Live2DCubismCore; !function (C) { C.csmGetDrawableRenderOrders = function () {} }()",
+    )
+    expect(() => validateCore(core)).not.toThrow()
   })
 })
 

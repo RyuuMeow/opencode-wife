@@ -29,7 +29,7 @@
 
 ## Live2D runtime and characters
 
-- The proprietary Cubism Core is **not bundled**. The setup wizard records version, SHA-256, source, and install time; replace/remove are supported from the same UI. Side Chat works without it.
+- The proprietary Cubism Core is **not bundled**. The setup wizard records version, SHA-256, source, and install time; replace/remove are supported from the same UI. Side Chat works without it. The bundled runtime requires a Core with the `csmGetDrawableRenderOrders` API — newer Cubism 5 SDK cores are rejected with guidance to use the official CDN file instead.
 - Model folders are picked through a native directory dialog and served via the `wife://` protocol; references resolve relative to the `.model3.json` directory (VTS-style loose motion/expression packs are discovered automatically).
 - Semantic mapping binds the character's motions/expressions to the stable state/gesture/emotion vocabulary.
 

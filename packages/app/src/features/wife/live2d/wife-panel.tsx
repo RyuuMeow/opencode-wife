@@ -68,10 +68,11 @@ type WifePanelPreference = {
 
 let live2dRuntimeLoad: Promise<void> | undefined
 
-const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core", string> = {
+const RUNTIME_ERROR_KEYS: Record<"core-not-found" | "invalid-size" | "invalid-core" | "incompatible-core", string> = {
   "core-not-found": "wife.runtime.error.coreNotFound",
   "invalid-size": "wife.runtime.error.invalidSize",
   "invalid-core": "wife.runtime.error.invalidCore",
+  "incompatible-core": "wife.runtime.error.incompatibleCore",
 }
 
 function loadLive2DRuntime() {

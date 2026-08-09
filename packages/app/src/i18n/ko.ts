@@ -637,6 +637,7 @@ export const dict = {
   "wife.runtime.download": "Open official download",
   "wife.runtime.error.coreNotFound": "No live2dcubismcore.min.js was found in the selected SDK ZIP.",
   "wife.runtime.error.invalidSize": "The selected Cubism Core file is empty or too large.",
+  "wife.runtime.error.incompatibleCore": "This Cubism Core is not compatible with the bundled runtime. Use the official CDN version (cubism.live2d.com/sdk-web/cubismcore) or an older SDK release.",
   "wife.runtime.error.invalidCore": "The selected file is not a valid Live2D Cubism Core runtime.",
   "wife.runtime.install": "Choose SDK file",
   "wife.runtime.installing": "Installing…",
