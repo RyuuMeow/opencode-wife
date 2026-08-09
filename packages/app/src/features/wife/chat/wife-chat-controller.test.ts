@@ -5,9 +5,16 @@ import {
   isWifeSession,
   normalizeWifeReply,
   projectWifeHistory,
+  requiresWifeSessionRebuild,
+  wifeChatError,
+  wifePromptVariant,
   WIFE_READ_ONLY_PERMISSION,
 } from "./wife-chat-controller"
-import { isWifeAssistantMetadata } from "./wife-chat-metadata"
+import {
+  isWifeAssistantMetadata,
+  WIFE_METADATA_VERSION,
+  WIFE_METADATA_VERSION_VALUE,
+} from "./wife-chat-metadata"
 
 describe("normalizeWifeReply", () => {
   test("normalizes short messages and unique choices", () => {
@@ -58,12 +65,45 @@ describe("wife session identity", () => {
         "main-session",
       ),
     ).toBe(false)
+    expect(
+      isWifeSession(
+        { ...value, metadata: { ...value.metadata, [WIFE_METADATA_VERSION]: "1" } },
+        "main-session",
+      ),
+    ).toBe(false)
+    expect(
+      requiresWifeSessionRebuild(
+        { ...value, metadata: { ...value.metadata, [WIFE_METADATA_VERSION]: "1" } },
+        "main-session",
+      ),
+    ).toBe(true)
+    expect(
+      requiresWifeSessionRebuild(
+        { ...value, metadata: { ...value.metadata, "wife.kind": "other", [WIFE_METADATA_VERSION]: "1" } },
+        "main-session",
+      ),
+    ).toBe(false)
   })
 
   test("recognizes Wife metadata for notification isolation", () => {
     expect(isWifeAssistantMetadata({ "wife.kind": "assistant", "wife.ownerSessionID": "main" })).toBe(true)
     expect(isWifeAssistantMetadata({ "wife.kind": "other" })).toBe(false)
     expect(isWifeAssistantMetadata(undefined)).toBe(false)
+  })
+})
+
+describe("wife prompt compatibility", () => {
+  test("uses the default variant for DeepSeek structured output", () => {
+    expect(
+      wifePromptVariant({ id: "deepseek-v4-flash-free", provider: { id: "opencode" } }, "low"),
+    ).toBe("default")
+    expect(wifePromptVariant({ id: "gpt-5", provider: { id: "openai" } }, "high")).toBe("high")
+  })
+
+  test("extracts readable SDK and provider errors", () => {
+    expect(wifeChatError({ data: { message: "Provider failed" } })).toBe("Provider failed")
+    expect(wifeChatError({ error: { data: { message: "Nested failure" } } })).toBe("Nested failure")
+    expect(wifeChatError({ reason: "unknown" })).toBeUndefined()
   })
 })
 
@@ -141,6 +181,7 @@ function session(input: Partial<Session> = {}) {
     metadata: {
       "wife.kind": "assistant",
       "wife.ownerSessionID": "main-session",
+      [WIFE_METADATA_VERSION]: WIFE_METADATA_VERSION_VALUE,
     },
     permission: WIFE_READ_ONLY_PERMISSION.map((rule) => ({ ...rule })),
     time: { created: 1, updated: 1, archived: 1 },

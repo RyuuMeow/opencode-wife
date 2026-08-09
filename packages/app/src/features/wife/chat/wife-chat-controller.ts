@@ -11,7 +11,9 @@ import {
   isWifeAssistantMetadata,
   WIFE_METADATA_KIND,
   WIFE_METADATA_OWNER,
+  WIFE_METADATA_VERSION,
   WIFE_METADATA_VALUE,
+  WIFE_METADATA_VERSION_VALUE,
 } from "./wife-chat-metadata"
 
 export const WIFE_READ_ONLY_PERMISSION = [
@@ -76,7 +78,7 @@ type Conversation = {
   messages: WifeChatMessage[]
   choices: string[]
   status: "idle" | "loading" | "responding" | "revealing" | "stopping"
-  error: boolean
+  error: string | undefined
   hydrated: boolean
 }
 
@@ -84,7 +86,7 @@ const EMPTY_CONVERSATION: Conversation = {
   messages: [],
   choices: [],
   status: "idle",
-  error: false,
+  error: undefined,
   hydrated: false,
 }
 export function normalizeWifeReply(value: unknown): WifeReply | undefined {
@@ -106,8 +108,34 @@ export function isWifeSession(session: Session, ownerSessionID: string) {
   return (
     isWifeAssistantMetadata(session.metadata) &&
     session.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID &&
+    session.metadata?.[WIFE_METADATA_VERSION] === WIFE_METADATA_VERSION_VALUE &&
     hasReadOnlyPermission(session.permission)
   )
+}
+
+export function requiresWifeSessionRebuild(session: Session, ownerSessionID: string) {
+  return (
+    isWifeAssistantMetadata(session.metadata) &&
+    session.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID &&
+    session.metadata?.[WIFE_METADATA_VERSION] !== WIFE_METADATA_VERSION_VALUE
+  )
+}
+
+export function wifePromptVariant(model: { id: string; provider: { id: string } }, variant: string | undefined) {
+  if (model.provider.id === "opencode" && model.id === "deepseek-v4-flash-free") return "default"
+  return variant
+}
+
+export function wifeChatError(error: unknown, depth = 0): string | undefined {
+  if (depth > 4) return undefined
+  if (typeof error === "string" && error.trim()) return error.trim()
+  if (error instanceof Error && error.message) return error.message
+  if (!isRecord(error)) return undefined
+  if (typeof error.message === "string" && error.message.trim()) return error.message.trim()
+  if (isRecord(error.data) && typeof error.data.message === "string" && error.data.message.trim()) {
+    return error.data.message.trim()
+  }
+  return wifeChatError(error.error, depth + 1) ?? wifeChatError(error.cause, depth + 1)
 }
 
 export function projectWifeHistory(items: SessionMessage[]) {
@@ -174,12 +202,13 @@ export function createWifeChatController(input: {
 
   const setFailure = (sessionID: string, generation: number, error: unknown) => {
     if (!active(sessionID, generation)) return
-    console.error("[wife.chat] request failed", error)
+    const message = wifeChatError(error) ?? "Request failed"
+    console.error("[wife.chat] request failed", message)
     setStore("conversations", sessionID, {
       ...(store.conversations[sessionID] ?? EMPTY_CONVERSATION),
       status: "idle",
       choices: [],
-      error: true,
+      error: message,
       hydrated: true,
     })
   }
@@ -193,6 +222,7 @@ export function createWifeChatController(input: {
         ...session.metadata,
         [WIFE_METADATA_KIND]: WIFE_METADATA_VALUE,
         [WIFE_METADATA_OWNER]: ownerSessionID,
+        [WIFE_METADATA_VERSION]: WIFE_METADATA_VERSION_VALUE,
       },
       permission: hasReadOnlyPermission(session.permission) ? undefined : WIFE_READ_ONLY_PERMISSION,
       time: { archived: session.time.archived ?? Date.now() },
@@ -204,13 +234,25 @@ export function createWifeChatController(input: {
     return verified.data
   }
 
+  const retire = async (session: Session, ownerSessionID: string) => {
+    const response = await sdk().client.session.update({
+      sessionID: session.id,
+      directory: sdk().directory,
+      metadata: {
+        ...session.metadata,
+        [WIFE_METADATA_OWNER]: `retired:${ownerSessionID}`,
+      },
+    })
+    if (response.error) throw response.error
+  }
+
   const linked = async (ownerSessionID: string) => {
     await linksReady.promise
     const id = links.sessions[ownerSessionID]
     if (!id) return undefined
     const result = await sdk()
       .client.session.get({ sessionID: id, directory: sdk().directory })
-      .then((response) => ({ session: response.data }))
+      .then((response) => (response.error ? { error: response.error } : { session: response.data }))
       .catch((error: unknown) => ({ error }))
     if ("error" in result) {
       if (errorStatus(result.error) !== 404) throw result.error
@@ -218,7 +260,15 @@ export function createWifeChatController(input: {
       return undefined
     }
     if (!result.session) return undefined
-    if (result.session.metadata?.[WIFE_METADATA_OWNER] !== ownerSessionID) {
+    if (
+      !isWifeAssistantMetadata(result.session.metadata) ||
+      result.session.metadata?.[WIFE_METADATA_OWNER] !== ownerSessionID
+    ) {
+      setLinks("sessions", ownerSessionID, undefined)
+      return undefined
+    }
+    if (requiresWifeSessionRebuild(result.session, ownerSessionID)) {
+      await retire(result.session, ownerSessionID)
       setLinks("sessions", ownerSessionID, undefined)
       return undefined
     }
@@ -232,10 +282,12 @@ export function createWifeChatController(input: {
       search: ownerSessionID,
       limit: 20,
     })
+    if (response.error) throw response.error
     const session = response.data?.find(
       (item) =>
         item.metadata?.[WIFE_METADATA_KIND] === WIFE_METADATA_VALUE &&
-        item.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID,
+        item.metadata?.[WIFE_METADATA_OWNER] === ownerSessionID &&
+        item.metadata?.[WIFE_METADATA_VERSION] === WIFE_METADATA_VERSION_VALUE,
     )
     if (!session) return undefined
     return secure(session, ownerSessionID)
@@ -266,9 +318,11 @@ export function createWifeChatController(input: {
       metadata: {
         [WIFE_METADATA_KIND]: WIFE_METADATA_VALUE,
         [WIFE_METADATA_OWNER]: ownerSessionID,
+        [WIFE_METADATA_VERSION]: WIFE_METADATA_VERSION_VALUE,
       },
       permission: WIFE_READ_ONLY_PERMISSION,
     })
+    if (created.error) throw created.error
     if (!created.data) throw new Error("Wife session creation returned no session")
     const session = await secure(created.data, ownerSessionID)
     setLinks("sessions", ownerSessionID, session.id)
@@ -288,6 +342,7 @@ export function createWifeChatController(input: {
           directory: sdk().directory,
           limit: 200,
         })
+        if (response.error) throw response.error
         return projectWifeHistory(response.data ?? [])
       })
       .then((history) => ({ history }))
@@ -301,7 +356,7 @@ export function createWifeChatController(input: {
       messages: result.history.messages,
       choices: result.history.choices,
       status: "idle",
-      error: false,
+      error: undefined,
       hydrated: true,
     })
   }
@@ -348,11 +403,12 @@ export function createWifeChatController(input: {
           directory: sdk().directory,
           agent: agent.name,
           model: { providerID: model.provider.id, modelID: model.id },
-          variant: local.model.variant.current(),
-          format: { type: "json_schema", schema: WIFE_REPLY_SCHEMA, retryCount: 2 },
+          variant: wifePromptVariant(model, local.model.variant.current()),
+          format: { type: "json_schema", schema: WIFE_REPLY_SCHEMA },
           system: wifeSystemPrompt(characterName),
           parts: [{ type: "text", text }],
         })
+        if (response.error) throw response.error
         if (!response.data || response.data.info.error) {
           throw response.data?.info.error ?? new Error("Wife prompt returned no response")
         }
@@ -385,7 +441,7 @@ export function createWifeChatController(input: {
       ],
       choices: [],
       status: "responding",
-      error: false,
+      error: undefined,
       hydrated: true,
     })
     void run(ownerSessionID, generation, text.trim(), characterName)

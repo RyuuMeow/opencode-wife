@@ -27,7 +27,7 @@ export function WifeChatArea(props: {
   onHistoryProgress: (next: number) => void
   onChoice: (choice: string) => void
   loading: () => boolean
-  error: () => boolean
+  error: () => string | undefined
   loadingLabel: () => string
   errorLabel: () => string
   /** Forwards right-drags to the Live2D view so the model can be panned through this area. */
@@ -219,7 +219,9 @@ export function WifeChatArea(props: {
               >
                 <Show
                   when={!props.error()}
-                  fallback={<span class="text-13-regular text-v2-state-fg-danger">{props.errorLabel()}</span>}
+                  fallback={
+                    <span class="text-13-regular text-v2-state-fg-danger">{props.error() ?? props.errorLabel()}</span>
+                  }
                 >
                   <span class="flex items-center gap-2 text-13-regular text-v2-text-text-muted">
                     <LoaderV2 class="size-3.5 shrink-0 text-v2-icon-icon-muted" />

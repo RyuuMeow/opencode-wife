@@ -48,7 +48,8 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 ## Milestone 2 — Wife Assistant Chat (core delivered)
 
 - `features/wife/chat/wife-chat-controller.ts`: one persistent archived Wife session per main session, recovered through a workspace-local pointer plus owner metadata; every use verifies the deny-all/read-glob-grep permission profile before prompting
-- session prompts use the active agent/model/variant and JSON-schema output (`messages` 1–6, `choices` 0–3); replies enter the existing Live2D bubble flow sentence by sentence, choices submit as user bubbles, and history rebuilds from durable session messages
+- session prompts use the active agent/model and compatible variant with JSON-schema output (`messages` 1–6, `choices` 0–3); DeepSeek Flash structured replies fall back to the default non-thinking variant because its provider rejects required tool choice in thinking mode
+- Wife chat metadata is versioned; pre-v2 sessions containing the legacy incompatible structured-format payload are retired once and replaced automatically
 - controller ownership lives in `SessionPage`, not `WifePanel`, so collapsing the panel does not interrupt work; stop aborts the Wife session and generation guards prevent late replies from crossing session boundaries
 - loading and failures stay inside the assistant bubble surface with V2 semantic tokens; archived Wife sessions are excluded from ordinary completion/error notifications
 
@@ -58,7 +59,7 @@ Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文�
 
 - `bun run typecheck` from package dirs (wife-core / app / ui / desktop).
 - `bun test` in `packages/wife-core` (28 tests).
-- `bun run test:unit` in `packages/app` (722 tests; parity included via `bun test --conditions=solid --preload ./happydom.ts src/i18n/parity.test.ts`).
+- `bun run test:unit` in `packages/app` (724 tests; parity included via `bun test --conditions=solid --preload ./happydom.ts src/i18n/parity.test.ts`).
 - `bunx oxlint <changed files>` — repo-wide lint has a pre-existing error in `packages/session-ui/src/v2/components/prompt-input/index.tsx` (octal literal) and ~4.8k pre-existing warnings.
 - Builds: `bun run build` in `packages/app`; `bunx electron-vite build` in `packages/desktop` (skip prebuild — see environment notes).
 - Dev servers: backend `bun run --conditions=browser ./src/index.ts serve --port 4096` from `packages/opencode`; app `bun dev -- --port 4444` from `packages/app`; open `http://localhost:4444`.
