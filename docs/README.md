@@ -9,6 +9,12 @@
 2. Side Chat works out of the box. Live2D is optional: open **Settings → Wife → Live2D runtime**, download the Web SDK from Live2D, accept its terms, and select the SDK ZIP or `live2dcubismcore.min.js`.
 3. Attach a Live2D model folder to a character (**Settings → Wife → Characters** → Edit → model folder). The panel (`mod+alt+w`) shows the character overlaid with the Side Chat.
 
+### Panel controls
+
+- **Top-left dropdown** — switch the displayed character for the current session.
+- **Top-right mouse icon** — Live2D model adjustment mode: drag to move, wheel to zoom (0.2x–3x); chat UI pauses and `Escape` returns to chat.
+- **Wheel over the conversation** — scroll up to open the detailed conversation history, scroll down to collapse it.
+
 ## Side Chat and commands
 
 - Each main Agent session owns one persistent, archived, read-only Wife session (`read`/`glob`/`grep` tools only; no write or exec tools, no permission prompts).

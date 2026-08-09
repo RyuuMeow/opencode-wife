@@ -45,6 +45,12 @@ Side Chat 不會污染你的主 Agent transcript。它是獨立的 archived sess
 
 開啟 session,按 `mod+alt+w`(或標題列的 **Toggle Wife** 按鈕)開啟面板,送出訊息。角色會讀取目前 Agent 的 context,用唯讀工具回答。
 
+面板操作:
+
+- **左上角角色下拉選單** — 切換此 session 顯示的角色。
+- **右上角滑鼠圖標** — 進入 Live2D 模型操作模式:拖曳移動模型、滾輪縮放(0.2x–3x)。此模式下聊天 UI 暫停;按 `Escape` 或再點一次圖標回到聊天。
+- **對話區域滾動滑鼠滾輪** — 向上滾動展開詳細對話歷史,向下滾動收起回近期訊息。
+
 ### 2. 設定模型與 provider
 
 - **主聊天模型**:Wife session 共用你設定的 OpenCode provider/model。
@@ -60,7 +66,7 @@ OpenCode Wife **不綁附** `live2dcubismcore.min.js` 或任何範例模型。
 3. 選擇 SDK ZIP 或 `live2dcubismcore.min.js`。App 會驗證檔案、記錄版本與 SHA-256,並安裝到 Wife profile。
 4. 隨時可在同一畫面替換或移除執行環境。
 
-渲染需要 Live2D 模型:**Settings → Wife → Characters** 新增角色並選擇模型資料夾。官方免費的 [Hiyori 範例](https://docs.live2d.com/cubism-editor-manual/sample-model/) 是不錯的起點 — 使用前請確認其條款。匯入模型的方式見[文件](./docs/README.md)。
+渲染需要 Live2D 模型:**Settings → Wife → Characters** 新增角色並選擇模型資料夾。官方免費的 [Hiyori 範例](https://www.live2d.com/en/learn/sample/momose-hiyori/) 是不錯的起點 — 使用前請確認其條款。匯入模型的方式見[文件](./docs/README.md)。
 
 沒有這些東西 Side Chat 也完全正常 — 面板只會顯示 setup 狀態。
 

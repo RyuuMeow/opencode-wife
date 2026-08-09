@@ -45,6 +45,12 @@ The Side Chat never pollutes your main Agent transcript. It is a separate archiv
 
 Open a session, press `mod+alt+w` (or the **Toggle Wife** button in the title bar) to open the panel, and send a message. The character reads the current Agent context and answers with read-only tools.
 
+Panel controls:
+
+- **Top-left character dropdown** — switch which character is displayed for this session.
+- **Top-right mouse icon** — enter Live2D model adjustment mode: drag to move the model, scroll to zoom (0.2x–3x). Chat UI pauses in this mode; press `Escape` or click the icon again to return to chat.
+- **Scroll wheel over the conversation** — scroll up to reveal the detailed conversation history, scroll down to collapse back to the recent messages.
+
 ### 2. Set up a model and provider
 
 - **Main chat model**: the Wife session shares your configured OpenCode provider/model.
@@ -60,7 +66,7 @@ OpenCode Wife does **not** bundle `live2dcubismcore.min.js` or any sample model.
 3. Select the SDK ZIP or `live2dcubismcore.min.js`. The app verifies the file, records its version and SHA-256, and installs it into the Wife profile.
 4. Replace or remove the runtime at any time from the same screen.
 
-A Live2D model is required for rendering: open **Settings → Wife → Characters**, add a character, and pick its model folder. The free official [Hiyori sample](https://docs.live2d.com/cubism-editor-manual/sample-model/) is a good starting point — review its terms before use. Importing models is covered in the [documentation](./docs/README.md).
+A Live2D model is required for rendering: open **Settings → Wife → Characters**, add a character, and pick its model folder. The free official [Hiyori sample](https://www.live2d.com/en/learn/sample/momose-hiyori/) is a good starting point — review its terms before use. Importing models is covered in the [documentation](./docs/README.md).
 
 Side Chat works fine without any of this — the panel just shows a setup state.
 
