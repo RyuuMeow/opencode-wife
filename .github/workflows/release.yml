@@ -122,8 +122,15 @@ jobs:
             "- Compatible OpenCode base version: 1.18.14." \
             "- Live2D Cubism Core is not bundled; install it from Settings → Wife → Live2D runtime." \
             "- Automatic updates are disabled in this alpha.")
-          gh release create "$GITHUB_REF_NAME" \
-            --draft --prerelease \
-            --title "OpenCode Wife ${{ needs.validate.outputs.version }}" \
-            --notes "$NOTES" \
-            *.exe SHA256SUMS.txt
+          if gh release view "$GITHUB_REF_NAME" > /dev/null 2>&1; then
+            gh release edit "$GITHUB_REF_NAME" --draft --prerelease \
+              --title "OpenCode Wife ${{ needs.validate.outputs.version }}" \
+              --notes "$NOTES"
+            gh release upload "$GITHUB_REF_NAME" --clobber *.exe SHA256SUMS.txt
+          else
+            gh release create "$GITHUB_REF_NAME" \
+              --draft --prerelease \
+              --title "OpenCode Wife ${{ needs.validate.outputs.version }}" \
+              --notes "$NOTES" \
+              *.exe SHA256SUMS.txt
+          fi
