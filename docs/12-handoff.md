@@ -60,6 +60,12 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 - Wife chat metadata is versioned; pre-v4 sessions are aborted, retired, and replaced automatically because legacy `msg_wife_*` prompt IDs permanently outrank chronological IDs and can keep the session loop running
 - controller ownership lives in `SessionPage`, not `WifePanel`, so collapsing the panel does not interrupt work; stop aborts the Wife session and generation guards prevent late replies from crossing session boundaries
 - loading and failures stay inside the assistant bubble surface with V2 semantic tokens; archived Wife sessions are excluded from ordinary completion/error notifications
+- character settings now include global `userAddress` and bounded `personaInstructions`; the latest profile is JSON-encoded into each new Wife turn and cannot override security or output rules
+- each normal turn projects up to 80 current main-session messages into a 12,000-character untrusted snapshot containing visible text, tool state/title/error, and patch filenames; reasoning, tool input/output, attachments, and other sessions are excluded, and snapshot failure does not block chat
+- local `/send` and `/clear` reuse PromptInputV2 slash suggestions and keyboard/IME behavior; `/send foo` remains a normal message
+- `/send` uses a separate archived `wife.kind=handoff` session with deny-all permissions, summarizes the Side Chat plus latest Agent snapshot, deletes the temporary session, and writes only to the matching main composer after Replace / Append / Cancel when needed; it never auto-submits
+- `/clear` confirms through a V2 dialog, aborts active work, permanently deletes the assistant session and pointer, and preserves character/model/persona/compatibility/Live2D preferences
+- notification isolation recognizes all Wife internal sessions, while chat recovery continues to recognize only `wife.kind=assistant`
 
 Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文件` (VTS pack; 2 motions 待机动画/打瞌睡, 22 expressions). Synthetic `wife-demo\luna` fixture files do NOT render (placeholder moc3).
 
@@ -83,12 +89,12 @@ Manual test asset: `E:\Temp\Baidu\w242水色眼罩小熊\水色小熊\模型文�
 
 - `custom.*` gestures/emotions: types accept them, mapping editor does not render or add them yet.
 - Loose-scan motion/expression file paths live in capabilities but are not persisted as assets; the runtime reads them back from the model folder (desktop protocol), so re-picking a folder after re-import is not required as long as the folder path is stored.
-- Milestone 2 still needs `/wife-context` and chat-driven presentation intent. Project binding (Milestone 3), observation (Milestone 4), persona (Milestone 5), and voice/lip sync (Milestone 6) remain pending.
+- Side Chat is the current mainline. Chat-driven presentation intent, project binding (Milestone 3), observation (Milestone 4), the activity persona director (Milestone 5), voice/lip sync (Milestone 6), and later work are explicitly paused.
 - Web build intentionally shows an empty state (no `wife://` protocol in browsers).
 - i18n: run `bun run translate:app -- all` (needs the opencode CLI) to replace placeholders in non-en/zht locales.
 - Registry store is localStorage-backed; large avatar images are downscaled to 128px data URLs, but a future move to IndexedDB may be worth it if many characters accumulate.
 
 ## Suggested next steps
 
-1. Finish Milestone 2 with `/wife-context` and chat-driven presentation intent.
-2. Then Milestone 3 (project binding), Milestone 4 (activity pipeline / observation), Milestone 5 (persona), Milestone 6 (voice + lip sync).
+1. Exercise and refine the delivered Side Chat persona, automatic Agent context, `/send`, `/clear`, stop, recovery, and narrow-panel behavior.
+2. Resume chat-driven presentation intent or Milestone 3+ only after the Side Chat use case is stable and the priority is explicitly revisited.

@@ -27,6 +27,7 @@ const readOnlyRuleset: PermissionV1.Ruleset = [
   { permission: "glob", action: "allow", pattern: "*" },
   { permission: "grep", action: "allow", pattern: "*" },
 ]
+const handoffRuleset: PermissionV1.Ruleset = [{ permission: "*", action: "deny", pattern: "*" }]
 
 describe("wife read-only session ruleset", () => {
   test("denies write and execution tools", () => {
@@ -51,6 +52,12 @@ describe("wife read-only session ruleset", () => {
     expect(Permission.disabled(tools, readOnlyRuleset)).toEqual(
       new Set(["bash", "edit", "write", "apply_patch", "task", "skill"]),
     )
+  })
+
+  test("removes every tool from the handoff session", () => {
+    const tools = ["bash", "edit", "read", "glob", "grep", "webfetch", "mcp__github"]
+    expect(Permission.disabled(tools, handoffRuleset)).toEqual(new Set(tools))
+    tools.forEach((tool) => expect(Permission.evaluate(tool, "*", handoffRuleset).action).toBe("deny"))
   })
 
   it.instance(

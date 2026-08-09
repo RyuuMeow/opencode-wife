@@ -133,7 +133,7 @@ Loop B (assistant):    user ⇄ wife session (read-only) → reply → intent
 
 A second, restricted conversation surface inside the wife panel. The assistant watches nothing yet (that is Milestone 4); it answers project questions with read-only tools.
 
-> Status: core assistant chat delivered on `live2d-runtime`. Each main session owns a persistent, archived Wife session with a verified deny-all/read-glob-grep permission profile. The Live2D overlay uses structured short messages and choices, restores history, survives panel collapse, and isolates stop/error state. `/wife-context` and chat-driven presentation intent remain pending.
+> Status: Side Chat core delivered on `live2d-runtime`. Each main session owns a persistent, archived Wife session with a verified deny-all/read-glob-grep permission profile. The overlay restores history, survives panel collapse, and isolates stop/error state. Character persona, automatic current-Agent context, `/send`, and `/clear` are delivered. Chat-driven presentation intent is paused with the downstream milestones.
 
 Deliverables:
 
@@ -142,18 +142,23 @@ Deliverables:
 - context management: server-side auto-compaction (existing feature — no custom truncation)
 - chat UI: the Live2D canvas hosts the conversation overlay, reuses `PromptInputV2` (controller mode) with a custom wife submit handler, lightweight message bubbles (reuse `Markdown`), and choices rendered as buttons from session structured output (visual-novel style; clicking sends the chosen text)
 - speech bubble overlay on the Live2D canvas for chat replies
-- `/wife-context` slash command: prepends a wife conversation summary into the agent input box (editable before sending)
-- presentation coordinator v1: chat-driven intent (typing → listening, reply → speaking + bubble); in-flight replies continue when the panel is collapsed
+- global character chat persona: user address plus bounded free-form speaking/personality instructions, applied from the next reply
+- automatic current-Agent snapshot: up to 80 recent messages projected into a 12,000-character untrusted read-only reference
+- `/send`: a temporary archived deny-all/no-tools session summarizes the Side Chat and latest Agent snapshot into the scoped Agent composer; existing drafts offer Replace / Append / Cancel and are never auto-submitted
+- `/clear`: confirmed permanent deletion of the current Wife session and pointer while preserving character, model, persona, compatibility, and Live2D preferences
 
 Acceptance:
 
 - asking project questions returns useful answers; no write/exec tool is available to the wife session
 - choices render as buttons and submit their text
-- `/wife-context` injects a summary into the agent input
+- `/send` produces an editable Agent task without auto-submitting or crossing session boundaries
+- `/clear` remains cleared after restart; its next normal message creates a fresh Wife session
 - memory is session-scoped; a collapsed panel does not interrupt an in-flight reply
 - model failure shows an error state without affecting the agent session
 
 ### Milestone 3 — Project binding
+
+> Status: paused while Side Chat remains the product mainline.
 
 Deliverables:
 
@@ -170,6 +175,8 @@ Acceptance:
 - configuration stores references, not duplicated assets
 
 ### Milestone 4 — Activity pipeline (observation)
+
+> Status: paused.
 
 The character starts watching the agent work. Observation is event-driven and intentionally cheap.
 
@@ -193,6 +200,8 @@ Acceptance:
 
 ### Milestone 5 — Lightweight persona director
 
+> Status: paused. This is separate from the delivered static character chat persona.
+
 Deliverables:
 
 - structured persona request/response via `LLM.generateObject` (text + emotion + gesture + optional choices)
@@ -208,6 +217,8 @@ Acceptance:
 - AI never outputs asset paths or tool decisions
 
 ### Milestone 6 — Voice engine and lip sync
+
+> Status: paused.
 
 Deliverables:
 
@@ -263,9 +274,10 @@ These changes touch high-conflict upstream UI files and should remain separate f
 | Structured output | `LLM.generateObject` (choices / persona) |
 | Choices | Renderer-rendered buttons from structured output; clicking sends the chosen text (no server question API) |
 | Input reuse | `PromptInputV2` (controller mode) with a custom wife submit handler |
-| `/wife-context` | Summary prepended into the agent input box (editable) |
+| `/send` | Temporary deny-all/no-tools summary session; scoped editable Agent draft; never auto-submit |
+| `/clear` | Permanently delete the assistant session and pointer after V2 confirmation |
 | Memory | Session-scoped, keyed by session id, pruned |
-| Context management | Server-side auto-compaction (existing); no custom truncation |
+| Context management | Wife memory uses server auto-compaction; current Agent context is a non-persisted bounded projection |
 | Observation | Event-driven; activity snapshot input (small window, bounded); 5-minute idle threshold; 30-minute idle-speech cooldown; full stop when collapsed / Wife Mode off |
 | Template bank | Per-character `speechTemplates` (sentence lists) + built-in defaults |
 | Panel width | Resizable 260–480 px, default 320, persisted |

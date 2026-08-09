@@ -86,6 +86,12 @@ import {
 import { SessionSidePanel } from "@/pages/session/session-side-panel"
 import { WifePanel, WIFE_PANEL_WIDTH_MIN } from "@/features/wife/live2d/wife-panel"
 import { createWifeChatController } from "@/features/wife/chat/wife-chat-controller"
+import { DialogWifeHandoffDraft } from "@/features/wife/chat/wife-command-dialogs"
+import {
+  applyWifeHandoffDraft,
+  hasWifeHandoffDraft,
+  type WifeHandoffDraftMode,
+} from "@/features/wife/chat/side-chat-commands"
 import { sessionPanelLayout } from "@/pages/session/session-panel-layout"
 import { SessionReviewEmptyChangesV2 } from "@opencode-ai/session-ui/v2/session-review-empty-changes-v2"
 import { SessionReviewEmptyNoGitV2 } from "@opencode-ai/session-ui/v2/session-review-empty-no-git-v2"
@@ -1159,6 +1165,29 @@ export default function Page() {
   const focusInput = () => {
     if (isChildSession()) return
     inputRef?.focus()
+  }
+
+  const applyWifeHandoff = async (result: { ownerSessionID: string; summary: string }) => {
+    if (params.id !== result.ownerSessionID) return
+    const scope = { dir: base64Encode(sdk().directory), id: result.ownerSessionID }
+    await prompt.ready.promise
+    if (params.id !== result.ownerSessionID) return
+    const target = prompt.capture(scope)
+    const apply = (mode: WifeHandoffDraftMode) => {
+      if (params.id !== result.ownerSessionID) return
+      const next = applyWifeHandoffDraft(target.current(), result.summary, mode)
+      prompt.set(next, promptLength(next), scope)
+      requestAnimationFrame(() => {
+        if (params.id !== result.ownerSessionID) return
+        inputRef?.focus()
+        setCursorPosition(inputRef, promptLength(next))
+      })
+    }
+    if (!hasWifeHandoffDraft(target.current(), target.context.items().length)) {
+      apply("replace")
+      return
+    }
+    void dialog.show(() => <DialogWifeHandoffDraft onSelect={apply} />)
   }
 
   useComposerCommands()
@@ -2329,6 +2358,7 @@ export default function Page() {
             maxWidth={wifePanelMax()}
             resizeEdge={desktopSidePanelOpen() ? "end" : "start"}
             chat={wifeChat}
+            onHandoff={applyWifeHandoff}
           />
         </Show>
 

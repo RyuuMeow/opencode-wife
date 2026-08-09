@@ -965,6 +965,18 @@ export const dict = {
   // TODO: translate via translate:app
   "wife.panel.empty.openSettings": "Open settings",
   "wife.panel.chat.placeholder": "Talk to your companion…", // TODO: translate via translate:app
+  "wife.panel.commands.send.title": "Send to Agent", // TODO: translate via translate:app
+  "wife.panel.commands.send.description": "Turn this side chat into an editable Agent prompt", // TODO: translate via translate:app
+  "wife.panel.commands.send.working": "Preparing for Agent", // TODO: translate via translate:app
+  "wife.panel.commands.send.draftTitle": "The Agent draft is not empty", // TODO: translate via translate:app
+  "wife.panel.commands.send.draftDescription": "Replace its text and mentions, or append the prepared task.", // TODO: translate via translate:app
+  "wife.panel.commands.send.replace": "Replace", // TODO: translate via translate:app
+  "wife.panel.commands.send.append": "Append", // TODO: translate via translate:app
+  "wife.panel.commands.clear.title": "Clear side chat", // TODO: translate via translate:app
+  "wife.panel.commands.clear.suggestionDescription": "Permanently clear this side chat and its memory", // TODO: translate via translate:app
+  "wife.panel.commands.clear.description": "This permanently deletes the current side chat history and memory.", // TODO: translate via translate:app
+  "wife.panel.commands.clear.confirm": "Clear", // TODO: translate via translate:app
+  "wife.panel.commands.clear.working": "Clearing side chat", // TODO: translate via translate:app
   "wife.panel.chat.historyTitle": "Chat history", // TODO: translate via translate:app
   "wife.panel.chat.historyClose": "Close chat history", // TODO: translate via translate:app
   "wife.panel.chat.roleAssistant": "Companion", // TODO: translate via translate:app

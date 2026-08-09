@@ -37,7 +37,15 @@ type CharacterDefinition = {
   personaPresetId?: string
   behavior?: CharacterBehaviorDefaults
 }
+
+type CharacterBehaviorDefaults = {
+  userAddress?: string
+  personaInstructions?: string // maximum 2,000 characters in the settings UI
+  // existing speech/template fields omitted
+}
 ```
+
+`userAddress` and `personaInstructions` are global character settings. They affect the next Side Chat reply without replacing the session, and are encoded as profile data that cannot override permissions, safety, language following, or the reply contract. `personaPresetId` remains reserved; there is no preset manager yet.
 
 > Implementation note: the model folder path for a character is machine-local state and lives outside `CharacterDefinition` — the registry keeps `modelFolders: Record<characterId, string>` (absolute path, used by the desktop `wife://` protocol to serve model files to the runtime).
 
@@ -274,6 +282,29 @@ type CharacterRuntimeState = {
 }
 ```
 
+## Side Chat sessions and context
+
+```ts
+type WifeAssistantSessionLink = {
+  ownerSessionId: string
+  wifeSessionId: string
+  kind: "assistant"
+  permission: "deny-all + read/glob/grep"
+}
+
+type WifeHandoffSession = {
+  ownerSessionId: string
+  kind: "handoff"
+  permission: "deny-all"
+  archived: true
+  temporary: true
+}
+```
+
+Each main Agent session owns one persistent archived assistant session. A normal Wife turn receives a non-persisted, at-most-12,000-character snapshot of the current owner session: title/status, visible user/assistant text, bounded tool status/title/error, and patch filenames. Reasoning, synthetic/ignored text, tool input/output, attachments, and other sessions are excluded.
+
+`/send` uses a separate archived handoff session with no tools, writes only an editable plain-text task into the scoped main composer, and is deleted after completion. `/clear` permanently deletes only the assistant session and pointer; persona, model/variant, character choice, model compatibility, and Live2D view state are separate persisted settings.
+
 ## Persistence guidance
 
 Persist:
@@ -284,6 +315,7 @@ Persist:
 - voice presets
 - project bindings
 - user defaults
+- per-main-session Wife assistant pointers and panel character/model preferences
 
 Do not persist as authoritative state:
 

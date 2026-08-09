@@ -1,6 +1,6 @@
 # OpenCode Desktop Wife — Documentation Index
 
-> Status: Milestone 0 (baseline), Milestone 1 (character registry) and Phase A (Live2D runtime) delivered on `wife-baseline` / `character-registry` / `wife-settings` / `live2d-runtime`. Roadmap revised (docs/09): Wife Assistant Chat (Milestone 2) planned next — see [12-handoff.md](./12-handoff.md).
+> Status: Milestone 0, Milestone 1, Phase A, and the Side Chat core are delivered on `live2d-runtime`. Side Chat + character persona is the current product mainline; Milestone 3 and later are paused — see [12-handoff.md](./12-handoff.md).
 > Basis: the design discussion around extending `anomalyco/opencode` with a low-impact presentation layer.
 
 ## Project position
@@ -71,12 +71,7 @@ Keep changes to upstream OpenCode files limited to small integration points. Pro
 ## Suggested implementation order
 
 1. Register and preview one character. (done)
-2. Finish the Wife Assistant Chat with `/wife-context` and chat-driven presentation intent (persistent read-only chat is delivered).
-3. Bind characters to projects.
-4. Drive deterministic states from OpenCode events (observation loop).
-5. Add lightweight persona requests for spoken text, gestures and dialogue choices.
-6. Add GPT-SoVITS streaming and audio-driven lip sync.
-7. Add multi-session arbitration and runtime hardening.
-8. Add utility tabs, split panes and detachable windows after the character pipeline is stable.
+2. Refine the delivered Side Chat, persona, automatic Agent context, `/send`, and `/clear` workflows.
+3. Resume project binding, observation, presentation intent, voice, and later runtime work only after the Side Chat use case is stable.
 
-Current progress: Phase A and the core persistent read-only Wife Assistant Chat are delivered; next is `/wife-context` + chat-driven presentation intent, see 12-handoff.md.
+Current progress: Phase A and the core persistent read-only Side Chat are delivered, including global character persona, bounded current-Agent context, `/send`, and `/clear`; see 12-handoff.md.

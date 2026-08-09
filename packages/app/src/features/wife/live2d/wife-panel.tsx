@@ -7,6 +7,7 @@ import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
 import { Icon } from "@opencode-ai/ui/v2/icon"
 import { TooltipV2 } from "@opencode-ai/ui/v2/tooltip-v2"
+import { useDialog } from "@opencode-ai/ui/context/dialog"
 import { PromptInputV2, type PromptInputV2PersistedState } from "@opencode-ai/session-ui/v2/prompt-input"
 import { createPromptInputV2Controller } from "@opencode-ai/session-ui/v2/prompt-input/interaction"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
@@ -24,6 +25,8 @@ import { Persist, persisted } from "@/utils/persist"
 import { useWifeRegistry } from "../registry/wife-registry"
 import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea } from "../chat/wife-chat-area"
 import type { WifeChatController } from "../chat/wife-chat-controller"
+import { DialogClearWifeChat } from "../chat/wife-command-dialogs"
+import { parseSideChatCommand } from "../chat/side-chat-commands"
 import type { PresentationIntent } from "./live2d-view"
 
 export const WIFE_PANEL_WIDTH_MIN = 260
@@ -68,6 +71,7 @@ export function WifePanel(props: {
   maxWidth: number
   resizeEdge: "start" | "end"
   chat: WifeChatController
+  onHandoff: (result: { ownerSessionID: string; summary: string }) => void
 }) {
   const language = useLanguage()
   const registry = useWifeRegistry()
@@ -77,6 +81,7 @@ export function WifePanel(props: {
   const sdk = useSDK()
   const serverSDK = useServerSDK()
   const local = useLocal()
+  const dialog = useDialog()
   const openCharacters = useSettingsDialog("wife-characters")
   const [preferences, setPreferences, , preferencesReady] = persisted(
     Persist.serverWorkspace(serverSDK().scope, sdk().directory, "wife-panel-preferences"),
@@ -227,11 +232,54 @@ export function WifePanel(props: {
       { providerID: model.provider.id, modelID: model.id, variant: selectedVariant() },
     )
   }
+  const runCommand = (command: "send" | "clear") => {
+    if (command === "clear") {
+      void dialog.show(() => (
+        <DialogClearWifeChat
+          onConfirm={async () => {
+            const cleared = await props.chat.clear()
+            if (cleared) setHistoryProgress(0)
+            return cleared
+          }}
+        />
+      ))
+      return
+    }
+    const model = selectedModel()
+    if (!model) return
+    void props.chat
+      .handoff({ providerID: model.provider.id, modelID: model.id, variant: selectedVariant() })
+      .then((result) => {
+        if (result) props.onHandoff(result)
+      })
+  }
   const wifeInputController = createPromptInputV2Controller({
     store: [wifeInput, setWifeInput],
-    commands: () => [],
+    commands: () => [
+      {
+        id: "wife.send",
+        kind: "command",
+        label: "/send",
+        trigger: "send",
+        title: language.t("wife.panel.commands.send.title"),
+        description: language.t("wife.panel.commands.send.description"),
+      },
+      {
+        id: "wife.clear",
+        kind: "command",
+        label: "/clear",
+        trigger: "clear",
+        title: language.t("wife.panel.commands.clear.title"),
+        description: language.t("wife.panel.commands.clear.suggestionDescription"),
+      },
+    ],
     context: () => [],
     searchContextFiles: () => [],
+    onSuggestionSelect: (item) => {
+      const command = item.id === "wife.send" ? "send" : item.id === "wife.clear" ? "clear" : undefined
+      if (!command) return undefined
+      return () => runCommand(command)
+    },
     view: {
       placeholder: () => language.t("wife.panel.chat.placeholder"),
       variant: {
@@ -240,11 +288,17 @@ export function WifePanel(props: {
         onSelect: (value) => wifeModel.variant.set(value === "default" ? undefined : value),
       },
       submit: {
-        stopping: props.chat.working,
+        stopping: props.chat.stoppable,
         working: props.chat.working,
         onSubmit: () => {
           const text = wifeInputController.value()
           if (!text.trim()) return
+          const command = parseSideChatCommand(text)
+          if (command) {
+            wifeInputController.onInput("", [{ type: "text", content: "", start: 0, end: 0 }], 0)
+            runCommand(command)
+            return
+          }
           if (!submitWifeMessage(text)) return
           wifeInputController.onInput("", [{ type: "text", content: "", start: 0, end: 0 }], 0)
         },
@@ -407,7 +461,13 @@ export function WifePanel(props: {
                       onChoice={submitWifeMessage}
                       loading={props.chat.loading}
                       error={props.chat.error}
-                      loadingLabel={() => language.t("common.loading")}
+                      loadingLabel={() =>
+                        props.chat.status() === "summarizing"
+                          ? language.t("wife.panel.commands.send.working")
+                          : props.chat.status() === "clearing"
+                            ? language.t("wife.panel.commands.clear.working")
+                            : language.t("common.loading")
+                      }
                       errorLabel={() => language.t("common.requestFailed")}
                       interactive={() => !modelInteraction()}
                     />
