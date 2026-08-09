@@ -50,6 +50,7 @@ import { migrate } from "./migrate"
 import { cleanupStoreFiles } from "./store-cleanup"
 import { startBackgroundCli } from "./background-cli"
 import { setNativeTranslations } from "./native-translations"
+import { desktopPaths } from "./desktop-paths"
 
 const TEST_ONBOARDING = process.env.OPENCODE_TEST_ONBOARDING === "1"
 const SIDECAR_VERSION = process.env.OPENCODE_SIDECAR_V2 === "1" ? "v2" : "v1"
@@ -129,13 +130,25 @@ const main = Effect.gen(function* () {
     process.env.XDG_STATE_HOME = join(root, "state")
     return root
   })()
+  const paths = onboardingTestRoot
+    ? {
+        wifeUserData: join(onboardingTestRoot, "desktop"),
+        agentStateHome: join(onboardingTestRoot, "state"),
+      }
+    : desktopPaths({ appData: app.getPath("appData"), wifeAppId: appId, channel: CHANNEL })
+
+  // Electron's process singleton is scoped by the active user-data namespace. Acquire it through
+  // OpenCode's namespace so the original desktop and Wife cannot start competing local backends.
+  app.setPath("userData", paths.agentStateHome)
+  if (!app.requestSingleInstanceLock({ product: "OpenCode Wife" })) {
+    app.quit()
+    return
+  }
+
+  app.setPath("userData", paths.wifeUserData)
+  app.setPath("sessionData", onboardingTestRoot ? join(onboardingTestRoot, "session") : join(paths.wifeUserData, "session"))
   app.setName(app.isPackaged ? APP_NAMES[CHANNEL] : APP_NAMES.dev)
   app.setAppUserModelId(appId)
-  app.setPath(
-    "userData",
-    onboardingTestRoot ? join(onboardingTestRoot, "desktop") : join(app.getPath("appData"), appId),
-  )
-  if (onboardingTestRoot) app.setPath("sessionData", join(onboardingTestRoot, "session"))
   initializeOldLayoutEligibility(app.getPath("userData"))
   logger = initLogging()
   initCrashReporter()
@@ -186,15 +199,12 @@ const main = Effect.gen(function* () {
   app.commandLine.appendSwitch("enable-features", features ? `${jsCallStackFeature},${features}` : jsCallStackFeature)
   if (!app.isPackaged) app.commandLine.appendSwitch("remote-debugging-port", "9222")
 
-  if (!app.requestSingleInstanceLock()) {
-    app.quit()
-    return
-  }
-
-  const shellEnv = preferAppEnv(app.getPath("userData"))
+  preferAppEnv(paths.agentStateHome)
 
   app.on("second-instance", (_event: Event, argv: string[]) => {
-    const urls = argv.filter((arg: string) => arg.startsWith(`${APP_PROTOCOL}://`))
+    const urls = argv.filter(
+      (arg: string) => arg.startsWith(`${APP_PROTOCOL}://`) || arg.startsWith("opencode://"),
+    )
     if (urls.length) {
       logger.log("deep link received via second-instance", { urls })
       emitDeepLinks(urls)
@@ -324,7 +334,7 @@ const main = Effect.gen(function* () {
 
     if (SIDECAR_VERSION === "v2") {
       logger.log("spawning v2 sidecar")
-      const sidecar = yield* Effect.promise(() => startBackgroundCli(logger, shellEnv?.XDG_STATE_HOME))
+      const sidecar = yield* Effect.promise(() => startBackgroundCli(logger, paths.agentStateHome))
       yield* Deferred.succeed(serverReady, {
         url: sidecar.url,
         username: sidecar.username,
@@ -369,7 +379,7 @@ const main = Effect.gen(function* () {
     logger.log("spawning sidecar", { url })
     const { listener, health } = yield* Effect.promise(() =>
       spawnLocalServer(hostname, port, password, {
-        userDataPath: app.getPath("userData"),
+        userDataPath: paths.agentStateHome,
         onStdout: (message) => writeLog("server", "stdout", { message }),
         onStderr: (message) => writeLog("server", "stderr", { message }, "warn"),
         onExit: (code) => writeLog("utility", "sidecar exited", { code }, "warn"),
