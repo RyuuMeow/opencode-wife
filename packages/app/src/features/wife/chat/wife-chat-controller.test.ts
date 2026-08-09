@@ -4,11 +4,13 @@ import {
   createWifeReplyGate,
   isWifeSession,
   normalizeWifeReply,
+  normalizeWifeReplyText,
   projectWifeHistory,
   requiresWifeSessionRebuild,
   wifeChatError,
-  wifePromptVariant,
+  wifePromptFormat,
   WIFE_READ_ONLY_PERMISSION,
+  WIFE_REPLY_SCHEMA,
 } from "./wife-chat-controller"
 import {
   isWifeAssistantMetadata,
@@ -34,6 +36,22 @@ describe("normalizeWifeReply", () => {
     expect(normalizeWifeReply({ messages: [], choices: [] })).toBeUndefined()
     expect(normalizeWifeReply({ messages: ["ok"], choices: [1] })).toBeUndefined()
     expect(normalizeWifeReply({ messages: ["ok"], choices: ["1", "2", "3", "4"] })).toBeUndefined()
+  })
+
+  test("normalizes plain and fenced JSON text fallback", () => {
+    expect(normalizeWifeReplyText('{"messages":["你好。"],"choices":["繼續"]}')).toEqual({
+      messages: ["你好。"],
+      choices: ["繼續"],
+    })
+    expect(normalizeWifeReplyText('```json\n{"messages":["嗨！"],"choices":[]}\n```')).toEqual({
+      messages: ["嗨！"],
+      choices: [],
+    })
+    expect(normalizeWifeReplyText("你好呀！今天想聊什麼？")).toEqual({
+      messages: ["你好呀！", "今天想聊什麼？"],
+      choices: [],
+    })
+    expect(normalizeWifeReplyText('{"messages":')).toBeUndefined()
   })
 })
 
@@ -93,11 +111,13 @@ describe("wife session identity", () => {
 })
 
 describe("wife prompt compatibility", () => {
-  test("uses the default variant for DeepSeek structured output", () => {
-    expect(
-      wifePromptVariant({ id: "deepseek-v4-flash-free", provider: { id: "opencode" } }, "low"),
-    ).toBe("default")
-    expect(wifePromptVariant({ id: "gpt-5", provider: { id: "openai" } }, "high")).toBe("high")
+  test("uses text JSON fallback when thinking rejects forced tool choice", () => {
+    expect(wifePromptFormat({ id: "deepseek-v4-flash-free", provider: { id: "opencode" } })).toBeUndefined()
+    expect(wifePromptFormat({ id: "deepseek-v4-flash", provider: { id: "opencode-go" } })).toBeUndefined()
+    expect(wifePromptFormat({ id: "gpt-5", provider: { id: "openai" } })).toEqual({
+      type: "json_schema",
+      schema: WIFE_REPLY_SCHEMA,
+    })
   })
 
   test("extracts readable SDK and provider errors", () => {
@@ -147,6 +167,23 @@ describe("projectWifeHistory", () => {
         { id: "user-2", role: "user", content: "繼續" },
       ],
       choices: [],
+    })
+  })
+
+  test("restores messages and choices from text JSON fallback", () => {
+    expect(
+      projectWifeHistory([
+        {
+          info: { id: "assistant-1", role: "assistant" },
+          parts: [{ type: "text", text: '{"messages":["第一句。","第二句。"],"choices":["繼續"]}' }],
+        },
+      ]),
+    ).toEqual({
+      messages: [
+        { id: "assistant-1:0", role: "assistant", content: "第一句。" },
+        { id: "assistant-1:1", role: "assistant", content: "第二句。" },
+      ],
+      choices: ["繼續"],
     })
   })
 })

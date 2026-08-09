@@ -22,9 +22,18 @@ export type WifeLogger = {
 export function wifeLogger(scope: WifeLogScope): WifeLogger {
   const prefix = `[wife.${scope}]`
   return {
-    debug: (...args) => console.debug(prefix, ...args),
-    info: (...args) => console.info(prefix, ...args),
-    warn: (...args) => console.warn(prefix, ...args),
-    error: (...args) => console.error(prefix, ...args),
+    debug: (...args) => console.debug(prefix, ...args.map(formatWifeLogValue)),
+    info: (...args) => console.info(prefix, ...args.map(formatWifeLogValue)),
+    warn: (...args) => console.warn(prefix, ...args.map(formatWifeLogValue)),
+    error: (...args) => console.error(prefix, ...args.map(formatWifeLogValue)),
+  }
+}
+
+export function formatWifeLogValue(value: unknown) {
+  if (value instanceof Error || typeof value !== "object" || value === null) return value
+  try {
+    return JSON.stringify(value)
+  } catch {
+    return "[Unserializable object]"
   }
 }
