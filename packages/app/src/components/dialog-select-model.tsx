@@ -26,7 +26,11 @@ import { matchesModelSearch } from "./dialog-select-model-search"
 const isFree = (provider: string, cost: { input: number } | undefined) =>
   provider === "opencode" && (!cost || cost.input === 0)
 
-type ModelState = ReturnType<typeof useLocal>["model"]
+export type ModelSelectorModelState = Pick<
+  ReturnType<typeof useLocal>["model"],
+  "current" | "list" | "set" | "visible"
+>
+type ModelState = ModelSelectorModelState
 type ModelItem = ReturnType<ModelState["list"]>[number]
 
 const modelKey = (model: ModelItem) => `${model.provider.id}:${model.id}`
@@ -225,6 +229,7 @@ export function ModelSelectorPopover(props: {
 export function ModelSelectorPopoverV2(props: {
   provider?: string
   model?: ModelState
+  manage?: boolean
   trigger: ModelSelectorTrigger
   onClose?: () => void
 }) {
@@ -242,11 +247,15 @@ export function ModelSelectorPopoverV2(props: {
       groups={controller.groups}
       current={controller.current}
       select={controller.select}
-      onManage={() => {
-        void import("./dialog-manage-models").then((module) => {
-          void dialog.show(() => <module.DialogManageModelsV2 />)
-        })
-      }}
+      onManage={
+        props.manage === false
+          ? undefined
+          : () => {
+              void import("./dialog-manage-models").then((module) => {
+                void dialog.show(() => <module.DialogManageModelsV2 />)
+              })
+            }
+      }
       onClose={() => props.onClose?.()}
     />
   )
@@ -297,7 +306,7 @@ function ModelSelectorPopoverV2View(props: {
   groups: (models: ModelItem[]) => { category: string; items: ModelItem[] }[]
   current: () => string | undefined
   select: (item: ModelItem) => void
-  onManage: () => void
+  onManage?: () => void
   onClose: () => void
 }) {
   const language = useLanguage()
@@ -308,7 +317,7 @@ function ModelSelectorPopoverV2View(props: {
 
   const models = createMemo(() => props.models(store.search))
   const groups = createMemo(() => props.groups(models()))
-  const keys = () => [...models().map(modelKey), manageKey]
+  const keys = () => [...models().map(modelKey), ...(props.onManage ? [manageKey] : [])]
   const initialActive = () => {
     const selected = props.current()
     const options = keys()
@@ -337,6 +346,7 @@ function ModelSelectorPopoverV2View(props: {
     dismiss.afterClose(() => props.select(item))
   }
   const manage = () => {
+    if (!props.onManage) return
     dismiss.preventTriggerRestore()
     setOpen(false)
     dismiss.afterClose(props.onManage)
@@ -359,7 +369,7 @@ function ModelSelectorPopoverV2View(props: {
   }
   const setSearch = (value: string) => {
     const first = props.models(value)[0]
-    setStore({ search: value, active: first ? modelKey(first) : manageKey })
+    setStore({ search: value, active: first ? modelKey(first) : props.onManage ? manageKey : "" })
   }
 
   createEffect(() => {
@@ -500,21 +510,23 @@ function ModelSelectorPopoverV2View(props: {
               </Show>
             </div>
           </ScrollView>
-          <div class="h-px bg-v2-border-border-muted" />
-          <div class="flex flex-col p-0.5">
-            <MenuV2.Item
-              data-option-key={manageKey}
-              classList={{ "!bg-v2-overlay-simple-overlay-hover": store.active === manageKey }}
-              onMouseEnter={() => {
-                setStore("active", manageKey)
-                setTimeout(() => searchRef?.focus())
-              }}
-              onSelect={manage}
-            >
-              <Icon name="outline-sliders" size="small" />
-              <span class="min-w-0 flex-1 truncate leading-5">{language.t("dialog.model.manage")}</span>
-            </MenuV2.Item>
-          </div>
+          <Show when={props.onManage}>
+            <div class="h-px bg-v2-border-border-muted" />
+            <div class="flex flex-col p-0.5">
+              <MenuV2.Item
+                data-option-key={manageKey}
+                classList={{ "!bg-v2-overlay-simple-overlay-hover": store.active === manageKey }}
+                onMouseEnter={() => {
+                  setStore("active", manageKey)
+                  setTimeout(() => searchRef?.focus())
+                }}
+                onSelect={manage}
+              >
+                <Icon name="outline-sliders" size="small" />
+                <span class="min-w-0 flex-1 truncate leading-5">{language.t("dialog.model.manage")}</span>
+              </MenuV2.Item>
+            </div>
+          </Show>
         </MenuV2.Content>
       </MenuV2.Portal>
     </MenuV2>

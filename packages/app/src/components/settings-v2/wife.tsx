@@ -4,11 +4,11 @@ import { Icon } from "@opencode-ai/ui/v2/icon"
 import { ProviderIcon } from "@opencode-ai/ui/provider-icon"
 import { Switch } from "@opencode-ai/ui/v2/switch-v2"
 import { SelectV2 } from "@opencode-ai/ui/v2/select-v2"
-import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
+import { ModelSelectorPopoverV2, type ModelSelectorModelState } from "@/components/dialog-select-model"
 import { SettingsListV2 } from "./parts/list"
 import { SettingsRowV2 } from "./parts/row"
 import { useLanguage } from "@/context/language"
-import { useLocal, type ModelSelection } from "@/context/local"
+import { useModels } from "@/context/models"
 import { useSettings } from "@/context/settings"
 import { wifeChoiceModelAvailable } from "@/features/wife/chat/wife-choice-generator"
 
@@ -17,10 +17,10 @@ const heightRatioOptions = [0.25, 0.35, 0.5, 0.65, 0.8]
 export const SettingsWifeV2: Component = () => {
   const language = useLanguage()
   const settings = useSettings()
-  const local = useLocal()
+  const models = useModels()
   const selectedModel = createMemo(() => {
     const value = settings.general.wifeChoiceModel()
-    return local.model.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID)
+    return models.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID)
   })
   const selectedVariant = createMemo(() => {
     const value = settings.general.wifeChoiceModel().variant
@@ -28,31 +28,19 @@ export const SettingsWifeV2: Component = () => {
     return value
   })
   const choiceModelAvailable = createMemo(() =>
-    wifeChoiceModelAvailable(local.model.list(), settings.general.wifeChoiceModel()),
+    wifeChoiceModelAvailable(models.list(), settings.general.wifeChoiceModel()),
   )
-  const choiceModel: ModelSelection = {
-    ...local.model,
+  const choiceModel: ModelSelectorModelState = {
+    list: models.list,
+    visible: models.visible,
     current: selectedModel,
     set(value) {
       if (!value) return
-      local.model.setVisibility(value, true)
+      models.setVisibility(value, true)
       settings.general.setWifeChoiceModel({ ...value, variant: undefined })
     },
-    variant: {
-      ...local.model.variant,
-      configured: () => undefined,
-      selected: selectedVariant,
-      current: selectedVariant,
-      list: () => Object.keys(selectedModel()?.variants ?? {}),
-      set: (variant) => settings.general.setWifeChoiceModel({ ...settings.general.wifeChoiceModel(), variant }),
-      cycle() {
-        const items = this.list()
-        if (items.length === 0) return
-        const index = items.indexOf(this.current() ?? "")
-        this.set(items[(index + 1) % items.length])
-      },
-    },
   }
+  const choiceVariants = () => Object.keys(selectedModel()?.variants ?? {})
 
   return (
     <>
@@ -120,6 +108,7 @@ export const SettingsWifeV2: Component = () => {
             >
               <ModelSelectorPopoverV2
                 model={choiceModel}
+                manage={false}
                 trigger={(triggerProps) => (
                   <ButtonV2
                     {...triggerProps}
@@ -147,13 +136,16 @@ export const SettingsWifeV2: Component = () => {
               <SelectV2
                 appearance="inline"
                 disabled={!settings.general.wifeChoiceGenerationEnabled() || !selectedModel()}
-                options={["default", ...choiceModel.variant.list()]}
-                current={choiceModel.variant.current() ?? "default"}
+                options={["default", ...choiceVariants()]}
+                current={selectedVariant() ?? "default"}
                 placement="bottom-end"
                 gutter={6}
                 label={(variant) => variant}
                 onSelect={(variant) =>
-                  choiceModel.variant.set(variant === "default" ? undefined : (variant ?? undefined))
+                  settings.general.setWifeChoiceModel({
+                    ...settings.general.wifeChoiceModel(),
+                    variant: variant === "default" ? undefined : (variant ?? undefined),
+                  })
                 }
                 aria-label={language.t("settings.wife.choices.variant.title")}
               />
