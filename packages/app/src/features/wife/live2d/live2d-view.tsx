@@ -1,4 +1,4 @@
-import { createEffect, createSignal, onCleanup, onMount, untrack } from "solid-js"
+import { createEffect, createSignal, on, onCleanup, onMount, untrack } from "solid-js"
 import { Application, Ticker } from "pixi.js"
 import { Live2DModel, MotionPriority } from "pixi-live2d-display-lipsyncpatch/cubism4"
 import type {
@@ -149,37 +149,40 @@ export function Live2DView(props: {
     })
   })
 
-  createEffect(() => {
-    const next = app()
-    const modelUrl = props.modelUrl()
-    if (!next) return
+  createEffect(
+    on(
+      () => [app(), props.modelUrl()] as const,
+      ([next, modelUrl]) => {
+        if (!next) return
 
-    const generation = ++loadGeneration
-    const previous = untrack(model)
-    const initialView = untrack(() => props.initialView?.())
-    setZoom(initialView?.zoom ?? 1)
-    setOffset({ x: initialView?.offsetX ?? 0, y: initialView?.offsetY ?? 0 })
-    if (previous) {
-      setModel(undefined)
-      next.stage.removeChild(previous)
-      previous.destroy()
-    }
-
-    void Live2DModel.from(modelUrl, { ticker: Ticker.shared })
-      .then((loaded) => {
-        if (disposed || generation !== loadGeneration) {
-          loaded.destroy()
-          return
+        const generation = ++loadGeneration
+        const previous = untrack(model)
+        const initialView = untrack(() => props.initialView?.())
+        setZoom(initialView?.zoom ?? 1)
+        setOffset({ x: initialView?.offsetX ?? 0, y: initialView?.offsetY ?? 0 })
+        if (previous) {
+          setModel(undefined)
+          next.stage.removeChild(previous)
+          previous.destroy()
         }
-        setModel(loaded)
-        next.stage.addChild(loaded)
-        fit()
-      })
-      .catch((cause: unknown) => {
-        if (disposed || generation !== loadGeneration) return
-        props.onError(cause instanceof Error ? cause.message : String(cause))
-      })
-  })
+
+        void Live2DModel.from(modelUrl, { ticker: Ticker.shared })
+          .then((loaded) => {
+            if (disposed || generation !== loadGeneration) {
+              loaded.destroy()
+              return
+            }
+            setModel(loaded)
+            next.stage.addChild(loaded)
+            fit()
+          })
+          .catch((cause: unknown) => {
+            if (disposed || generation !== loadGeneration) return
+            props.onError(cause instanceof Error ? cause.message : String(cause))
+          })
+      },
+    ),
+  )
 
   createEffect(() => {
     const loaded = model()
@@ -201,13 +204,13 @@ export function Live2DView(props: {
     if (!pan || event.pointerId !== pan.pointerId) return
     setOffset({ x: pan.offsetX + event.clientX - pan.startX, y: pan.offsetY + event.clientY - pan.startY })
     fit()
-    reportView()
   }
 
   const endPan = (event: PointerEvent) => {
     const pan = panning()
     if (!pan || event.pointerId !== pan.pointerId) return
     setPanning(undefined)
+    reportView()
   }
 
   createEffect(() => {
