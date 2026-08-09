@@ -1,5 +1,8 @@
 # Event and Persona Pipeline
 
+> Status: **Paused** — Milestone 4/5; Side Chat is the current mainline
+
+
 ## Objective
 
 Extract conversationally useful information without exposing internal reasoning or narrating low-level work.

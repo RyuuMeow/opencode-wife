@@ -1,5 +1,8 @@
 # Data Model
 
+> Status: **Implemented** — describes the shipped configuration and runtime data structures
+
+
 ## Configuration layers
 
 ```text

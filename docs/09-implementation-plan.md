@@ -1,5 +1,7 @@
 # Implementation Plan
 
+> Status: **Current** — roadmap reflects the delivered milestones and the paused remainder
+
 ## Working strategy
 
 Treat this as a large multi-file feature:
@@ -105,9 +107,9 @@ Acceptance:
 - toggling the panel behaves like the review panel
 - web build shows an empty state for the panel (desktop-first)
 
-### Phase A polish — panel resizing and zoom (next)
+### Phase A polish — panel resizing and zoom (delivered)
 
-Small UX follow-up before the roadmap milestones:
+Small UX follow-up completed on `live2d-runtime`:
 
 - resizable wife panel width: `layout.wife.width` (persisted, default 320, min 260 / max 480), `ResizeHandle` on the panel's left edge, chat column absorbs the change (existing `sessionPanelWidth` calc)
 - mouse-wheel zoom on the Live2D canvas: `zoomFactor` multiplied into the fit scale (`0.2x–3x`, runtime-only, multiplicative `exp(-deltaY * 0.001)`, centered on the viewport)
@@ -118,6 +120,19 @@ Commits:
 feat(wife): make wife panel width resizable
 feat(wife): add wheel zoom to live2d view
 ```
+
+### Alpha release preparation (delivered on `live2d-runtime`)
+
+> Status: delivered ahead of `v0.1.0-alpha.1`. Detail in 12-handoff.md.
+
+- `chore(brand)`: fork identity — product name, app IDs, `opencode-wife://` deep link, OW icon set, `NOTICE.md`
+- `feat(desktop)`: share opencode agent state — separate Wife profile, shared Agent state, mutual single-instance exclusion
+- `fix(desktop)`: guard shared data compatibility — base version `1.18.14`, read-only schema check, consistency backups
+- `feat(desktop)`: import opencode preferences — idempotent first-run import + Settings re-import
+- `fix(desktop)`: isolate fork updates — updater disabled, no upstream publish references
+- `feat(desktop)`: add live2d runtime setup — user-supplied Cubism Core wizard replacing the build-time fetch
+- `docs`: public documentation — root README (en/zh-TW/zh-CN), docs reorganization, SECURITY.md
+- `ci(release)`: Windows x64 alpha workflow — candidate artifacts and draft prereleases
 
 ## Roadmap (revised order)
 

@@ -1,11 +1,5 @@
 # Security
 
-## IMPORTANT
-
-We do not accept AI generated security reports. We receive a large number of
-these and we absolutely do not have the resources to review them all. If you
-submit one that will be an automatic ban from the project.
-
 ## Threat Model
 
 ### Overview
@@ -38,10 +32,8 @@ Server mode is opt-in only. When enabled, set `OPENCODE_SERVER_PASSWORD` to requ
 
 We appreciate your efforts to responsibly disclose your findings, and will make every effort to acknowledge your contributions.
 
-To report a security issue, please use the GitHub Security Advisory ["Report a Vulnerability"](https://github.com/anomalyco/opencode/security/advisories/new) tab.
+To report a security issue, please use the GitHub Private Vulnerability Reporting ["Report a Vulnerability"](https://github.com/RyuuMeow/opencode-wife/security/advisories/new) page for this repository.
 
-The team will send a response indicating the next steps in handling your report. After the initial reply to your report, the security team will keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.
+We will send a response indicating the next steps in handling your report. After the initial reply, we will keep you informed of the progress towards a fix and full announcement, and may ask for additional information or guidance.
 
-## Escalation
-
-If you do not receive an acknowledgement of your report within 6 business days, you may send an email to security@anoma.ly
+OpenCode Wife shares the upstream OpenCode agent backend. If an issue is reproducible with upstream OpenCode alone, please also consider reporting it to the upstream project at <https://github.com/anomalyco/opencode/security/advisories/new>.

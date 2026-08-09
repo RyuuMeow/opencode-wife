@@ -1,5 +1,8 @@
 # Character System
 
+> Status: **Implemented** — registration, scanning, and mapping are delivered; `custom.*` gestures/emotions UI is pending
+
+
 ## Design principle
 
 A Live2D model does not inherently understand application concepts such as `working` or `waiting_user`. The system therefore separates semantic intent from model-specific assets.

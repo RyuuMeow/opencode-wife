@@ -1,5 +1,7 @@
 # Product Design
 
+> Status: **Current** — delivered surfaces are accurate; voice configuration and behavior defaults remain planned (Milestone 5/6)
+
 ## Product modes
 
 ### Classic Mode

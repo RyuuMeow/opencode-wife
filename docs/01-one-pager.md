@@ -1,5 +1,8 @@
 # One-pager
 
+> Status: **Current** — product summary and goals remain valid; see the roadmap in 09-implementation-plan.md
+
+
 ## Problem
 
 OpenCode exposes detailed technical progress that is useful to developers but unsuitable for a conversational Live2D character. Directly mirroring tool calls, token streaming and logs would make the character noisy, repetitive and unnatural.

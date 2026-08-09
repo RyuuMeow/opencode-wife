@@ -1,5 +1,8 @@
 # Project and Session Routing
 
+> Status: **Paused** — Milestone 3; the Side Chat panel keeps a single character per window for now
+
+
 ## Why project-level assignment
 
 A character represents the working context rather than an individual message. Project assignment gives predictable behavior across multiple sessions while avoiding duplicated character assets.

@@ -1,5 +1,8 @@
 # System Architecture
 
+> Status: **Implemented** — architecture matches the delivered code; voice/pipeline components are wired for later milestones
+
+
 ## Architectural goal
 
 Add a product layer without inserting new blocking dependencies into OpenCode's agent, tool or permission execution path.

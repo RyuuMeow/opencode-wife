@@ -1,5 +1,8 @@
 # Decisions and Open Questions
 
+> Status: **Current** — decisions stand; open questions remain as recorded
+
+
 ## Agreed decisions
 
 ### D1 — Fork OpenCode Desktop

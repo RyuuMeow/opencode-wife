@@ -1,5 +1,8 @@
 # Testing and Observability
 
+> Status: **Current** — unit coverage is in place; integration/E2E scenarios are pending with the paused milestones
+
+
 ## Test layers
 
 ### Unit tests

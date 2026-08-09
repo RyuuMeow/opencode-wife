@@ -1,5 +1,8 @@
 # Live2D and TTS Runtime
 
+> Status: **Partial** — Phase A Live2D runtime delivered; GPT-SoVITS voice and audio lip sync (Milestone 6) paused
+
+
 ## Runtime selection (decided — Phase A)
 
 The Live2D renderer uses **pixi.js 7 + `pixi-live2d-display-lipsyncpatch`** (MIT, maintained fork). Its API aligns directly with the semantic model:
