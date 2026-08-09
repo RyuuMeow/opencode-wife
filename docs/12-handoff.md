@@ -24,7 +24,7 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 ### Milestone 0 (`wife-baseline`)
 - `packages/wife-core` (workspace package): `wife.*` logger, character schemas, Live2D model3 scanner, mapping suggestions.
 - App: `settings.general.wifeMode` flag (default off) + Settings → Wife category (tabs: Wife / Characters) — the settings sidebar category came later on `wife-settings`.
-- `WifeProvider` gated event bridge: subscribes to per-server event streams only when wifeMode is on; logs `[wife.activity]`.
+- `WifeProvider` exposes the global wifeMode gate; the former all-server debug event subscription was removed because it had no runtime consumer and flooded the terminal during active sessions.
 
 ### Milestone 1 + UI iterations (`character-registry`, `wife-settings`)
 - **Schemas** (`wife-core/src/schema/character.ts`): CharacterDefinition (avatar optional, avatarImage data URL), bindings, lip sync profile, speech policy, capabilities, vocabulary (8 states / 6 gestures / 7 emotions).
@@ -52,6 +52,7 @@ OpenCode Desktop fork adding a low-impact presentation layer: a Live2D character
 - assistant replies use as many short bubbles as needed to complete the thought; `<keep>...</keep>` explicitly preserves multi-sentence rhythm, inline code, quoted text, property chains, and explanations that would become fragments when split, while a final fragment guard rejoins messages beginning with punctuation
 - thinking uses a centered three-dot status animation with reduced-motion fallback; replies always request 2–3 model-authored follow-up choices, and choices are accepted only from JSON schema or explicit `<choice>` tags rather than inferred from Markdown lists
 - Wife prompts prefer natural plain conversation and discourage headings, lists, tables, and emphasis unless the user explicitly requests structured technical content or code
+- schema-to-text compatibility retries reuse one chronologically sortable app `messageID`/`partID`; do not replace these with descriptive UUID prefixes because the session loop compares message IDs to determine whether an assistant turn follows its user turn
 - Wife character/model/variant selection is persisted per main session and remains independent from the agent composer; Live2D zoom and position remain global per character
 - the Wife resize handle moves to its trailing edge when a review/side panel is present, giving each three-column divider one unambiguous resize target
 - Wife chat metadata is versioned; pre-v3 sessions containing legacy structured-format payloads are retired once and replaced automatically

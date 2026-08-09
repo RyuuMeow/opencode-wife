@@ -2,6 +2,7 @@ import type { Session } from "@opencode-ai/sdk/v2/client"
 import { describe, expect, test } from "bun:test"
 import {
   createWifeReplyGate,
+  createWifePromptIdentifiers,
   isWifeSession,
   normalizeWifeReply,
   normalizeWifeReplyText,
@@ -171,6 +172,15 @@ describe("wife session identity", () => {
 })
 
 describe("wife prompt compatibility", () => {
+  test("uses chronologically sortable IDs for exact prompt retries", () => {
+    const prompt = createWifePromptIdentifiers()
+    const next = createWifePromptIdentifiers()
+    expect(prompt.messageID).toMatch(/^msg_[0-9a-f]{12}/)
+    expect(prompt.partID).toMatch(/^prt_[0-9a-f]{12}/)
+    expect(prompt.messageID < next.messageID).toBe(true)
+    expect(prompt.partID < next.partID).toBe(true)
+  })
+
   test("uses schema until the model is marked text-only", () => {
     expect(wifePromptFormat(false)).toEqual({
       type: "json_schema",

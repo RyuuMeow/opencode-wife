@@ -4,6 +4,7 @@ import { createStore } from "solid-js/store"
 import { useLocal } from "@/context/local"
 import { useSDK } from "@/context/sdk"
 import { useServerSDK } from "@/context/server-sdk"
+import { Identifier } from "@/utils/id"
 import { Persist, persisted } from "@/utils/persist"
 import { splitIntoSentences } from "./sentences"
 import type { WifeChatMessage } from "./wife-chat-area"
@@ -167,6 +168,13 @@ export function wifePromptFormat(textOnly: boolean) {
 
 export function wifeModelCapabilityKey(model: WifeChatModelSelection) {
   return JSON.stringify([model.providerID, model.modelID])
+}
+
+export function createWifePromptIdentifiers() {
+  return {
+    messageID: Identifier.ascending("message"),
+    partID: Identifier.ascending("part"),
+  }
 }
 
 export function wifeFormatUnsupported(error: unknown) {
@@ -485,19 +493,18 @@ export function createWifeChatController(input: {
         if (!agent) throw new Error("An agent is required for Wife chat")
         await capabilitiesReady.promise
         const key = wifeModelCapabilityKey(model)
-        const messageID = `msg_wife_${crypto.randomUUID()}`
-        const partID = `prt_wife_${crypto.randomUUID()}`
+        const ids = createWifePromptIdentifiers()
         const prompt = async (format: ReturnType<typeof wifePromptFormat>) => {
           const response = await sdk().client.session.prompt({
             sessionID: session.id,
             directory: sdk().directory,
-            messageID,
+            messageID: ids.messageID,
             agent: agent.name,
             model: { providerID: model.providerID, modelID: model.modelID },
             variant: model.variant,
             format,
             system: wifeSystemPrompt(characterName, format ? "json" : "text"),
-            parts: [{ id: partID, type: "text", text }],
+            parts: [{ id: ids.partID, type: "text", text }],
           })
           if (response.error) throw response.error
           if (!response.data || response.data.info.error) {
