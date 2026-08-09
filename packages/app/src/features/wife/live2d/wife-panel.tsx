@@ -13,10 +13,13 @@ import { ModelSelectorPopoverV2 } from "@/components/dialog-select-model"
 import { useSettingsDialog } from "@/components/settings-dialog"
 import { useLanguage } from "@/context/language"
 import { useLayout } from "@/context/layout"
-import { useLocal } from "@/context/local"
+import { useLocal, type ModelKey, type ModelSelection } from "@/context/local"
 import { usePlatform } from "@/context/platform"
+import { useSDK } from "@/context/sdk"
+import { useServerSDK } from "@/context/server-sdk"
 import { useSettings } from "@/context/settings"
 import type { Sizing } from "@/pages/session/helpers"
+import { Persist, persisted } from "@/utils/persist"
 import { useWifeRegistry } from "../registry/wife-registry"
 import { Avatar, HISTORY_WHEEL_DISTANCE, WifeChatArea } from "../chat/wife-chat-area"
 import type { WifeChatController } from "../chat/wife-chat-controller"
@@ -52,13 +55,32 @@ function EmptyState(props: { title: string; action?: { label: string; onClick: (
   )
 }
 
-export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeChatController }) {
+type WifePanelPreference = {
+  characterID?: string
+  model?: ModelKey
+  variant?: string
+}
+
+export function WifePanel(props: {
+  sessionID: string
+  size: Sizing
+  maxWidth: number
+  resizeEdge: "start" | "end"
+  chat: WifeChatController
+}) {
   const language = useLanguage()
   const registry = useWifeRegistry()
   const platform = usePlatform()
   const layout = useLayout()
   const settings = useSettings()
+  const sdk = useSDK()
+  const serverSDK = useServerSDK()
+  const local = useLocal()
   const openCharacters = useSettingsDialog("wife-characters")
+  const [preferences, setPreferences, , preferencesReady] = persisted(
+    Persist.serverWorkspace(serverSDK().scope, sdk().directory, "wife-panel-preferences"),
+    createStore<{ sessions: Record<string, WifePanelPreference | undefined> }>({ sessions: {} }),
+  )
 
   const usableCharacters = createMemo(() => {
     if (platform.platform !== "desktop") return []
@@ -66,9 +88,10 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
       .list()
       .filter((character) => character.avatar && registry.modelFolder()(character.id))
   })
-  const [selectedId, setSelectedId] = createSignal<string>()
   const selectedCharacter = createMemo(
-    () => usableCharacters().find((character) => character.id === selectedId()) ?? usableCharacters()[0],
+    () =>
+      usableCharacters().find((character) => character.id === preferences.sessions[props.sessionID]?.characterID) ??
+      usableCharacters()[0],
   )
   const [loadError, setLoadError] = createSignal<string>()
   const [runtimeEnabled, setRuntimeEnabled] = createSignal(false)
@@ -88,7 +111,78 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
   const [historyProgress, setHistoryProgress] = createSignal(0)
   let historyScroll: HTMLDivElement | undefined
   let wifePanStart: ((event: PointerEvent) => void) | undefined
-  const local = useLocal()
+  const updatePreference = (patch: Partial<WifePanelPreference>) => {
+    setPreferences("sessions", props.sessionID, (value) => ({ ...value, ...patch }))
+  }
+
+  createEffect(() => {
+    const sessionID = props.sessionID
+    const model = local.model.current()
+    const variant = local.model.variant.current()
+    if (!model) return
+    const initialize = () => {
+      if (props.sessionID !== sessionID || preferences.sessions[sessionID]?.model) return
+      setPreferences("sessions", sessionID, {
+        ...preferences.sessions[sessionID],
+        model: { providerID: model.provider.id, modelID: model.id },
+        variant,
+      })
+    }
+    if (preferencesReady()) {
+      initialize()
+      return
+    }
+    void preferencesReady.promise?.then(initialize)
+  })
+
+  const selectedModel = createMemo(() => {
+    const value = preferences.sessions[props.sessionID]?.model
+    if (!value) return local.model.current()
+    return (
+      local.model.list().find((item) => item.provider.id === value.providerID && item.id === value.modelID) ??
+      local.model.current()
+    )
+  })
+  const selectedVariant = createMemo(() => {
+    const value = preferences.sessions[props.sessionID]?.variant
+    if (!value || !selectedModel()?.variants || !Object.keys(selectedModel()!.variants!).includes(value)) {
+      return undefined
+    }
+    return value
+  })
+  const wifeModel: ModelSelection = {
+    ...local.model,
+    current: selectedModel,
+    cycle(direction) {
+      const items = local.model
+        .list()
+        .filter((item) => local.model.visible({ providerID: item.provider.id, modelID: item.id }))
+      const current = selectedModel()
+      if (!current || items.length === 0) return
+      const index = items.findIndex((item) => item.provider.id === current.provider.id && item.id === current.id)
+      const next = items[(index + direction + items.length) % items.length]
+      if (next) this.set({ providerID: next.provider.id, modelID: next.id })
+    },
+    set(value) {
+      if (!value) return
+      local.model.setVisibility(value, true)
+      updatePreference({ model: value, variant: undefined })
+    },
+    variant: {
+      ...local.model.variant,
+      configured: () => undefined,
+      selected: selectedVariant,
+      current: selectedVariant,
+      list: () => Object.keys(selectedModel()?.variants ?? {}),
+      set: (value) => updatePreference({ variant: value }),
+      cycle() {
+        const items = this.list()
+        if (items.length === 0) return
+        const index = items.indexOf(this.current() ?? "")
+        this.set(items[(index + 1) % items.length])
+      },
+    },
+  }
   createEffect(() => {
     if (historyProgress() < 1) return
     queueMicrotask(() => {
@@ -99,9 +193,12 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
   })
 
   const submitWifeMessage = (text: string) => {
+    const model = selectedModel()
+    if (!model) return false
     return props.chat.submit(
       text,
       selectedCharacter()?.name ?? language.t("wife.panel.chat.roleAssistant"),
+      { providerID: model.provider.id, modelID: model.id, variant: selectedVariant() },
     )
   }
   const wifeInputController = createPromptInputV2Controller({
@@ -112,9 +209,9 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
     view: {
       placeholder: () => language.t("wife.panel.chat.placeholder"),
       variant: {
-        options: () => local.model.variant.list().map((value) => ({ id: value, label: value })),
-        current: () => local.model.variant.current() ?? "default",
-        onSelect: (value) => local.model.variant.set(value === "default" ? undefined : value),
+        options: () => wifeModel.variant.list().map((value) => ({ id: value, label: value })),
+        current: () => wifeModel.variant.current() ?? "default",
+        onSelect: (value) => wifeModel.variant.set(value === "default" ? undefined : value),
       },
       submit: {
         stopping: props.chat.working,
@@ -152,7 +249,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
 
   const onSelectCharacter = (id: string) => {
     setLoadError(undefined)
-    setSelectedId(id)
+    updatePreference({ characterID: id })
   }
 
   return (
@@ -165,7 +262,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
       <div onPointerDown={() => props.size.start()}>
         <ResizeHandle
           direction="horizontal"
-          edge="start"
+          edge={props.resizeEdge}
           size={layout.wife.width()}
           min={WIFE_PANEL_WIDTH_MIN}
           max={props.maxWidth}
@@ -265,7 +362,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
                       controller={wifeInputController}
                       modelControl={
                         <ModelSelectorPopoverV2
-                          model={local.model}
+                          model={wifeModel}
                           trigger={(triggerProps) => (
                             <ButtonV2
                               {...triggerProps}
@@ -276,7 +373,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
                               data-action="prompt-model"
                               data-control-type="popover"
                             >
-                              <Show when={local.model.current()}>
+                              <Show when={selectedModel()}>
                                 {(current) => (
                                   <ProviderIcon
                                     id={current().provider.id}
@@ -285,7 +382,7 @@ export function WifePanel(props: { size: Sizing; maxWidth: number; chat: WifeCha
                                 )}
                               </Show>
                               <span class="truncate leading-4">
-                                {local.model.current()?.id ?? language.t("dialog.model.select.title")}
+                                {selectedModel()?.id ?? language.t("dialog.model.select.title")}
                               </span>
                               <span class="-ms-0.5 -me-1 flex shrink-0">
                                 <Icon name="chevron-down" />

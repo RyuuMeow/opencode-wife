@@ -78,6 +78,8 @@ import { useSessionLayout } from "@/pages/session/session-layout"
 import { restorePromptModel, syncPromptModel, syncSessionModel } from "@/pages/session/session-model-helpers"
 import {
   clampSessionPanelWidth,
+  REVIEW_PANE_WIDTH_MIN,
+  REVIEW_PANE_WIDTH_MIN_SPLIT,
   SESSION_PANEL_WIDTH_MIN,
   sessionPanelWidthMax,
 } from "@/pages/session/session-panel-width"
@@ -492,6 +494,10 @@ export default function Page() {
   const wifePanelMax = createMemo(() => {
     const available = sessionPanelAvailable()
     if (available === undefined) return 1200
+    if (desktopSidePanelOpen()) {
+      const reviewMin = splitReview() ? REVIEW_PANE_WIDTH_MIN_SPLIT : REVIEW_PANE_WIDTH_MIN
+      return Math.max(WIFE_PANEL_WIDTH_MIN, available - sessionPanelResizedWidth() - reviewMin - 8)
+    }
     const reserved = SESSION_PANEL_WIDTH_MIN + (desktopFileTreeOpen() ? layout.fileTree.width() : 0)
     return Math.max(WIFE_PANEL_WIDTH_MIN, available - reserved)
   })
@@ -2315,7 +2321,13 @@ export default function Page() {
         </div>
 
         <Show when={isDesktop() && settings.general.wifeMode() && view().wifePanel.opened()}>
-          <WifePanel size={size} maxWidth={wifePanelMax()} chat={wifeChat} />
+          <WifePanel
+            sessionID={params.id ?? sessionKey()}
+            size={size}
+            maxWidth={wifePanelMax()}
+            resizeEdge={desktopSidePanelOpen() ? "end" : "start"}
+            chat={wifeChat}
+          />
         </Show>
 
         <Show when={!newSessionDesign() && desktopSidePanelOpen()}>

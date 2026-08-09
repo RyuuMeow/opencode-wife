@@ -7,6 +7,8 @@ import {
   normalizeWifeReplyText,
   projectWifeHistory,
   requiresWifeSessionRebuild,
+  wifeBubbleReadingDelay,
+  wifeBubbleRevealDelays,
   wifeChatError,
   wifePromptFormat,
   WIFE_READ_ONLY_PERMISSION,
@@ -31,6 +33,12 @@ describe("normalizeWifeReply", () => {
     })
   })
 
+  test("keeps every message needed to complete a reply", () => {
+    const messages = Array.from({ length: 8 }, (_, index) => `第 ${index + 1} 句。`)
+    expect(normalizeWifeReply({ messages, choices: [] })?.messages).toEqual(messages)
+    expect(normalizeWifeReplyText(messages.join(""))?.messages).toEqual(messages)
+  })
+
   test("rejects malformed structured output", () => {
     expect(normalizeWifeReply(undefined)).toBeUndefined()
     expect(normalizeWifeReply({ messages: [], choices: [] })).toBeUndefined()
@@ -52,6 +60,25 @@ describe("normalizeWifeReply", () => {
       choices: [],
     })
     expect(normalizeWifeReplyText('{"messages":')).toBeUndefined()
+  })
+})
+
+describe("wife bubble pacing", () => {
+  test("uses message length and language-aware reading units", () => {
+    expect(wifeBubbleReadingDelay("好。")).toBe(850)
+    expect(wifeBubbleReadingDelay("這是一段需要花比較久時間閱讀的訊息。"))
+      .toBeGreaterThan(wifeBubbleReadingDelay("好。"))
+    expect(wifeBubbleReadingDelay("This sentence takes a little longer to read."))
+      .toBeGreaterThan(wifeBubbleReadingDelay("Okay."))
+  })
+
+  test("reveals each bubble after the previous bubble's reading delay", () => {
+    const messages = ["好。", "這一句比較長，需要多一點閱讀時間。", "完成。"]
+    expect(wifeBubbleRevealDelays(messages)).toEqual([
+      650,
+      650 + wifeBubbleReadingDelay(messages[0]),
+      650 + wifeBubbleReadingDelay(messages[0]) + wifeBubbleReadingDelay(messages[1]),
+    ])
   })
 })
 

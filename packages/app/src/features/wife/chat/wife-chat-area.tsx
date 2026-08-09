@@ -2,7 +2,8 @@ import { batch, createEffect, createSignal, For, onCleanup, Show, type JSX } fro
 import { createResizeObserver } from "@solid-primitives/resize-observer"
 import { Markdown } from "@opencode-ai/session-ui/markdown"
 import { ButtonV2 } from "@opencode-ai/ui/v2/button-v2"
-import { LoaderV2 } from "@opencode-ai/ui/v2/loader-v2"
+import { wifeBubbleFitCount } from "./wife-chat-layout"
+import "./wife-chat-area.css"
 
 export type WifeChatMessage = {
   id: string
@@ -37,17 +38,27 @@ export function WifeChatArea(props: {
   const [exitedIds, setExitedIds] = createSignal<string[]>([])
   const [enteringIds, setEnteringIds] = createSignal<string[]>([])
   const [visibleCount, setVisibleCount] = createSignal(INITIAL_VISIBLE_COUNT)
+  const [measured, setMeasured] = createSignal(false)
   let root: HTMLDivElement | undefined
   let content: HTMLDivElement | undefined
+  let messageList: HTMLDivElement | undefined
   let messageCount = 0
   let messageIds = new Set<string>()
   let heightRatio = props.heightRatio()
+  let initialized = false
+  let measureFrame: number | undefined
   const animationTimers = new Set<ReturnType<typeof setTimeout>>()
 
   const evaluate = () => {
     const messages = props.messages()
     const list = content
-    if (messages.length === 0 || !root || !list) return
+    const bubbles = messageList
+    if (!root || !list || !bubbles || root.clientHeight === 0) return
+    if (messages.length === 0) {
+      initialized = true
+      setMeasured(true)
+      return
+    }
     if (leavingIds().length > 0) return
     const threshold = root.clientHeight
     const count = visibleCount()
@@ -56,8 +67,19 @@ export function WifeChatArea(props: {
       setVisibleCount(total)
       return
     }
-    if (count <= 1) return
-    if (props.choices().length === 0 && list.getBoundingClientRect().height <= threshold) return
+    const nextCount = wifeBubbleFitCount({
+      messageHeights: Array.from(bubbles.children).map((item) => item.getBoundingClientRect().height),
+      reservedHeight: Math.max(0, list.getBoundingClientRect().height - bubbles.getBoundingClientRect().height),
+      threshold,
+      gap: 12,
+    })
+    if (!initialized) {
+      initialized = true
+      setVisibleCount(Math.min(count, nextCount))
+      measureFrame = requestAnimationFrame(() => setMeasured(true))
+      return
+    }
+    if (count <= 1 || nextCount >= count) return
     const expelled = messages[total - count]
     if (!expelled || leavingIds().includes(expelled.id)) return
     batch(() => {
@@ -88,7 +110,7 @@ export function WifeChatArea(props: {
     const added = Math.max(0, total - messageCount)
     const nextIds = new Set(messages.map((message) => message.id))
     const entering = messages.filter((message) => !messageIds.has(message.id)).map((message) => message.id)
-    if (entering.length > 0) {
+    if (messageCount > 0 && entering.length > 0) {
       setEnteringIds((ids) => [...ids.filter((id) => nextIds.has(id)), ...entering])
       entering.forEach((id) => {
         const timer = setTimeout(() => {
@@ -127,7 +149,10 @@ export function WifeChatArea(props: {
     props.error()
     return content
   }, evaluate)
-  onCleanup(() => animationTimers.forEach(clearTimeout))
+  onCleanup(() => {
+    animationTimers.forEach(clearTimeout)
+    if (measureFrame !== undefined) cancelAnimationFrame(measureFrame)
+  })
 
   const visible = () => {
     const messages = props.messages()
@@ -169,8 +194,12 @@ export function WifeChatArea(props: {
         onContextMenu={(event) => event.preventDefault()}
         aria-busy={props.loading()}
       >
-        <div ref={content} class="absolute inset-x-0 bottom-0 flex flex-col px-3">
-          <div class="flex flex-col gap-3">
+        <div
+          ref={content}
+          class="absolute inset-x-0 bottom-0 flex flex-col px-3 transition-opacity duration-150 ease-out motion-reduce:transition-none"
+          style={{ opacity: measured() ? 1 : 0 }}
+        >
+          <div ref={messageList} class="flex flex-col gap-3">
             <For each={visible()}>
               {(message) => (
                 <div
@@ -223,10 +252,12 @@ export function WifeChatArea(props: {
                     <span class="text-13-regular text-v2-state-fg-danger">{props.error() ?? props.errorLabel()}</span>
                   }
                 >
-                  <span class="flex items-center gap-2 text-13-regular text-v2-text-text-muted">
-                    <LoaderV2 class="size-3.5 shrink-0 text-v2-icon-icon-muted" />
-                    <span>{props.loadingLabel()}</span>
+                  <span class="flex h-4 w-10 items-center justify-center gap-1 text-v2-icon-icon-muted" aria-hidden="true">
+                    <span class="wife-thinking-dot size-1 rounded-full bg-current" />
+                    <span class="wife-thinking-dot size-1 rounded-full bg-current" />
+                    <span class="wife-thinking-dot size-1 rounded-full bg-current" />
                   </span>
+                  <span class="sr-only">{props.loadingLabel()}</span>
                 </Show>
               </div>
             </div>
