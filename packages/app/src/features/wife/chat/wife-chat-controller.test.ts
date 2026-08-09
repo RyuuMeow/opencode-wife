@@ -31,12 +31,33 @@ describe("normalizeWifeReply", () => {
 })
 
 describe("wife session identity", () => {
-  test("requires matching metadata and the exact read-only ruleset", () => {
+  test("requires matching metadata and an effective read-only ruleset", () => {
     const value = session()
     expect(isWifeSession(value, "main-session")).toBe(true)
+    expect(
+      isWifeSession(
+        {
+          ...value,
+          permission: [
+            { permission: "bash", action: "allow", pattern: "*" },
+            ...WIFE_READ_ONLY_PERMISSION,
+          ],
+        },
+        "main-session",
+      ),
+    ).toBe(true)
     expect(isWifeSession({ ...value, metadata: { ...value.metadata, "wife.ownerSessionID": "other" } }, "main-session"))
       .toBe(false)
     expect(isWifeSession({ ...value, permission: value.permission?.slice(1) }, "main-session")).toBe(false)
+    expect(
+      isWifeSession(
+        {
+          ...value,
+          permission: [...WIFE_READ_ONLY_PERMISSION, { permission: "bash", action: "allow", pattern: "*" }],
+        },
+        "main-session",
+      ),
+    ).toBe(false)
   })
 
   test("recognizes Wife metadata for notification isolation", () => {

@@ -194,7 +194,7 @@ export function createWifeChatController(input: {
         [WIFE_METADATA_KIND]: WIFE_METADATA_VALUE,
         [WIFE_METADATA_OWNER]: ownerSessionID,
       },
-      permission: WIFE_READ_ONLY_PERMISSION,
+      permission: hasReadOnlyPermission(session.permission) ? undefined : WIFE_READ_ONLY_PERMISSION,
       time: { archived: session.time.archived ?? Date.now() },
     })
     const verified = await sdk().client.session.get({ sessionID: session.id, directory: sdk().directory })
@@ -440,8 +440,8 @@ export function createWifeChatController(input: {
 export type WifeChatController = ReturnType<typeof createWifeChatController>
 
 function hasReadOnlyPermission(permission: Session["permission"]) {
-  if (!permission || permission.length !== WIFE_READ_ONLY_PERMISSION.length) return false
-  return permission.every((rule, index) => {
+  if (!permission || permission.length < WIFE_READ_ONLY_PERMISSION.length) return false
+  return permission.slice(-WIFE_READ_ONLY_PERMISSION.length).every((rule, index) => {
     const expected = WIFE_READ_ONLY_PERMISSION[index]
     return (
       rule.permission === expected.permission && rule.action === expected.action && rule.pattern === expected.pattern
