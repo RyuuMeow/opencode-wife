@@ -61,9 +61,9 @@ Side Chat 不会污染你的主 Agent transcript。它是独立的 archived sess
 
 OpenCode Wife **不附带** `live2dcubismcore.min.js` 或任何示例模型。
 
-1. **Settings → Wife → Live2D runtime** → **打开官方下载页**。
-2. 下载 [Live2D Cubism Web SDK](https://www.live2d.com/en/sdk/download/web/) 并接受 [Live2D 许可条款](https://www.live2d.com/en/sdk/license/)。
-3. 选择 SDK ZIP 或 `live2dcubismcore.min.js`。App 会验证文件、记录版本与 SHA-256,并安装到 Wife profile。
+1. **Settings → Wife → Live2D runtime** → **下载兼容 Core**。
+2. 按钮会打开 Live2D 官方 CDN 的 `live2dcubismcore.min.js`;请查看 [Live2D 许可条款](https://www.live2d.com/en/sdk/license/)。
+3. 选择下载的文件。App 会验证文件、记录版本与 SHA-256,并安装到 Wife profile。
 4. 随时可在同一界面替换或移除运行环境。
 
 **Core 兼容性**:内置运行时需要具备旧版 `csmGetDrawableRenderOrders` API 的 Cubism Core。最新的 Cubism 5 SDK 改用了新名称,安装时会被拒绝并显示清晰提示 — 请改用官方 CDN 文件(`https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js`)或较早的 SDK 版本。

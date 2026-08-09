@@ -275,7 +275,7 @@ export const SettingsWifeV2: Component = () => {
                     <ButtonV2
                       variant="outline"
                       size="normal"
-                      onClick={() => platform.openExternal("https://www.live2d.com/en/sdk/download/web/")}
+                      onClick={() => platform.openExternal("https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js")}
                     >
                       {language.t("wife.runtime.download")}
                     </ButtonV2>
