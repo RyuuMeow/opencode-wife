@@ -70,8 +70,11 @@ jobs:
       - name: Typecheck
         run: bun run typecheck
       - name: Tests
+        shell: bash
         # draft-store.test.ts needs node:sqlite, which bun does not implement on Windows
-        run: bun test --ignore "**/draft-store.test.ts"
+        run: |
+          FILES=$(find src -name "*.test.ts" ! -name "draft-store.test.ts")
+          bun test $FILES
       - name: Build
         run: bun run build
 
