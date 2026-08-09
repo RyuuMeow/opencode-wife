@@ -1,0 +1,52 @@
+diff --git a/dist/cubism4.es.js b/dist/cubism4.es.js
+index eb264b4709d4aa2d8b05debc823fbc9bf0aaa51b..e10a80f57faf5a799a7ab7857e5c93f26c4c63e2 100644
+--- a/dist/cubism4.es.js
++++ b/dist/cubism4.es.js
+@@ -7380,7 +7380,7 @@ class CubismRenderer_WebGL extends CubismRenderer {
+   release() {
+     var _a, _b, _c;
+     const self2 = this;
+-    this._clippingManager.release();
++    this._clippingManager?.release();
+     self2._clippingManager = void 0;
+     (_a = this.gl) == null ? void 0 : _a.deleteBuffer(this._bufferData.vertex);
+     this._bufferData.vertex = null;
+diff --git a/dist/cubism4.js b/dist/cubism4.js
+index 70e107d6cc407a02fdebef231ee855626f43cb49..7458e385afc65e991b0f64e063356f10bb39b4d6 100644
+--- a/dist/cubism4.js
++++ b/dist/cubism4.js
+@@ -7382,7 +7382,7 @@ var __async = (__this, __arguments, generator) => {
+     release() {
+       var _a, _b, _c;
+       const self2 = this;
+-      this._clippingManager.release();
++      this._clippingManager?.release();
+       self2._clippingManager = void 0;
+       (_a = this.gl) == null ? void 0 : _a.deleteBuffer(this._bufferData.vertex);
+       this._bufferData.vertex = null;
+diff --git a/dist/index.es.js b/dist/index.es.js
+index 7ca11af82cdde3564816a6e0b839d7dbcaa6b11f..9900ea893d3645215d8087373767b7e06508eb48 100644
+--- a/dist/index.es.js
++++ b/dist/index.es.js
+@@ -8256,7 +8256,7 @@ class CubismRenderer_WebGL extends CubismRenderer {
+   release() {
+     var _a, _b, _c;
+     const self2 = this;
+-    this._clippingManager.release();
++    this._clippingManager?.release();
+     self2._clippingManager = void 0;
+     (_a = this.gl) == null ? void 0 : _a.deleteBuffer(this._bufferData.vertex);
+     this._bufferData.vertex = null;
+diff --git a/dist/index.js b/dist/index.js
+index 3f7a031f8602cf0566e2d7ea4e2b739419f57c81..b659f85e420f6179112f59cf238dd66f322aaba3 100644
+--- a/dist/index.js
++++ b/dist/index.js
+@@ -8258,7 +8258,7 @@ var __async = (__this, __arguments, generator) => {
+     release() {
+       var _a, _b, _c;
+       const self2 = this;
+-      this._clippingManager.release();
++      this._clippingManager?.release();
+       self2._clippingManager = void 0;
+       (_a = this.gl) == null ? void 0 : _a.deleteBuffer(this._bufferData.vertex);
+       this._bufferData.vertex = null;
