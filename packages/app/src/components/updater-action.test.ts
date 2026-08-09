@@ -6,6 +6,13 @@ describe("updaterAction", () => {
     expect(updaterAction(undefined)).toEqual({ label: "settings.updates.action.checkNow" })
   })
 
+  test("links to manual releases when automatic updates are disabled", () => {
+    expect(updaterAction({ status: "disabled" }, true)).toEqual({
+      label: "settings.updates.action.viewReleases",
+      run: "releases",
+    })
+  })
+
   test("projects updater transitions into one settings action", () => {
     expect(updaterAction({ status: "idle" })).toEqual({
       label: "settings.updates.action.checkNow",

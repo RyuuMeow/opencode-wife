@@ -131,7 +131,6 @@ function getConfig() {
         appId,
         productName: "OpenCode Wife Beta",
         protocols: { name: "OpenCode Wife Beta", schemes: ["opencode-wife"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode-beta", channel: "latest" },
         deb: { fpm: [metainfoFpm(appId)] },
         rpm: { packageName: "opencode-beta", fpm: [metainfoFpm(appId)] },
       }
@@ -142,7 +141,6 @@ function getConfig() {
         appId,
         productName: "OpenCode Wife",
         protocols: { name: "OpenCode Wife", schemes: ["opencode-wife"] },
-        publish: { provider: "github", owner: "anomalyco", repo: "opencode", channel: "latest" },
         deb: { fpm: [metainfoFpm(appId)] },
         rpm: { packageName: "opencode-wife", fpm: [metainfoFpm(appId)] },
       }

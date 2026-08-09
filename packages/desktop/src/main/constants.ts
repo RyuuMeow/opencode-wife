@@ -1,5 +1,3 @@
-import { app } from "electron"
-
 type Channel = "dev" | "beta" | "prod"
 const raw = import.meta.env.OPENCODE_CHANNEL
 export const CHANNEL: Channel = raw === "dev" || raw === "beta" || raw === "prod" ? raw : "dev"
@@ -18,4 +16,6 @@ export const APP_IDS: Record<Channel, string> = {
 
 export const APP_PROTOCOL = "opencode-wife"
 
-export const UPDATER_ENABLED = app.isPackaged && CHANNEL !== "dev"
+// Alpha releases are installed manually from this fork's GitHub Releases page.
+export const UPDATER_ENABLED = false
+export const RELEASES_URL = "https://github.com/RyuuMeow/opencode-wife/releases"

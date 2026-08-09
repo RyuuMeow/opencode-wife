@@ -242,6 +242,7 @@ const createPlatform = (windowState: DesktopWindowState): Platform => {
       check: () => window.api.updater.check(),
       install: () => window.api.updater.install(),
     },
+    updatePage: "https://github.com/RyuuMeow/opencode-wife/releases",
 
     exportDebugLogs: () => window.api.exportDebugLogs(),
 

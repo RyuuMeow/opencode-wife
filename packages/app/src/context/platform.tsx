@@ -88,6 +88,9 @@ type PlatformBase = {
   /** Application-global desktop updater */
   updater?: UpdaterPlatform
 
+  /** Manual release page used when in-app updates are disabled. */
+  updatePage?: string
+
   /** Fetch override */
   fetch?: typeof fetch
 

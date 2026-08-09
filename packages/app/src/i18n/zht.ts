@@ -1094,6 +1094,7 @@ export const dict = {
   "settings.updates.row.check.title": "檢查更新",
   "settings.updates.row.check.description": "手動檢查更新並在有更新時安裝",
   "settings.updates.action.checkNow": "立即檢查",
+  "settings.updates.action.viewReleases": "查看 Releases",
   "settings.updates.action.checking": "檢查中...",
   "settings.updates.action.downloading": "下載中...",
   "settings.updates.action.installing": "安裝中...",
