@@ -51,6 +51,7 @@ import { cleanupStoreFiles } from "./store-cleanup"
 import { startBackgroundCli } from "./background-cli"
 import { setNativeTranslations } from "./native-translations"
 import { desktopPaths } from "./desktop-paths"
+import { prepareSharedAgentData } from "./shared-agent-data"
 
 const TEST_ONBOARDING = process.env.OPENCODE_TEST_ONBOARDING === "1"
 const SIDECAR_VERSION = process.env.OPENCODE_SIDECAR_V2 === "1" ? "v2" : "v1"
@@ -331,6 +332,11 @@ const main = Effect.gen(function* () {
 
     ensureLoopbackNoProxy()
     useEnvProxy()
+
+    const sharedData = yield* Effect.promise(() =>
+      prepareSharedAgentData({ stateHome: paths.agentStateHome, wifeUserData: paths.wifeUserData }),
+    )
+    logger.log("shared Agent data checked", sharedData)
 
     if (SIDECAR_VERSION === "v2") {
       logger.log("spawning v2 sidecar")
