@@ -4,10 +4,9 @@
   "version": "1.18.14",
   "type": "module",
   "license": "MIT",
-  "homepage": "https://opencode.ai",
+  "homepage": "https://github.com/RyuuMeow/opencode-wife",
   "author": {
-    "name": "OpenCode",
-    "email": "hello@opencode.ai"
+    "name": "RyuuMeow"
   },
   "scripts": {
     "typecheck": "tsgo -b",
